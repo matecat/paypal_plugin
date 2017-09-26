@@ -1,0 +1,24 @@
+#preview-container {
+    .preview-info {
+        height: 40px;
+        line-height: 40px;
+        font-size: 20px;
+    }
+    .preview-image-container {
+        position: relative;
+        .preview-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        .preview-highlighter {
+            position: absolute;
+            border: 4px solid rgba(0, 128, 0, 0.21);
+            cursor: pointer;
+            &.active {
+                border: 4px solid green;
+            }
+        }
+    }
+}

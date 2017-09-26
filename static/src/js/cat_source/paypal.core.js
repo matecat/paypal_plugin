@@ -7,8 +7,9 @@
         setEvents: function () {
             originalSetEvents.apply(this);
             $(document).on('click', '.open-screenshot-button', function () {
-                window.open('/preview', "https://www.w3schools.com", "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=400,height=400");
-            })
+                window.open('/plugins/paypal/preview?id='+ config.id_job + '&pass=' + config.password, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1100,height=1000");
+            });
+            window.addEventListener("storage", this.selectSegmentFromPreview.bind(this), true);
         },
         createButtons: function() {
             originalCreateButtons.apply(this);
@@ -16,6 +17,11 @@
             var button = '<li><a class="open-screenshot-button">Open</a></li>';
             buttonsOb.append(button);
         },
+        selectSegmentFromPreview: function (e) {
+            if (e.key === UI.localStorageCurrentSegmentId) {
+                this.gotoSegment(e.newValue)
+            }
+        }
 
     });
 
