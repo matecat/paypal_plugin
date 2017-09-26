@@ -16,14 +16,8 @@ use Features\Paypal\Utils\Routes;
 
 class PreviewDecorator extends AbstractModelViewDecorator {
 
-
     public function decorate( $template ) {
-
         $template->append('footer_js', Routes::staticSrc('js/paypal.core.js') );
     }
-
-
-
-
 
 }

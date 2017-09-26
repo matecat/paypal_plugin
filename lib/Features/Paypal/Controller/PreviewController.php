@@ -28,17 +28,14 @@ class PreviewController extends \BaseKleinViewController {
     }
 
 
-    public function respond() {
+    /**
+     * @param $method
+     */
+    public function respond( $method = null ) {
         $decorator = new PreviewDecorator( $this->model );
-
-//        $decorator->setUser( $this->currentUser() ) ;
         $this->setLoggedUser() ;
-
         $this->setDefaultTemplateData() ;
-
         $decorator->decorate( $this->view );
-
-
         $this->response->body( $this->view->execute() );
         $this->response->send();
     }
