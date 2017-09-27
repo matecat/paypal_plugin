@@ -19,7 +19,7 @@ class Routes {
 
     public static function staticSrc( $file, $options=array() ) {
         $host = \Routes::pluginsBase( $options );
-        return $host . "/paypal/static/src/$file" ;
+        return $host . "/paypal/static/$file" ;
     }
 
     public static function projectImageReferences( $projectStructure, $fileName, $options=[] ){

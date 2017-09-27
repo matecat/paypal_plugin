@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Preview</title>
-
+    <script type="text/javascript" src="${basepath}public/js/build/libs.js?build=${build_number}"></script>
+    <script type="text/javascript" src="${basepath}public/js/build/common.js?build=${build_number}"></script>
+    <script type="text/javascript" src="${basepath}public/js/build/react.js?build=${build_number}"></script>
+    <script type="text/javascript" src="${basepath}public/js/build/cat-react.js?build=${build_number}"></script>
+    <tal:block  tal:repeat="css_url css_resources">
+        <link rel="stylesheet" tal:attributes="href css_url"/>
+    </tal:block>
 </head>
 <body>
-    <div>Hello world</div>
+    <div id="preview-container"></div>
     <div metal:use-macro="${php: INIT::$TEMPLATE_ROOT}/common.html/footer_includes" />
 </body>
 </html>
