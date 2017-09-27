@@ -12,6 +12,7 @@ namespace Features\Paypal\Controller\API;
 use API\V2\KleinController;
 use API\V2\Validators\JobPasswordValidator;
 use Features\Paypal\Utils\CDataHandler;
+use Features\Paypal\View\API\JSON\Preview;
 use Jobs\MetadataDao;
 
 class PreviewsStruct extends KleinController {
@@ -29,18 +30,8 @@ class PreviewsStruct extends KleinController {
 
         $notes = \Segments_SegmentNoteDao::getJsonNotesByRange( $jobStructs[ 0 ]->job_first_segment, end( $jobStructs )->job_last_segment );
 
-        $noteArray = [];
-        foreach( $notes as $note ){
-             $noteArray[ 'segments' ][] = json_decode( $note->json );
-        }
-
-        $result = array_merge( [
-                'previews' => json_decode( $jobMetaStruct->value )
-        ], $noteArray );
-
-        $this->response->json( [
-                'data' => $result
-        ] );
+        $previewObj = ( new Preview() )->renderItem( $jobMetaStruct, $notes );
+        $this->response->json( $previewObj );
 
     }
 
