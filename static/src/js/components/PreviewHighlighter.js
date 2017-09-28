@@ -5,19 +5,48 @@ class PreviewHighlighter extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-        };
-
     }
 
     selectSegment() {
-        let preview = this.props.segmentInfo.get('previews').first().get('file_index');
-        Actions.selectSegment(this.props.segmentInfo.get('segment'), preview);
+
+        Actions.selectSegment(this.props.segmentInfo.get('segment'), this.props.currentPreview);
     }
 
-    componentDidMount() {}
+    getPreviewPoint() {
+        let self = this;
+        return this.props.segmentInfo.get('previews').find(function (preview) {
+            return preview.get('file_index') === self.props.currentPreview;
+        });
+    }
 
-    componentWillUnmount() {}
+    calculateStyle() {
+        let preview = this.getPreviewPoint();
+        if (this.props.dimension.width === preview.get('file_w')){
+            return  {
+                width: preview.get('w') + 'px',
+                height: preview.get('h') + 'px',
+                left: preview.get('x') + 'px',
+                top: preview.get('y') + 'px',
+            };
+        } else {
+            let width = parseInt((preview.get('w')/preview.get('file_w')) * this.props.dimension.width);
+            let height = parseInt((preview.get('h')/preview.get('file_h')) * this.props.dimension.height);
+            let left = parseInt((preview.get('x')/preview.get('file_w')) * this.props.dimension.width);
+            let top = parseInt((preview.get('y')/preview.get('file_h')) * this.props.dimension.height);
+            return  {
+                width: width + 'px',
+                height: height + 'px',
+                left: left + 'px',
+                top: top + 'px'
+            };
+        }
+    }
+
+    componentDidMount() {
+    }
+
+    componentWillUnmount() {
+    }
 
     shouldComponentUpdate(nextProps, nextState) {
         return true
@@ -27,12 +56,14 @@ class PreviewHighlighter extends React.Component {
 
     render() {
         let classActive = (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)) ? 'active' : '';
-        let highlighterStyle = {
-            width: this.props.segmentInfo.get('previews').first().get('w') + 'px',
-            height: this.props.segmentInfo.get('previews').first().get('h') + 'px',
-            left: this.props.segmentInfo.get('previews').first().get('x') + 'px',
-            top: this.props.segmentInfo.get('previews').first().get('y') + 'px',
-        };
+        let highlighterStyle = this.calculateStyle();
+        // let preview = this.getPreviewPoint();
+        // let highlighterStyle = {
+        //     width: preview.get('w') + 'px',
+        //     height: preview.get('h') + 'px',
+        //     left: preview.get('x') + 'px',
+        //     top: preview.get('y') + 'px'
+        // };
         return <div
             className={"preview-highlighter " + classActive}
             style={highlighterStyle}
