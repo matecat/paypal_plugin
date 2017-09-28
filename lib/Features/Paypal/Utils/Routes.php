@@ -22,4 +22,9 @@ class Routes {
         return $host . "/paypal/static/$file" ;
     }
 
+    public static function projectImageReferences( $projectStructure, $fileName, $options=[] ){
+        $host = \Routes::pluginsBase( $options );
+        return [ 'path' => $host . "/reference-files/{$projectStructure[ 'id_project' ]}/{$projectStructure[ 'ppassword' ]}/", 'file_index' => $fileName ];
+    }
+
 }

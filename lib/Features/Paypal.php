@@ -8,14 +8,25 @@
 
 namespace Features;
 
+use BasicFeatureStruct;
 use Features\Paypal\Controller\PreviewController;
+use Features\Paypal\Utils\CDataHandler;
+use Features\Paypal\Utils\Routes;
 use Klein\Klein;
 
 class Paypal extends BaseFeature {
 
+    protected $jsonHandler;
+
+    public function __construct( BasicFeatureStruct $feature ) {
+        parent::__construct( $feature );
+        $this->jsonHandler = new CDataHandler();
+    }
+
     public static function loadRoutes( Klein $klein ) {
         $klein->respond( 'GET', '/preview',              [__CLASS__, 'previewRoute'] );
-        $klein->respond( 'GET', '/reference-files/[:id_project]/[:password]/[:file_name_in_zip]', [ __CLASS__, 'referenceImagesGet' ] );
+        route( '/reference-files/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
+        route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
     }
 
     public static function previewRoute($request, $response, $service, $app) {
@@ -23,11 +34,6 @@ class Paypal extends BaseFeature {
         $template_path = dirname( __FILE__ ) . '/Paypal/View/Html/preview.html';
         $controller->setView( $template_path );
         $controller->respond();
-    }
-
-    public static function referenceImagesGet( $request, $response, $service, $app ) {
-        $controller    = new Paypal\Controller\API\ReferenceFilesController( $request, $response, $service, $app );
-        $controller->flushStream();
     }
 
     /**
@@ -44,8 +50,15 @@ class Paypal extends BaseFeature {
                 $new_files[] = $file ;
             }
         }
-
         return $new_files   ;
+    }
+
+    public function handleJsonNotes( $projectStructure ){
+        $this->jsonHandler->formatJson( $projectStructure );
+    }
+
+    public function processJobsCreated( $projectStructure ){
+        $this->jsonHandler->storePreviewsMetadata( $projectStructure );
     }
 
 }

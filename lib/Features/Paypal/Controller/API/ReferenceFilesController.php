@@ -10,6 +10,7 @@ namespace Features\Paypal\Controller\API;
 
 use API\V2\KleinController;
 use API\V2\KleinResponseFileStream;
+use API\V2\Validators\ProjectPasswordValidator;
 use ZipArchiveReference;
 
 class ReferenceFilesController extends KleinController {
@@ -19,11 +20,19 @@ class ReferenceFilesController extends KleinController {
      */
     protected $project;
 
+    /**
+     * @var ProjectPasswordValidator
+     */
+    protected $projectValidator;
+
     protected function afterConstruct() {
-        $this->findProject();
+        $this->projectValidator = new ProjectPasswordValidator( $this );
+        $this->appendValidator( $this->projectValidator );
     }
 
     public function flushStream() {
+
+        $this->project = $this->projectValidator->getProject();
 
         list( $fileName, $filePointer, $mimeType ) = array_values(
                 ( new ZipArchiveReference() )->getFileStreamPointerInfo( $this->project, $this->params[ 'file_name_in_zip' ] )
@@ -31,13 +40,6 @@ class ReferenceFilesController extends KleinController {
 
         ( new KleinResponseFileStream( $this->response ) )->streamFileInlineFromPointer( $filePointer, $fileName, $mimeType );
 
-    }
-
-    private function findProject() {
-        $this->project = \Projects_ProjectDao::findByIdAndPassword(
-                $this->params[ 'id_project' ],
-                $this->params[ 'password' ]
-        );
     }
 
 }
