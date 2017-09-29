@@ -4,12 +4,20 @@
 
 
     $.extend(UI, {
+        windowPreview: null,
+
         setEvents: function () {
+            var self  = this;
             originalSetEvents.apply(this);
-            $(document).on('click', '.open-screenshot-button', function () {
-                window.open('/plugins/paypal/preview?id='+ config.id_job + '&pass=' + config.password, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1100,height=1000");
-            });
             window.addEventListener("storage", this.selectSegmentFromPreview.bind(this), true);
+            $(document).on('click', '.open-screenshot-button', function () {
+                if (self.windowPreview && !self.windowPreview) {
+                    self.windowPreview.focus()
+                } else {
+                    self.windowPreview = window.open('/plugins/paypal/preview?id='+ config.id_job + '&pass=' + config.password, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1100,height=1000");
+                }
+            });
+
         },
         createButtons: function() {
             originalCreateButtons.apply(this);
