@@ -9,6 +9,7 @@
 namespace Features\Paypal\Decorator;
 
 use AbstractModelViewDecorator;
+use Bootstrap;
 use Features\Paypal\Utils\Routes;
 use INIT;
 
@@ -24,6 +25,8 @@ class PreviewDecorator extends AbstractModelViewDecorator {
 
         $template->append('footer_js', Routes::staticSrc('build/paypal-build.js') );
         $template->append('css_resources', Routes::staticSrc('build/paypal-build.css') );
+
+        $template->googleDriveEnabled = Bootstrap::isGDriveConfigured() ;
 
     }
 

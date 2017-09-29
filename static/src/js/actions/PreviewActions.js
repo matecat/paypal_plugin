@@ -24,6 +24,12 @@ let PreviewActions = {
             sid: sid,
             preview: preview
         });
+    },
+
+    nextSegmentPreview: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.NEXT_SEGMENT_IMAGE,
+        });
     }
 
 };

@@ -23,12 +23,14 @@ let Store = assign({}, EventEmitter.prototype, {
     },
 
     getPreviewsSegments: function (sid, previewName) {
-        let preview = this.previews.find(function (item) {
-            return (item.has(previewName));
-        });
+        let preview = this.previews.get(previewName)
         return this.segments.filter(function (item) {
-            return preview.get(previewName).indexOf(item.get('segment')) > -1;
+            return preview.indexOf(item.get('segment')) > -1;
         });
+
+    },
+
+    getNextSegmentImage: function (sid, currentPreview) {
 
     },
 
@@ -48,13 +50,13 @@ AppDispatcher.register(function(action) {
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
             Store.currentPreview = segment.get('previews').first().get('file_index');
-            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid, Store.currentPreview));
+            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid, Store.currentPreview), Store.previews);
             break;
         case Constants.UPDATE_VIEW:
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
             Store.currentPreview = segment.get('previews').first().get('file_index');
-            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
             break;
         case Constants.SELECT_SEGMENT:
             Store.currentSegmentId = action.sid;
@@ -64,6 +66,11 @@ AppDispatcher.register(function(action) {
                 Store.currentPreview = action.preview;
                 Store.emitChange(action.actionType, action.sid, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
             }
+            break;
+        case Constants.NEXT_SEGMENT_IMAGE:
+            // segment = Store.getSegmentInfo(Store.currentSegmentId);
+            //
+            // Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
             break;
     }
 });
