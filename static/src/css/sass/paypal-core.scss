@@ -1,0 +1,27 @@
+a.open-screenshot-button {
+    font-size: 18px;
+    width: 79px !important;
+    height: 27px !important;
+    font-weight: bold;
+    background: -webkit-gradient(linear, left top, left bottom, from(#09beec), to(#119ec4));
+    color: white;
+    margin: -9px 25px -9px 25px;
+    text-transform: uppercase;
+    font-family: 'Calibri', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    padding: 8px 18px;
+    border-radius: 2px;
+    border: 1px solid #848689;
+    cursor: pointer;
+    margin: 0 0px 5px 5px;
+    span.icon.icon-picture {
+        line-height: 6px;
+    }
+}
+
+.review a.open-screenshot-button {
+    background: #7cc576;
+}
+
+.buttons li.right {
+    float: right !important;
+}

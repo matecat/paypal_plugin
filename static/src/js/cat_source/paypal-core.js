@@ -14,8 +14,10 @@
         createButtons: function() {
             originalCreateButtons.apply(this);
             var buttonsOb = $('#segment-' + this.currentSegmentId + '-buttons');
-            var button = '<li><a class="open-screenshot-button">Open</a></li>';
-            buttonsOb.append(button);
+            var button = '<li class="right"><a class="open-screenshot-button">' +
+                '<span class="icon icon-picture"></span>' +
+                'Open</a></li>';
+            buttonsOb.prepend(button);
         },
         selectSegmentFromPreview: function (e) {
             if (e.key === UI.localStorageCurrentSegmentId) {

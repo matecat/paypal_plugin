@@ -48,6 +48,16 @@ module.exports = function(grunt) {
                 ],
                 dest: 'static/build/paypal-build.css'
             },
+            distCore: {
+                options: {
+                    sourceMap: false,
+                    includePaths: ['static/src/css/sass/']
+                },
+                src: [
+                    'static/src/css/sass/paypal-core.scss'
+                ],
+                dest: 'static/build/paypal-core-build.css'
+            },
         }
 
     });
