@@ -13,7 +13,6 @@
             url = '/plugins/paypal/preview?id='+ config.id_job + '&pass=' + config.password;
             $(document).on('click', '.open-screenshot-button', function () {
                 if (self.windowPreview && !self.windowPreview.closed) {
-                    self.windowPreview.location.href = url;
                     self.windowPreview.focus()
                 } else {
                     self.windowPreview = window.open(url, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1100,height=1000");
