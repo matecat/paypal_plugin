@@ -15,7 +15,7 @@
                 if (self.windowPreview && !self.windowPreview.closed) {
                     self.windowPreview.focus()
                 } else {
-                    self.windowPreview = window.open(url, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1100,height=1000");
+                    self.windowPreview = window.open(url, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1100,height=1100");
                 }
             });
 

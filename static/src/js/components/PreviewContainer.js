@@ -24,12 +24,13 @@ class PreviewContainer extends React.Component {
             currentPreview: previewName,
             previews: previews
         });
-        this.resizeWindow();
+        setTimeout(this.resizeWindow.bind(this));
+        // this.resizeWindow();
     }
 
     resizeWindow() {
         let preview = this.getCurrentPreview();
-        window.resizeTo(preview.get('file_w'), window.outerHeight);
+        window.resizeTo(preview.get('file_w') + 80, window.outerHeight);
     }
 
     getPreviewHighLighter() {
@@ -47,9 +48,9 @@ class PreviewContainer extends React.Component {
         return highlighters;
     }
 
-    selectSegment(sid, segmentsInfo) {
+    selectSegment(sid, previewName, segmentsInfo, previews) {
         if (segmentsInfo) {
-            this.renderPreview(sid, segmentsInfo)
+            this.renderPreview(sid, previewName, segmentsInfo, previews)
         } else {
             this.setState({
                 currentSid: sid,
@@ -97,20 +98,38 @@ class PreviewContainer extends React.Component {
 
     render() {
         if (this.state.segmentsInfo) {
+            let self = this;
             let preview = this.getCurrentPreview();
             let backgroundSrc = preview.get('path') + preview.get('file_index') ;
+            let styleDimension = {
+                width: preview.get('file_w') + 1,
+                height: preview.get('file_h')
+            }
+            let segmentPreviews = this.state.segmentsInfo.find(function (item) {
+                return item.get('segment') === parseInt(self.state.currentSid);
+            });
             return <div>
                 <PreviewInfo
-                currentSid={this.state.currentSid}/>
-                <div className="preview-image-container" >
-                        <img className="preview-image" src={backgroundSrc} ref={(img)=>this.backgroundImage=img}/>
+                currentSid={this.state.currentSid}
+                segmentPreviews={segmentPreviews.get('previews')}
+                currentPreview={this.state.currentPreview}
+                />
+                <div className="preview-image-container" style={styleDimension}>
+                        <div className="preview-image-layer" style={styleDimension}/>
+                        <img className="preview-image"
+                             src={backgroundSrc}
+                             ref={(img)=>this.backgroundImage=img}
+                             width={preview.get('file_w')}
+                             height={preview.get('file_h')}
+                        />
                     {this.getPreviewHighLighter()}
                 </div>
                 <PreviewActions
                     currentSid={this.state.currentSid}
+                    currentPreview={this.state.currentPreview}
                     previews={this.state.previews}
-                    segmentInfo={this.state.segmentsInfo}
-
+                    segmentsInfo={this.state.segmentsInfo}
+                    segmentPreviews={segmentPreviews.get('previews')}
                 />
             </div>;
         } else  {

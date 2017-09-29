@@ -64,7 +64,7 @@ AppDispatcher.register(function(action) {
                 Store.emitChange(action.actionType, action.sid);
             } else {
                 Store.currentPreview = action.preview;
-                Store.emitChange(action.actionType, action.sid, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+                Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
             }
             break;
         case Constants.NEXT_SEGMENT_IMAGE:

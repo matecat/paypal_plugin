@@ -7,6 +7,9 @@
     <script type="text/javascript" src="${basepath}public/js/build/common.js?build=${build_number}"></script>
     <script type="text/javascript" src="${basepath}public/js/build/react.js?build=${build_number}"></script>
     <script type="text/javascript" src="${basepath}public/js/build/cat-react.js?build=${build_number}"></script>
+
+    <link href="${basepath}public/css/build/semantic.css?build=${build_number}" rel="stylesheet" type="text/css"/>
+
     <tal:block  tal:repeat="css_url css_resources">
         <link rel="stylesheet" tal:attributes="href css_url"/>
     </tal:block>
