@@ -24,6 +24,12 @@ class PreviewContainer extends React.Component {
             currentPreview: previewName,
             previews: previews
         });
+        this.resizeWindow();
+    }
+
+    resizeWindow() {
+        let preview = this.getCurrentPreview();
+        window.resizeTo(preview.get('file_w'), window.outerHeight);
     }
 
     getPreviewHighLighter() {
@@ -86,7 +92,8 @@ class PreviewContainer extends React.Component {
         )
     }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+    }
 
     render() {
         if (this.state.segmentsInfo) {
