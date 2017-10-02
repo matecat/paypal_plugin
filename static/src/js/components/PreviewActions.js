@@ -44,11 +44,47 @@ class PreviewActions extends React.Component {
         Actions.selectSegment(this.props.currentSid, this.props.segmentPreviews.get(next).get('file_index'));
     }
 
-    // nextImage() {
-    //     let index = this.props.preview.findIndex(function (item) {
-    //         return item.get('file_index') === self.props.currentPreview;
-    //     });
-    // }
+    nextImage() {
+        let self = this;
+        let index = this.props.previews.keySeq().findIndex(function (k, i) {
+            return k === self.props.currentPreview;
+        });
+        let nextIndex = index+1;
+        let previewName;
+        let next;
+        if (!this.props.previews.toArray()[nextIndex]) {
+            nextIndex = 0;
+        }
+        next = this.props.previews.toArray()[nextIndex];
+        this.props.previews.keySeq().findIndex(function (k, i) {
+            if (i === nextIndex) {
+                previewName = k;
+            }
+            return false;
+        });
+        Actions.selectSegment(next.first(), previewName);
+    }
+
+    previousImage() {
+        let self = this;
+        let index = this.props.previews.keySeq().findIndex(function (k, i) {
+            return k === self.props.currentPreview;
+        });
+        let nextIndex = index-1;
+        let previewName;
+        let next;
+        if (!this.props.previews.toArray()[nextIndex]) {
+            nextIndex = this.props.previews.size-1;
+        }
+        next = this.props.previews.toArray()[nextIndex];
+        this.props.previews.keySeq().findIndex(function (k, i) {
+            if (i === nextIndex) {
+                previewName = k;
+            }
+            return false;
+        });
+        Actions.selectSegment(next.first(), previewName);
+    }
 
     componentDidMount() {
     }
@@ -62,14 +98,14 @@ class PreviewActions extends React.Component {
 
         return <div className="preview-actions-container">
 
-            {/*<div className="preview-actions-image">*/}
-                {/*<button className="preview-button previous ui left floated blue button"*/}
-                        {/*onClick={this.previousImage.bind(this)}*/}
-                {/*>Previous Preview</button>*/}
-                {/*<button className="preview-button previous ui right floated blue button"*/}
-                        {/*onClick={this.nextImage.bind(this)}*/}
-                {/*>Next Preview</button>*/}
-            {/*</div>*/}
+            <div className="preview-actions-image">
+                <button className="preview-button previous ui left floated blue button"
+                        onClick={this.previousImage.bind(this)}
+                >Previous Preview</button>
+                <button className="preview-button previous ui right floated blue button"
+                        onClick={this.nextImage.bind(this)}
+                >Next Preview</button>
+            </div>
 
             { this.props.segmentPreviews.size > 1 ? (
                 <div className="preview-actions-segment">
