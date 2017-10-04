@@ -74,10 +74,10 @@ let Store = require('../store/PreviewsStore');
         },
 
         setLastSegmentFromLocalStorage: function (segmentId) {
-            originalSetLastSegmentFromLocalStorage.call(this, segmentId);
             setTimeout(function () {
                 PreviewActions.updatePreview(segmentId);
             });
+            originalSetLastSegmentFromLocalStorage.call(this, segmentId);
         },
 
     });

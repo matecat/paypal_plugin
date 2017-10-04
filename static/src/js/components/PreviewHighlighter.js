@@ -7,8 +7,10 @@ class PreviewHighlighter extends React.Component {
         super(props);
     }
 
-    selectSegment() {
-        Actions.selectSegment(this.props.segmentInfo.get('segment'), this.props.currentPreview);
+    selectSegment(e) {
+        if (this.props.segmentInfo.get('segment') !==  parseInt(this.props.currentId) ) {
+            Actions.selectSegment(this.props.segmentInfo.get('segment'), this.props.currentPreview);
+        }
     }
 
     getPreviewPoint() {
@@ -53,22 +55,20 @@ class PreviewHighlighter extends React.Component {
         return true
     }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        if (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)) {
+            $('#plugin-mount-point').scrollTop(this.elem.offsetTop)
+        }
+    }
 
     render() {
         let classActive = (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)) ? 'active' : '';
         let highlighterStyle = this.calculateStyle();
-        // let preview = this.getPreviewPoint();
-        // let highlighterStyle = {
-        //     width: preview.get('w') + 'px',
-        //     height: preview.get('h') + 'px',
-        //     left: preview.get('x') + 'px',
-        //     top: preview.get('y') + 'px'
-        // };
         return <div
         className={"preview-highlighter " + classActive}
         style={highlighterStyle}
         onClick={this.selectSegment.bind(this)}
+        ref={(elem)=> this.elem=elem}
     />
 
     }
