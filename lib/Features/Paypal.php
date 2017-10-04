@@ -11,7 +11,6 @@ namespace Features;
 use BasicFeatureStruct;
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Utils\CDataHandler;
-use Features\Paypal\Utils\Routes;
 use Klein\Klein;
 
 class Paypal extends BaseFeature {
@@ -59,6 +58,10 @@ class Paypal extends BaseFeature {
 
     public function processJobsCreated( $projectStructure ){
         $this->jsonHandler->storePreviewsMetadata( $projectStructure );
+    }
+
+    public function forceXLIFFConversion( $forceXliff ){
+        return false;
     }
 
 }

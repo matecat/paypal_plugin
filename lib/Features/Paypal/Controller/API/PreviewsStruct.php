@@ -28,7 +28,7 @@ class PreviewsStruct extends KleinController {
         $jobMeta = new MetadataDao();
         $jobMetaStruct = @$jobMeta->setCacheTTL( 60 * 60 * 24 )->getByIdJob( $this->params[ 'id_job' ], CDataHandler::PREVIEWS_LOOKUP )[0];
 
-        $notes = \Segments_SegmentNoteDao::getJsonNotesByRange( $jobStructs[ 0 ]->job_first_segment, end( $jobStructs )->job_last_segment );
+        $notes = \Segments_SegmentNoteDao::getJsonNotesByRange( $jobStructs[ 0 ]->job_first_segment, end( $jobStructs )->job_last_segment, 60 * 60 * 24 );
 
         $previewObj = ( new Preview() )->renderItem( $jobMetaStruct, $notes );
         $this->response->json( $previewObj );
