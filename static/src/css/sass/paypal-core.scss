@@ -5,9 +5,14 @@ body.cattool {
 
 
 #outer {
-    margin-top: 640px !important;
-    height: 58%;
-    overflow: scroll;
+    height: 55%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: fixed;
+    bottom: 0;
+    article {
+        margin-top: 30px;
+    }
 }
 
 #plugin-mount-point {

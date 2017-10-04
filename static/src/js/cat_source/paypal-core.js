@@ -3,8 +3,10 @@ let PreviewActions = require('../actions/PreviewActions');
 let Constants = require('../costansts');
 let Store = require('../store/PreviewsStore');
 
+
 (function() {
     var originalSetEvents = UI.setEvents;
+    var originalCreateButtons = UI.createButtons;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
 
     $.extend(UI, {
@@ -19,6 +21,16 @@ let Store = require('../store/PreviewsStore');
             Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
 
+            $(document).on('click', '.open-screenshot-button', this.openWindow.bind(this));
+        },
+
+        createButtons: function() {
+            originalCreateButtons.apply(this);
+            var buttonsOb = $('#segment-' + this.currentSegmentId + '-buttons');
+            var button = '<li class="right"><a class="open-screenshot-button">' +
+                '<span class="icon icon-picture"></span>' +
+                'Open</a></li>';
+            buttonsOb.prepend(button);
         },
 
         openWindow: function () {
