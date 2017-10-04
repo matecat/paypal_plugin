@@ -1,3 +1,26 @@
+@import "paypal-preview";
+body.cattool {
+    overflow: hidden !important;
+}
+
+
+#outer {
+    margin-top: 640px !important;
+    height: 58%;
+    overflow: scroll;
+}
+
+#plugin-mount-point {
+    position: fixed;
+    top: 48px;
+    height: 400px;
+    overflow: hidden;
+    background-color: grey;
+    width: 100%;
+    z-index: 9999;
+    overflow-y: scroll;
+}
+
 a.open-screenshot-button {
     font-size: 18px;
     width: 79px !important;
@@ -25,3 +48,4 @@ a.open-screenshot-button {
 .buttons li.right {
     float: right !important;
 }
+

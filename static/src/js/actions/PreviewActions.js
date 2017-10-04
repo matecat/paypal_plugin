@@ -26,9 +26,9 @@ let PreviewActions = {
         });
     },
 
-    nextSegmentPreview: function () {
+    openWindow: function () {
         AppDispatcher.dispatch({
-            actionType: Constants.NEXT_SEGMENT_IMAGE,
+            actionType: Constants.OPEN_WINDOW,
         });
     }
 

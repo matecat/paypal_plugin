@@ -67,10 +67,8 @@ AppDispatcher.register(function(action) {
                 Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
             }
             break;
-        case Constants.NEXT_SEGMENT_IMAGE:
-            // segment = Store.getSegmentInfo(Store.currentSegmentId);
-            //
-            // Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+        case Constants.OPEN_WINDOW:
+            Store.emitChange(action.actionType,);
             break;
     }
 });

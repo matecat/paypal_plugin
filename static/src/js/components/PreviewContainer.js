@@ -3,6 +3,7 @@ let Constants = require('../costansts');
 let PreviewHighlighter = require('./PreviewHighlighter').default;
 let PreviewInfo = require('./PreviewInfo').default;
 let PreviewActions = require('./PreviewActions').default;
+let Actions = require('../actions/PreviewActions');
 
 class PreviewContainer extends React.Component {
 
@@ -24,13 +25,6 @@ class PreviewContainer extends React.Component {
             currentPreview: previewName,
             previews: previews
         });
-        setTimeout(this.resizeWindow.bind(this));
-        // this.resizeWindow();
-    }
-
-    resizeWindow() {
-        let preview = this.getCurrentPreview();
-        window.resizeTo(preview.get('file_w') + 80, window.outerHeight);
     }
 
     getPreviewHighLighter() {
@@ -42,6 +36,7 @@ class PreviewContainer extends React.Component {
             currentId={self.state.currentSid}
             segmentInfo={segment}
             currentPreview={self.state.currentPreview}
+            imageWidth={self.getImageDimension()}
                 />
             );
         });
@@ -68,13 +63,29 @@ class PreviewContainer extends React.Component {
         })
     }
 
+    getImageDimension() {
+        let preview = this.getCurrentPreview();
+        let img_w = preview.get('file_w');
+        let window_w_percent = window.outerWidth * 0.9;
+        if (img_w > window_w_percent) {
+            img_w = window_w_percent;
+        }
+        return img_w;
+    }
 
+    updateDimensions() {
+        this.forceUpdate();
+    }
+
+    openWindow() {
+        Actions.openWindow();
+    }
 
     componentDidMount() {
         Store.addListener(Constants.RENDER_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.UPDATE_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
-        // window.addEventListener("resize", this.updateDimensions.bind(this));
+        window.addEventListener("resize", this.updateDimensions.bind(this));
     }
 
     componentWillUnmount() {
@@ -82,19 +93,17 @@ class PreviewContainer extends React.Component {
         Store.removeListener(Constants.UPDATE_VIEW, this.renderPreview);
         Store.removeListener(Constants.SELECT_SEGMENT, this.selectSegment);
 
-        // window.removeEventListener("resize", this.updateDimensions.bind(this));
+        window.removeEventListener("resize", this.updateDimensions.bind(this));
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         return (!nextState.currentSid ||
             nextState.currentSid !== this.state.currentSid ||
-            !nextState.segmentsInfo.equals(this.state.segmentsInfo) ||
-            nextState.dimension.width !== this.state.dimension.width
+            !nextState.segmentsInfo.equals(this.state.segmentsInfo)
         )
     }
 
-    componentDidUpdate() {
-    }
+    componentDidUpdate() {}
 
     render() {
         if (this.state.segmentsInfo) {
@@ -102,28 +111,25 @@ class PreviewContainer extends React.Component {
             let preview = this.getCurrentPreview();
             let backgroundSrc = preview.get('path') + preview.get('file_index') ;
             let styleDimension = {
-                width: preview.get('file_w') + 1,
-                height: preview.get('file_h')
-            }
+                width: this.getImageDimension(),
+            };
             let segmentPreviews = this.state.segmentsInfo.find(function (item) {
                 return item.get('segment') === parseInt(self.state.currentSid);
             });
-            return <div>
-                <PreviewInfo
-                currentSid={this.state.currentSid}
-                segmentPreviews={segmentPreviews.get('previews')}
-                currentPreview={this.state.currentPreview}
-                />
-                <div className="preview-image-container" style={styleDimension}>
-                        <div className="preview-image-layer" style={styleDimension}/>
-                        <img className="preview-image"
-                             src={backgroundSrc}
-                             ref={(img)=>this.backgroundImage=img}
-                             width={preview.get('file_w')}
-                             height={preview.get('file_h')}
-                        />
-                    {this.getPreviewHighLighter()}
-                </div>
+            return <div className={this.props.classContainer}>
+                {this.props.showInfo ? (
+                    <PreviewInfo
+                        currentSid={this.state.currentSid}
+                        segmentPreviews={segmentPreviews.get('previews')}
+                        currentPreview={this.state.currentPreview}
+                    />
+                ) : (null)}
+
+                {this.props.showFullScreenButton ? (
+                    <button className="preview-button previous ui right floated blue button"
+                            onClick={this.openWindow.bind(this)}>Open in a Window</button>
+                ) : (null) }
+
                 <PreviewActions
                     currentSid={this.state.currentSid}
                     currentPreview={this.state.currentPreview}
@@ -131,6 +137,16 @@ class PreviewContainer extends React.Component {
                     segmentsInfo={this.state.segmentsInfo}
                     segmentPreviews={segmentPreviews.get('previews')}
                 />
+                <div className="preview-image-container" style={styleDimension}>
+                        {/*<div className="preview-image-layer" style={styleDimension}/>*/}
+                        <img className="preview-image"
+                             src={backgroundSrc}
+                             ref={(img)=>this.backgroundImage=img}
+                             width={styleDimension.width}
+                             // height={preview.get('file_h')}
+                        />
+                    {this.getPreviewHighLighter()}
+                </div>
             </div>;
         } else  {
             return <div/>
@@ -138,6 +154,12 @@ class PreviewContainer extends React.Component {
     }
 }
 
+
+PreviewContainer.defaultProps = {
+    showInfo: true,
+    classContainer: "preview-container",
+    showFullScreenButton: false
+};
 
 export default PreviewContainer ;
 

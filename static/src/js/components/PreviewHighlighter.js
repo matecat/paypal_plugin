@@ -20,25 +20,27 @@ class PreviewHighlighter extends React.Component {
 
     calculateStyle() {
         let preview = this.getPreviewPoint();
-        // if (this.props.dimension.width === preview.get('file_w')){
+        if (this.props.imageWidth === preview.get('file_w')){
             return  {
                 width: preview.get('w') + 'px',
                 height: preview.get('h') + 'px',
                 left: preview.get('x') + 'px',
                 top: preview.get('y') + 'px',
             };
-        // } else {
-        //     let width = parseInt((preview.get('w')/preview.get('file_w')) * this.props.dimension.width);
-        //     let height = parseInt((preview.get('h')/preview.get('file_h')) * this.props.dimension.height);
-        //     let left = parseInt((preview.get('x')/preview.get('file_w')) * this.props.dimension.width);
-        //     let top = parseInt((preview.get('y')/preview.get('file_h')) * this.props.dimension.height);
-        //     return  {
-        //         width: width + 'px',
-        //         height: height + 'px',
-        //         left: left + 'px',
-        //         top: top + 'px'
-        //     };
-        // }
+        } else {
+            let image_height = (this.props.imageWidth/preview.get('file_w')) * preview.get('file_h');
+
+            let width = parseInt((preview.get('w')/preview.get('file_w')) * this.props.imageWidth);
+            let height = parseInt((preview.get('h')/preview.get('file_h')) * image_height);
+            let left = parseInt((preview.get('x')/preview.get('file_w')) * this.props.imageWidth);
+            let top = parseInt((preview.get('y')/preview.get('file_h')) * image_height);
+            return  {
+                width: width + 'px',
+                height: height + 'px',
+                left: left + 'px',
+                top: top + 'px'
+            };
+        }
     }
 
     componentDidMount() {
