@@ -77,10 +77,6 @@ class PreviewContainer extends React.Component {
         this.forceUpdate();
     }
 
-    openWindow() {
-        Actions.openWindow();
-    }
-
     componentDidMount() {
         Store.addListener(Constants.RENDER_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.UPDATE_VIEW, this.renderPreview.bind(this));
@@ -125,17 +121,13 @@ class PreviewContainer extends React.Component {
                     />
                 ) : (null)}
 
-                {this.props.showFullScreenButton ? (
-                    <button className="preview-button previous ui right floated blue button"
-                            onClick={this.openWindow.bind(this)}>Open in a Window</button>
-                ) : (null) }
-
                 <PreviewActions
                     currentSid={this.state.currentSid}
                     currentPreview={this.state.currentPreview}
                     previews={this.state.previews}
                     segmentsInfo={this.state.segmentsInfo}
                     segmentPreviews={segmentPreviews.get('previews')}
+                    showFullScreenButton={this.props.showFullScreenButton}
                 />
                 <div className="preview-image-container" style={styleDimension}>
                         {/*<div className="preview-image-layer" style={styleDimension}/>*/}

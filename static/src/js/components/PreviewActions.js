@@ -86,6 +86,10 @@ class PreviewActions extends React.Component {
         Actions.selectSegment(next.first(), previewName);
     }
 
+    openWindow() {
+        Actions.openWindow();
+    }
+
     componentDidMount() {
     }
 
@@ -98,25 +102,48 @@ class PreviewActions extends React.Component {
 
         return <div className="preview-actions-container">
 
-            <div className="preview-actions-image">
-                <button className="preview-button previous ui left floated blue button"
+
+
+
+                <div className="preview-pp actions-segment">
+                    { this.props.segmentPreviews.size > 1 ? (
+                    <div>
+                        <button className="preview-button previous"
+                             onClick={this.goToPreviousSegmentImage.bind(this)}> <i className="icon icon-chevron-left" /> </button>
+                        <button className="preview-button next"
+                        onClick={this.goToNextSegmentImage.bind(this)}> <i className="icon icon-chevron-right" /> </button>
+                    </div>
+
+                    ) : (null) }
+                </div>
+
+
+
+            <div className="preview-pp actions-image">
+                <button className="preview-button previous"
                         onClick={this.previousImage.bind(this)}
                 >Previous Preview</button>
-                <button className="preview-button previous ui right floated blue button"
+                <button className="preview-button previous ui"
                         onClick={this.nextImage.bind(this)}
                 >Next Preview</button>
+                <button> </button>
+                <button> </button>
             </div>
 
-            { this.props.segmentPreviews.size > 1 ? (
-                <div className="preview-actions-segment">
-                    <button className="preview-button previous ui left floated green button"
-                         onClick={this.goToPreviousSegmentImage.bind(this)}>Previous Segment Preview</button>
-                    <button className="preview-button next ui right floated green button"
-                    onClick={this.goToNextSegmentImage.bind(this)}>Next Segment Preview</button>
-                </div>
-            ) : (null)
-            }
 
+            <div className="preview-pp change-window">
+                <button className="preview-button previous">
+                    <i className="icon icon-chevron-left" />
+                </button>
+                <button className="preview-button next">
+                    <i className="icon icon-chevron-right" />
+                </button>
+            </div>
+
+            {this.props.showFullScreenButton ? (
+                <button className="preview-button previous ui right floated blue button"
+                        onClick={this.openWindow.bind(this)}>Open in a Window</button>
+            ) : (null) }
 
 
         </div>
