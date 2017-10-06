@@ -28,7 +28,7 @@ body.cattool {
 a.open-screenshot-button {
     font-size: 17px;
     background: #f3f3f3;
-    margin: -9px -20px -9px 0px;
+    margin: -9px 0px -9px 0px;
     text-transform: uppercase;
     padding: 8px 4px;
     border-radius: 2px;
@@ -51,9 +51,9 @@ a.open-screenshot-button {
     }
 }
 
-.review a.open-screenshot-button {
+/*.review a.open-screenshot-button {
     margin: -9px 0px -9px 0px;
-}
+}*/
 
 .preview-core-container {
     .preview-image-container {
@@ -63,6 +63,7 @@ a.open-screenshot-button {
         display: block;
         overflow-y: scroll;
         height: 86%;
+
     }
 }
 
