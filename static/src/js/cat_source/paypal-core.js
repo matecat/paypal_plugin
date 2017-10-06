@@ -27,9 +27,8 @@ let Store = require('../store/PreviewsStore');
         createButtons: function() {
             originalCreateButtons.apply(this);
             var buttonsOb = $('#segment-' + this.currentSegmentId + '-buttons');
-            var button = '<li class="right"><a class="open-screenshot-button">' +
-                '<span class="icon icon-picture"></span>' +
-                'Open</a></li>';
+            var button = '<li><a class="open-screenshot-button">' +
+                '<span class="icon icon-picture"></span></a></li>';
             buttonsOb.prepend(button);
         },
 
