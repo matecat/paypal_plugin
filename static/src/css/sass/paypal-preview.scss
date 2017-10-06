@@ -44,28 +44,98 @@
         }
     }
     .preview-actions-container {
-        background: #000000;
-        height: 10%;
+        background: #4d4d4d;
+        height: 9%;
         min-height: 40px;
         position: relative;
         width: 100%;
         z-index: 1;
         display: block;
+        color: #ffffff;
         .preview-pp {
             display: inline-block;
             width: 30%;
+            button {
+                background: #f3f3f3;
+                padding: 0;
+                font-size: 12px;
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                margin: 5px;
+                border-radius: 2px;
+                border: 1px solid #848689;
+                cursor: pointer;
+                color: grey;
+                i {
+                    position: relative;
+                    top: 1px;
+                }
+                &:hover {
+                    box-shadow: 0 1px 2px #ccc;
+                    border: 1px solid #000;
+                    i {
+                        color: #000000;
+                    }
+                }
+            }
             &.actions-segment {
-                background: pink;
+                text-align: left;
+                button {
+                    background: transparent;
+                    border: none;
+                    color: white;
+                    i {
+                        font-size: 21px;
+                        line-height: 0;
+                        position: relative;
+                        top: 5px;
+                    }
+                    &:hover {
+                        box-shadow: none;
+                        i {
+                            color: #e2e2e2;
+                        }
+                    }
+                }
+                .preview-button, .n-segments-available, .text-n-segments-available {
+                    display: inline-block;
+                }
             }
             &.actions-image {
                 width: 40%;
-                background: beige;
+                text-align: center;
+                .info-icon {
+                    display: inline-block;
+                    i {
+                        font-size: 38px;
+                        line-height: 0;
+                        position: relative;
+                        top: 12px;
+                    }
+                }
             }
 
            &.change-window {
-                background: yellow;
+               text-align: right;
+               button {
+                   background: transparent;
+                   border: none;
+                   color: white;
+                   i {
+                       font-size: 21px;
+                       line-height: 0;
+                       position: relative;
+                       top: 5px;
+                   }
+                   &:hover {
+                       box-shadow: none;
+                       i {
+                           color: #e2e2e2;
+                       }
+                   }
+               }
             }
         }
-
     }
 }
