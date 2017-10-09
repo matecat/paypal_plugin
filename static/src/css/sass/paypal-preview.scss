@@ -50,11 +50,13 @@
         position: relative;
         width: 100%;
         z-index: 1;
-        display: block;
+        display: flex;
         color: #ffffff;
+        align-items: center;
+        justify-content: space-between;
         .preview-pp {
             display: inline-block;
-            width: 30%;
+            flex: 2 0px;
             button {
                 background: #f3f3f3;
                 padding: 0;
@@ -81,6 +83,7 @@
             }
             &.actions-segment {
                 text-align: left;
+                min-width: 330px;
                 button {
                     background: transparent;
                     border: none;
@@ -103,7 +106,7 @@
                 }
             }
             &.actions-image {
-                width: 40%;
+                flex: 3 0px;
                 text-align: center;
                 .info-icon {
                     display: inline-block;
