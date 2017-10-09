@@ -5,6 +5,7 @@ class PreviewHighlighter extends React.Component {
 
     constructor(props) {
         super(props);
+        this.isMac = (navigator.platform == 'MacIntel')? true : false;
     }
 
     selectSegmentClick(e) {
@@ -25,7 +26,7 @@ class PreviewHighlighter extends React.Component {
     calculateStyle() {
         let preview = this.getPreviewPoint();
         let scrollSize = 0;
-        if (!UI.isMac) {
+        if (this.isMac) {
             scrollSize = 5;
         }
         if (this.props.imageWidth === preview.get('file_w')){
