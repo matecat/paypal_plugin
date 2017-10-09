@@ -64,4 +64,9 @@ class Paypal extends BaseFeature {
         return false;
     }
 
+    public function filterNewProjectInputFilters( $filter_args ){
+        unset( $filter_args[ 'tag_projection' ] );
+        return $filter_args;
+    }
+
 }
