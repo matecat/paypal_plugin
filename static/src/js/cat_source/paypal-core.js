@@ -42,7 +42,10 @@ let Store = require('../store/PreviewsStore');
             }
         },
         selectSegment: function (sid) {
-            this.gotoSegment(sid)
+            var el = $("section:not(.opened) #segment-" + sid + "-target").find(".editarea");
+            if (el.length > 0 ) {
+                UI.editAreaClick(el[0]);
+            }
         },
         selectSegmentFromPreview: function (e) {
             if (e.key === UI.localStorageCurrentSegmentId) {

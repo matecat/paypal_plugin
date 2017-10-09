@@ -7,7 +7,9 @@ class PreviewHighlighter extends React.Component {
         super(props);
     }
 
-    selectSegment(e) {
+    selectSegmentClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
         if (this.props.segmentInfo.get('segment') !==  parseInt(this.props.currentId) ) {
             Actions.selectSegment(this.props.segmentInfo.get('segment'), this.props.currentPreview);
         }
@@ -67,7 +69,7 @@ class PreviewHighlighter extends React.Component {
         return <div
         className={"preview-highlighter " + classActive}
         style={highlighterStyle}
-        onClick={this.selectSegment.bind(this)}
+        onClick={this.selectSegmentClick.bind(this)}
         ref={(elem)=> this.elem=elem}
     />
 
