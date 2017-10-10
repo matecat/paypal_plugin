@@ -127,8 +127,7 @@ class PreviewActions extends React.Component {
                     <i className="icon icon-chevron-left" />
                 </button>
 
-
-                <button className="preview-button previous"
+                <button className="preview-button next"
                         onClick={this.nextImage.bind(this)}>
                     <i className="icon icon-chevron-left" /> <i className="icon icon-chevron-left" />
                 </button>
