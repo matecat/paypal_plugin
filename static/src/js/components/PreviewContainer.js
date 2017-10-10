@@ -129,15 +129,17 @@ class PreviewContainer extends React.Component {
                     segmentPreviews={segmentPreviews.get('previews')}
                     showFullScreenButton={this.props.showFullScreenButton}
                 />
-                <div className="preview-image-container" style={styleDimension}>
+                <div className="preview-image-container">
+                    <div className="preview-image-innercontainer" style={styleDimension}>
                         {/*<div className="preview-image-layer" style={styleDimension}/>*/}
                         <img className="preview-image"
                              src={backgroundSrc}
                              ref={(img)=>this.backgroundImage=img}
                              width={styleDimension.width}
-                             // height={preview.get('file_h')}
+                            // height={preview.get('file_h')}
                         />
-                    {this.getPreviewHighLighter()}
+                        {this.getPreviewHighLighter()}
+                    </div>
                 </div>
             </div>;
         } else  {
