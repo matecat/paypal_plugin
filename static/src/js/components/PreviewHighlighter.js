@@ -25,23 +25,19 @@ class PreviewHighlighter extends React.Component {
 
     calculateStyle() {
         let preview = this.getPreviewPoint();
-        let scrollSize = 0;
-        if (this.isMac) {
-            scrollSize = 5;
-        }
         if (this.props.imageWidth === preview.get('file_w')){
             return  {
-                width: preview.get('w') - scrollSize + 'px',
-                height: preview.get('h') - scrollSize + 'px',
-                left: preview.get('x') - scrollSize + 'px',
+                width: preview.get('w') + 'px',
+                height: preview.get('h')  + 'px',
+                left: preview.get('x')  + 'px',
                 top: preview.get('y') + 'px',
             };
         } else {
             let image_height = (this.props.imageWidth/preview.get('file_w')) * preview.get('file_h');
 
-            let width = parseInt((preview.get('w')/preview.get('file_w')) * this.props.imageWidth) - scrollSize;
-            let height = parseInt((preview.get('h')/preview.get('file_h')) * image_height) - scrollSize;
-            let left = parseInt((preview.get('x')/preview.get('file_w')) * this.props.imageWidth) - scrollSize;
+            let width = parseInt((preview.get('w')/preview.get('file_w')) * this.props.imageWidth) ;
+            let height = parseInt((preview.get('h')/preview.get('file_h')) * image_height) ;
+            let left = parseInt((preview.get('x')/preview.get('file_w')) * this.props.imageWidth) ;
             let top = parseInt((preview.get('y')/preview.get('file_h')) * image_height) ;
             return  {
                 width: width + 'px',
