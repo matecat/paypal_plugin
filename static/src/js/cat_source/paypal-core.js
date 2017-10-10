@@ -73,7 +73,7 @@ let interact = require('interactjs');
             }
         },
         selectSegment: function (sid) {
-            var el = $("section:not(.opened) #segment-" + sid + "-target").find(".editarea");
+            var el = $("section:not(.opened) #segment-" + sid + "-target").find(".editarea, .targetarea");
             if (el.length > 0 ) {
                 UI.editAreaClick(el[0]);
             }
