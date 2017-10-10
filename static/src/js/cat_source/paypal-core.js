@@ -2,6 +2,7 @@ let PreviewContainer = require('../components/PreviewContainer').default;
 let PreviewActions = require('../actions/PreviewActions');
 let Constants = require('../costansts');
 let Store = require('../store/PreviewsStore');
+let interact = require('interactjs');
 
 
 (function() {
@@ -22,6 +23,36 @@ let Store = require('../store/PreviewsStore');
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
 
             $(document).on('click', '.open-screenshot-button', this.openWindow.bind(this));
+
+            interact('#plugin-mount-point')
+                .resizable({
+                    preserveAspectRatio: true,
+                    edges: { left: false, right: false, bottom: false, top: true }
+                })
+                .on('resizemove', function (event) {
+                    var target = event.target,
+                        x = (parseFloat(target.getAttribute('data-x')) || 0),
+                        y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+                    // update the element's style
+                    // target.style.width  = event.rect.width + 'px';
+                    target.style.height = event.rect.height + 'px';
+
+                    var outerH = window.innerHeight - event.rect.height;
+                    $('#outer').height(outerH);
+
+                    // translate when resizing from top or left edges
+                    // x += event.deltaRect.left;
+                    y += event.deltaRect.top;
+
+                    // target.style.webkitTransform = target.style.transform =
+                        'translate(' + x + 'px,' + y + 'px)';
+
+                    // target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                    // target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
+                });
+
         },
 
         createButtons: function() {
