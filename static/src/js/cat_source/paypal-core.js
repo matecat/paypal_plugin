@@ -7,7 +7,6 @@ let interact = require('interactjs');
 
 (function() {
     var originalSetEvents = UI.setEvents;
-    var originalCreateButtons = UI.createButtons;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
 
     $.extend(UI, {
@@ -25,7 +24,7 @@ let interact = require('interactjs');
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
             Store.addListener(Constants.CLOSE_WINDOW, this.closePreview.bind(this));
 
-            $(document).on('click', '.open-screenshot-button', this.openPreview.bind(this));
+            $(document).on('click', '.editToolbar.preview-screen', this.openPreview.bind(this));
 
             interact('#plugin-mount-point')
                 .resizable({
@@ -56,14 +55,6 @@ let interact = require('interactjs');
                     // target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
                 });
 
-        },
-
-        createButtons: function() {
-            originalCreateButtons.apply(this);
-            var buttonsOb = $('#segment-' + this.currentSegmentId + '-buttons');
-            var button = '<li><a class="open-screenshot-button">' +
-                '<span class="icon icon-picture"></span></a></li>';
-            buttonsOb.prepend(button);
         },
 
         openWindow: function () {
