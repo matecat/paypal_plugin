@@ -73,6 +73,9 @@ AppDispatcher.register(function(action) {
         case Constants.OPEN_WINDOW:
             Store.emitChange(action.actionType,);
             break;
+        case Constants.CLOSE_WINDOW:
+            Store.emitChange(action.actionType,);
+            break;
     }
 });
 
