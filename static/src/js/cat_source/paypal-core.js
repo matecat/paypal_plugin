@@ -13,6 +13,8 @@ let interact = require('interactjs');
     $.extend(UI, {
         windowPreview: null,
 
+        scrollSelector: "#outer",
+
         setEvents: function () {
             let self  = this;
             originalSetEvents.apply(this);
@@ -21,8 +23,9 @@ let interact = require('interactjs');
 
             Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
+            Store.addListener(Constants.CLOSE_WINDOW, this.closePreview.bind(this));
 
-            $(document).on('click', '.open-screenshot-button', this.openWindow.bind(this));
+            $(document).on('click', '.open-screenshot-button', this.openPreview.bind(this));
 
             interact('#plugin-mount-point')
                 .resizable({
@@ -112,6 +115,21 @@ let interact = require('interactjs');
             });
             originalSetLastSegmentFromLocalStorage.call(this, segmentId);
         },
+
+        closePreview: function () {
+            $('#plugin-mount-point').css('height', 0);
+            $('#outer').css('height', '100%');
+        },
+
+        openPreview: function () {
+            $('#plugin-mount-point').css('height', '50%');
+            $('#outer').css('height', '50%');
+            setTimeout(function () {
+                UI.scrollSegment(UI.currentSegment);
+            }, 100);
+
+        },
+
 
     });
 

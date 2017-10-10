@@ -30,6 +30,12 @@ let PreviewActions = {
         AppDispatcher.dispatch({
             actionType: Constants.OPEN_WINDOW,
         });
+    },
+
+    closePreview: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.CLOSE_WINDOW,
+        });
     }
 
 };
