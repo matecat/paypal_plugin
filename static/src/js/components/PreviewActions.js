@@ -86,6 +86,20 @@ class PreviewActions extends React.Component {
         Actions.selectSegment(next.first(), previewName);
     }
 
+    nextSegment() {
+        let arrLength = this.props.previews.get(this.props.currentPreview).size;
+        let index = this.props.previews.get(this.props.currentPreview).indexOf(parseInt(this.props.currentSid));
+        let next = ((index + 1) < arrLength ) ? index + 1 : 0;
+        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(next), this.props.currentPreview);
+    }
+
+    previousSegment() {
+        let arrLength = this.props.previews.get(this.props.currentPreview).size;
+        let index = this.props.previews.get(this.props.currentPreview).indexOf(parseInt(this.props.currentSid));
+        let previous = ((index - 1) < 0 ) ? arrLength - 1 : index-1;
+        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(previous), this.props.currentPreview);
+    }
+
     openWindow() {
         Actions.openWindow();
     }
@@ -127,17 +141,23 @@ class PreviewActions extends React.Component {
                     <i className="icon icon-chevron-left" />
                 </button>
 
-                <button className="preview-button next"
-                        onClick={this.nextImage.bind(this)}>
-                    <i className="icon icon-chevron-left" /> <i className="icon icon-chevron-left" />
+                <button className="preview-button previous" onClick={this.previousSegment.bind(this)}>
+                    <i className="icon icon-chevron-left" />
+                    <i className="icon icon-chevron-left" />
                 </button>
 
                 <div className="info-icon">
                     <i className="icon icon-picture" />
                 </div>
 
-                <button>  <i className="icon icon-chevron-right" /> <i className="icon icon-chevron-right" /> </button>
-                <button> <i className="icon icon-chevron-right" /> </button>
+                <button onClick={this.nextSegment.bind(this)}>
+                    <i className="icon icon-chevron-right" />
+                    <i className="icon icon-chevron-right" />
+                </button>
+
+                <button onClick={this.nextImage.bind(this)}>
+                    <i className="icon icon-chevron-right" />
+                </button>
             </div>
 
 

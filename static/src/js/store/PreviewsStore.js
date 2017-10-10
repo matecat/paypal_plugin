@@ -53,6 +53,9 @@ AppDispatcher.register(function(action) {
             Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid, Store.currentPreview), Store.previews);
             break;
         case Constants.UPDATE_VIEW:
+            if (Store.currentSegmentId === parseInt(action.sid) ){
+                return;
+            }
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
             Store.currentPreview = segment.get('previews').first().get('file_index');
