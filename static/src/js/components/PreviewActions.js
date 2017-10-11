@@ -5,7 +5,11 @@ class PreviewActions extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            index: 1
+        }
     }
+
 
     getCurrentSegment() {
         let self = this;
@@ -27,6 +31,9 @@ class PreviewActions extends React.Component {
         }
 
         Actions.selectSegment(this.props.currentSid, this.props.segmentPreviews.get(next).get('file_index'));
+        this.setState({
+            index: next+1
+        });
     }
 
     goToPreviousSegmentImage() {
@@ -35,13 +42,16 @@ class PreviewActions extends React.Component {
             return item.get('file_index') === self.props.currentPreview;
         });
         let next;
-        if (this.props.segmentPreviews.get(index - 1)) {
+        if (index > 0) {
             next = index - 1;
         } else {
             next = this.props.segmentPreviews.size - 1;
         }
 
         Actions.selectSegment(this.props.currentSid, this.props.segmentPreviews.get(next).get('file_index'));
+        this.setState({
+            index: next+1
+        });
     }
 
     nextImage() {
@@ -63,6 +73,7 @@ class PreviewActions extends React.Component {
             return false;
         });
         Actions.selectSegment(next.first(), previewName);
+
     }
 
     previousImage() {
@@ -133,7 +144,7 @@ class PreviewActions extends React.Component {
                         <div>
                             <button className="preview-button previous"
                                     onClick={this.goToPreviousSegmentImage.bind(this)}> <i className="icon icon-chevron-left" /> </button>
-                            <div className="n-segments-available">2/3</div>
+                            <div className="n-segments-available">{this.state.index}/{this.props.segmentPreviews.size}</div>
                             <button className="preview-button next"
                                     onClick={this.goToNextSegmentImage.bind(this)}> <i className="icon icon-chevron-right" /> </button>
                             <div className="text-n-segments-available">available screens for this segment</div>
