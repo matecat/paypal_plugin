@@ -24,7 +24,7 @@ let interact = require('interactjs');
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
             Store.addListener(Constants.CLOSE_WINDOW, this.closePreview.bind(this));
 
-            $(document).on('click', '.editToolbar.preview-screen', this.openPreview.bind(this));
+            $(document).on('click', '.open-screenshot-button', this.openPreview.bind(this));
 
             interact('#plugin-mount-point')
                 .resizable({
@@ -65,6 +65,7 @@ let interact = require('interactjs');
                 let url = '/plugins/paypal/preview?id='+ config.id_job + '&pass=' + config.password;
                 this.windowPreview = window.open(url, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1024,height=600");
             }
+            this.closePreview();
         },
         selectSegment: function (sid) {
             var el = $("section:not(.opened) #segment-" + sid + "-target").find(".editarea, .targetarea");
@@ -110,6 +111,7 @@ let interact = require('interactjs');
         closePreview: function () {
             $('#plugin-mount-point').css('height', 0);
             $('#outer').css('height', '100%');
+            $('.segment-options-container').show();
         },
 
         openPreview: function () {
@@ -118,6 +120,7 @@ let interact = require('interactjs');
             setTimeout(function () {
                 UI.scrollSegment(UI.currentSegment);
             }, 100);
+            $('.segment-options-container').hide();
 
         },
 
