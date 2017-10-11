@@ -108,6 +108,11 @@ class PreviewActions extends React.Component {
         Actions.closePreview();
     }
 
+    openPreviewParent() {
+        window.opener.UI.openPreview();
+        window.close();
+    }
+
     componentDidMount() {
     }
 
@@ -173,7 +178,11 @@ class PreviewActions extends React.Component {
                             <button className="preview-button"
                                     onClick={this.closePreview.bind(this)}><i className="icon icon-cancel-circle" /> </button>
                         </div>
-                    ) : (null) }
+                    ) : (
+                        <div>
+                            <button className="preview-button"
+                                    onClick={this.openPreviewParent.bind(this)}><i className="icon icon-window" /> </button>
+                        </div>) }
 
                 </div>
 
@@ -183,8 +192,6 @@ class PreviewActions extends React.Component {
                 <div className="preview-pp change-window">
                     {this.props.showFullScreenButton ? (
                         <div>
-                            <button className="preview-button"
-                                    onClick={this.openWindow.bind(this)}><i className="icon icon-window" /> </button>
                             <button className="preview-button"
                                     onClick={this.closePreview.bind(this)}><i className="icon icon-cancel-circle" /> </button>
                         </div>
