@@ -16,10 +16,9 @@ class PreviewInfo extends React.Component {
 
     render() {
         return <div className="preview-info-container">
-            <h2>Segment info</h2>
-            <div className="preview-info">Current Segment ID: {this.props.currentSid}</div>
-            <div className="preview-info">Total previews: {this.props.segmentPreviews.size}</div>
-            <div className="preview-info">Current preview: {this.props.currentPreview}</div>
+            <div className="preview-info">Current segment: {this.props.currentSid}</div>
+            <div className="preview-info">Total screenshots: {this.props.segmentPreviews.size}</div>
+            <div className="preview-info">Current screenshot: {this.props.currentPreview}</div>
         </div>
     }
 }

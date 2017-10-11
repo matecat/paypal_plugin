@@ -1,13 +1,28 @@
-
+body {
+    margin: 0;
+    padding: 0;
+    background: #e4e6e8;
+    font-family: Calibri, Arial, Helvetica, sans-serif;
+}
 .preview-container, .preview-core-container {
     height: 100%;
     position: relative;
 }
 
 .preview-container, .preview-core-container {
-    .preview-info {
-        line-height: 25px;
-        font-size: 16px;
+    .preview-info-container {
+        background: #4e4e4e;
+        box-shadow: 1px 0px 1px 1px white;
+        z-index: 2;
+        border-bottom: 1px solid #000000;
+        color: #ffffff;
+        font-weight: 100;
+        .preview-info {
+            line-height: 25px;
+            font-size: 16px;
+            display: inline-block;
+            padding: 0 15px;
+        }
     }
     .preview-image-container {
         position: relative;
