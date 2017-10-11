@@ -149,7 +149,12 @@ class PreviewContainer extends React.Component {
                     currentPreview={this.state.currentPreview}
                     showFullScreenButton={this.props.showFullScreenButton}
                 />
-                No Previews
+                <div className="no-preview">
+                    <div className="no-preview-img">
+                        <i className="icon icon-no-preview" />
+                        <div>This segment has no preview</div>
+                    </div>
+                </div>
             </div>
         }
     }

@@ -1,4 +1,5 @@
 
+
 class PreviewInfo extends React.Component {
 
     constructor(props) {
@@ -23,6 +24,6 @@ class PreviewInfo extends React.Component {
     }
 }
 
-
 export default PreviewInfo ;
+
 
