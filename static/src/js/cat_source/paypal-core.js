@@ -8,7 +8,7 @@ let interact = require('interactjs');
 (function() {
     var originalSetEvents = UI.setEvents;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
-
+    var originalActiveteSegment = UI.activateSegment;
     $.extend(UI, {
         windowPreview: null,
 
@@ -56,7 +56,22 @@ let interact = require('interactjs');
                 });
 
         },
+        activateSegment: function (segment) {
+            originalActiveteSegment.apply(this, segment);
+            let sid = UI.getSegmentId(segment);
+            this.hideShowSegmentButton(sid);
 
+        },
+        hideShowSegmentButton: function(sid) {
+            if (this.segmentsPreviews) {
+                var segmentPreview = this.segmentsPreviews.segments.find(function (item) {
+                    return item.segment === parseInt(sid);
+                });
+                if (segmentPreview.previews.length === 0) {
+                    UI.getSegmentById(sid).find('.segment-options-container').remove();
+                }
+            }
+        },
         openWindow: function () {
             if (this.windowPreview && !this.windowPreview.closed) {
                 this.windowPreview.focus()
@@ -82,6 +97,7 @@ let interact = require('interactjs');
             let storageKey = 'currentSegmentId-' +config.id_job + config.password;
             let currentId = localStorage.getItem(storageKey);
             let mountPoint = $("#plugin-mount-point")[0];
+            let self = this;
             ReactDOM.render(React.createElement(PreviewContainer, {
                 sid: currentId,
                 classContainer: "preview-core-container",
@@ -89,6 +105,8 @@ let interact = require('interactjs');
                 showFullScreenButton: true
             }), mountPoint);
             this.getPreviewData().done(function (response) {
+                self.segmentsPreviews = response.data;
+                self.hideShowSegmentButton(currentId);
                 PreviewActions.renderPreview(currentId, response.data);
             });
         },

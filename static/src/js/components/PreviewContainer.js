@@ -102,7 +102,7 @@ class PreviewContainer extends React.Component {
     componentDidUpdate() {}
 
     render() {
-        if (this.state.segmentsInfo) {
+        if (this.state.segmentsInfo && this.state.currentPreview) {
             let self = this;
             let preview = this.getCurrentPreview();
             let backgroundSrc = preview.get('path') + preview.get('file_index') ;
@@ -143,7 +143,14 @@ class PreviewContainer extends React.Component {
                 </div>
             </div>;
         } else  {
-            return <div/>
+            return <div className={this.props.classContainer}>
+                <PreviewActions
+                    currentSid={this.state.currentSid}
+                    currentPreview={this.state.currentPreview}
+                    showFullScreenButton={this.props.showFullScreenButton}
+                />
+                No Previews
+            </div>
         }
     }
 }
