@@ -23,6 +23,9 @@ let Store = assign({}, EventEmitter.prototype, {
     },
 
     getPreviewsSegments: function (sid, previewName) {
+        if (_.isUndefined(previewName) ) {
+            return  Immutable.fromJS([]);
+        }
         let preview = this.previews.get(previewName)
         return this.segments.filter(function (item) {
             return preview.indexOf(item.get('segment')) > -1;
@@ -30,8 +33,12 @@ let Store = assign({}, EventEmitter.prototype, {
 
     },
 
-    getNextSegmentImage: function (sid, currentPreview) {
-
+    getPreviewName: function (segment) {
+        let preview = segment.get('previews');
+        if (preview.size > 0 ) {
+            return preview.first().get('file_index')
+        }
+        return undefined;
     },
 
     emitChange: function(event, args) {
@@ -49,7 +56,7 @@ AppDispatcher.register(function(action) {
             Store.storeData(action.data);
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
-            Store.currentPreview = segment.get('previews').first().get('file_index');
+            Store.currentPreview = Store.getPreviewName(segment);
             Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid, Store.currentPreview), Store.previews);
             break;
         case Constants.UPDATE_VIEW:
@@ -58,7 +65,7 @@ AppDispatcher.register(function(action) {
             }
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
-            Store.currentPreview = segment.get('previews').first().get('file_index');
+            Store.currentPreview = Store.getPreviewName(segment);
             Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
             break;
         case Constants.SELECT_SEGMENT:

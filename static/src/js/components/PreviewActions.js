@@ -117,67 +117,82 @@ class PreviewActions extends React.Component {
     componentDidUpdate() {}
 
     render() {
-
-        return <div className="preview-actions-container">
+        if (this.props.currentPreview) {
+            return <div className="preview-actions-container">
 
 
 
 
                 <div className="preview-pp actions-segment">
                     { this.props.segmentPreviews.size > 1 ? (
-                    <div>
-                        <button className="preview-button previous"
-                             onClick={this.goToPreviousSegmentImage.bind(this)}> <i className="icon icon-chevron-left" /> </button>
-                        <div className="n-segments-available">2/3</div>
-                        <button className="preview-button next"
-                        onClick={this.goToNextSegmentImage.bind(this)}> <i className="icon icon-chevron-right" /> </button>
-                        <div className="text-n-segments-available">available screens for this segment</div>
-                    </div>
+                        <div>
+                            <button className="preview-button previous"
+                                    onClick={this.goToPreviousSegmentImage.bind(this)}> <i className="icon icon-chevron-left" /> </button>
+                            <div className="n-segments-available">2/3</div>
+                            <button className="preview-button next"
+                                    onClick={this.goToNextSegmentImage.bind(this)}> <i className="icon icon-chevron-right" /> </button>
+                            <div className="text-n-segments-available">available screens for this segment</div>
+                        </div>
 
                     ) : (null) }
                 </div>
 
 
 
-            <div className="preview-pp actions-image">
-                <button className="preview-button previous"
-                        onClick={this.previousImage.bind(this)}>
-                    <i className="icon icon-chevron-left" />
-                </button>
+                <div className="preview-pp actions-image">
+                    <button className="preview-button previous"
+                            onClick={this.previousImage.bind(this)}>
+                        <i className="icon icon-chevron-left" />
+                    </button>
 
-                <button className="preview-button previous" onClick={this.previousSegment.bind(this)}>
-                    <i className="icon icon-chevron-left" />
-                    <i className="icon icon-chevron-left" />
-                </button>
+                    <button className="preview-button previous" onClick={this.previousSegment.bind(this)}>
+                        <i className="icon icon-chevron-left" />
+                        <i className="icon icon-chevron-left" />
+                    </button>
 
-                <div className="info-icon">
-                    <i className="icon icon-picture" />
+                    <div className="info-icon">
+                        <i className="icon icon-picture" />
+                    </div>
+
+                    <button onClick={this.nextSegment.bind(this)}>
+                        <i className="icon icon-chevron-right" />
+                        <i className="icon icon-chevron-right" />
+                    </button>
+
+                    <button onClick={this.nextImage.bind(this)}>
+                        <i className="icon icon-chevron-right" />
+                    </button>
                 </div>
 
-                <button onClick={this.nextSegment.bind(this)}>
-                    <i className="icon icon-chevron-right" />
-                    <i className="icon icon-chevron-right" />
-                </button>
 
-                <button onClick={this.nextImage.bind(this)}>
-                    <i className="icon icon-chevron-right" />
-                </button>
-            </div>
+                <div className="preview-pp change-window">
+                    {this.props.showFullScreenButton ? (
+                        <div>
+                            <button className="preview-button"
+                                    onClick={this.openWindow.bind(this)}><i className="icon icon-window" /> </button>
+                            <button className="preview-button"
+                                    onClick={this.closePreview.bind(this)}><i className="icon icon-cancel-circle" /> </button>
+                        </div>
+                    ) : (null) }
 
-
-            <div className="preview-pp change-window">
-                {this.props.showFullScreenButton ? (
-                    <div>
-                        <button className="preview-button"
-                                onClick={this.openWindow.bind(this)}><i className="icon icon-window" /> </button>
-                        <button className="preview-button"
-                                onClick={this.closePreview.bind(this)}><i className="icon icon-cancel-circle" /> </button>
-                    </div>
-                ) : (null) }
+                </div>
 
             </div>
+        } else {
+            return <div className="preview-actions-container">
+                <div className="preview-pp change-window">
+                    {this.props.showFullScreenButton ? (
+                        <div>
+                            <button className="preview-button"
+                                    onClick={this.openWindow.bind(this)}><i className="icon icon-window" /> </button>
+                            <button className="preview-button"
+                                    onClick={this.closePreview.bind(this)}><i className="icon icon-cancel-circle" /> </button>
+                        </div>
+                    ) : (null) }
 
-        </div>
+                </div>
+            </div>
+        }
 
     }
 }
