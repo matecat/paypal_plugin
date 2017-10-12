@@ -9,6 +9,7 @@ let interact = require('interactjs');
     var originalSetEvents = UI.setEvents;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
     var originalActiveteSegment = UI.activateSegment;
+    var originalAnimateScroll = UI.animateScroll;
     $.extend(UI, {
         windowPreview: null,
 
@@ -61,6 +62,29 @@ let interact = require('interactjs');
             let sid = UI.getSegmentId(segment);
             this.hideShowSegmentButton(sid);
 
+        },
+        animateScroll: function (segment, speed) {
+            var scrollAnimation = $( UI.scrollSelector ).stop().delay( 300 );
+            var pos ;
+            var prev = segment.prev('section') ;
+
+            // XXX: this condition is necessary **only** because in case of first segment of a file,
+            // the previous element (<ul>) has display:none style. Such elements are ignored by the
+            // the .offset() function.
+            var commonOffset = $('.header-menu').height() +
+                $('.searchbox:visible').height() ;
+
+            if ( prev.length ) {
+                pos = prev.offset().top  - prev.offsetParent('#outer').offset().top;
+            } else {
+                pos = segment.offset().top  - prev.offsetParent('#outer').offset().top ;
+            }
+
+            scrollAnimation.animate({
+                scrollTop: pos
+            }, speed);
+
+            return scrollAnimation.promise() ;
         },
         hideShowSegmentButton: function(sid) {
             if (this.segmentsPreviews) {
