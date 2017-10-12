@@ -159,10 +159,10 @@ class PreviewActions extends React.Component {
                     <button className="preview-button previous"
                             onClick={this.previousImage.bind(this)}>
                         <i className="icon icon-chevron-left" />
+                        <i className="icon icon-chevron-left" />
                     </button>
 
                     <button className="preview-button previous" onClick={this.previousSegment.bind(this)}>
-                        <i className="icon icon-chevron-left" />
                         <i className="icon icon-chevron-left" />
                     </button>
 
@@ -172,10 +172,10 @@ class PreviewActions extends React.Component {
 
                     <button onClick={this.nextSegment.bind(this)}>
                         <i className="icon icon-chevron-right" />
-                        <i className="icon icon-chevron-right" />
                     </button>
 
                     <button onClick={this.nextImage.bind(this)}>
+                        <i className="icon icon-chevron-right" />
                         <i className="icon icon-chevron-right" />
                     </button>
                 </div>
