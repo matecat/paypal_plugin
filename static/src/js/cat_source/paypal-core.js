@@ -9,6 +9,7 @@ let interact = require('interactjs');
     var originalSetEvents = UI.setEvents;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
     var originalActiveteSegment = UI.activateSegment;
+    var originalAnimateScroll = UI.animateScroll;
     $.extend(UI, {
         windowPreview: null,
 
@@ -36,8 +37,13 @@ let interact = require('interactjs');
                         x = (parseFloat(target.getAttribute('data-x')) || 0),
                         y = (parseFloat(target.getAttribute('data-y')) || 0);
 
+
+
                     // update the element's style
                     // target.style.width  = event.rect.width + 'px';
+                    if (event.rect.height > (window.innerHeight -26) || event.rect.height < 82) {
+                        return
+                    }
                     target.style.height = event.rect.height + 'px';
 
                     var outerH = window.innerHeight - event.rect.height;
@@ -62,12 +68,35 @@ let interact = require('interactjs');
             this.hideShowSegmentButton(sid);
 
         },
+        animateScroll: function (segment, speed) {
+            var scrollAnimation = $( UI.scrollSelector ).stop().delay( 300 );
+            var pos ;
+            var prev = segment.prev('section') ;
+
+            // XXX: this condition is necessary **only** because in case of first segment of a file,
+            // the previous element (<ul>) has display:none style. Such elements are ignored by the
+            // the .offset() function.
+            var commonOffset = $('.header-menu').height() +
+                $('.searchbox:visible').height() ;
+
+            if ( prev.length ) {
+                pos = prev.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
+            } else {
+                pos = segment.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
+            }
+
+            scrollAnimation.animate({
+                scrollTop: pos
+            }, speed);
+
+            return scrollAnimation.promise() ;
+        },
         hideShowSegmentButton: function(sid) {
             if (this.segmentsPreviews) {
                 var segmentPreview = this.segmentsPreviews.segments.find(function (item) {
                     return item.segment === parseInt(sid);
                 });
-                if (segmentPreview.previews.length === 0) {
+                if (_.isUndefined(segmentPreview) || segmentPreview.previews.length === 0) {
                     UI.getSegmentById(sid).find('.segment-options-container').remove();
                 }
             }
