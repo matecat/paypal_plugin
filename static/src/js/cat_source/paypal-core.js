@@ -37,8 +37,13 @@ let interact = require('interactjs');
                         x = (parseFloat(target.getAttribute('data-x')) || 0),
                         y = (parseFloat(target.getAttribute('data-y')) || 0);
 
+
+
                     // update the element's style
                     // target.style.width  = event.rect.width + 'px';
+                    if (event.rect.height > (window.innerHeight -26) || event.rect.height < 82) {
+                        return
+                    }
                     target.style.height = event.rect.height + 'px';
 
                     var outerH = window.innerHeight - event.rect.height;
@@ -75,9 +80,9 @@ let interact = require('interactjs');
                 $('.searchbox:visible').height() ;
 
             if ( prev.length ) {
-                pos = prev.offset().top  - prev.offsetParent('#outer').offset().top;
+                pos = prev.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
             } else {
-                pos = segment.offset().top  - prev.offsetParent('#outer').offset().top ;
+                pos = segment.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
             }
 
             scrollAnimation.animate({
