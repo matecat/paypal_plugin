@@ -50,4 +50,16 @@ class CDataHandler {
 
     }
 
+    /**
+     * @param $jsonNoteString
+     *
+     * @return mixed
+     */
+    public function parseJsonNotes( $jsonNoteString ){
+        foreach ( $jsonNoteString as $k => $noteObj ){
+            $jsonNoteString[ $k ][ 0 ][ 'json' ] = $noteObj[ 0 ][ 'json' ][ 'txt' ];
+        }
+        return $jsonNoteString;
+    }
+
 }
