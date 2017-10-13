@@ -15,6 +15,9 @@ use Klein\Klein;
 
 class Paypal extends BaseFeature {
 
+    /**
+     * @var CDataHandler
+     */
     protected $jsonHandler;
 
     public function __construct( BasicFeatureStruct $feature ) {
@@ -54,6 +57,23 @@ class Paypal extends BaseFeature {
 
     public function handleJsonNotes( $projectStructure ){
         $this->jsonHandler->formatJson( $projectStructure );
+    }
+
+    /**
+     * Tell to the controller to extract also json content of segment_notes table
+     * @return bool
+     */
+    public function prepareAllNotes(){
+        return true;
+    }
+
+    /**
+     * @param $jsonStringNotes string
+     *
+     * @return mixed
+     */
+    public function processExtractedJsonNotes( $jsonStringNotes ){
+        return $this->jsonHandler->parseJsonNotes( $jsonStringNotes );
     }
 
     public function processJobsCreated( $projectStructure ){
