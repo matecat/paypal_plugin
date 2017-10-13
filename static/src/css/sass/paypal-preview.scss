@@ -50,11 +50,12 @@ body {
         }
         .preview-highlighter {
             position: absolute;
-            border: 4px solid #fff3ce;
+            border: 4px solid #dadada;
             cursor: pointer;
             border-radius: 4px;
             &.active {
-                border: 4px solid #ffbf00;
+                border: 4px solid #0abae8;
+                background: rgba(255, 201, 2, 0.23);
             }
         }
         .preview-image-layer {
