@@ -82,7 +82,7 @@ let interact = require('interactjs');
             if ( prev.length ) {
                 pos = prev.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
             } else {
-                pos = segment.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
+                pos = 0;
             }
 
             scrollAnimation.animate({
