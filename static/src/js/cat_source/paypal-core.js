@@ -19,6 +19,9 @@ let interact = require('interactjs');
             let self  = this;
             originalSetEvents.apply(this);
 
+            // To make tab Footer messages opened by default
+            // SegmentActions.registerTab('messages', true, true);
+
             this.createPreviewContainer();
 
             Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
@@ -82,7 +85,7 @@ let interact = require('interactjs');
             if ( prev.length ) {
                 pos = prev.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
             } else {
-                pos = segment.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
+                pos = 0;
             }
 
             scrollAnimation.animate({

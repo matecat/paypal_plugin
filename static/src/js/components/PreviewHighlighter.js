@@ -49,6 +49,12 @@ class PreviewHighlighter extends React.Component {
     }
 
     componentDidMount() {
+        let self = this;
+        if (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)) {
+            setTimeout(function () {
+                $('#plugin-mount-point .preview-image-container').scrollTop(self.elem.offsetTop - 50)
+            }, 200)
+        }
     }
 
     componentWillUnmount() {
@@ -59,8 +65,11 @@ class PreviewHighlighter extends React.Component {
     }
 
     componentDidUpdate() {
+        let self = this;
         if (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)) {
-            $('#plugin-mount-point .preview-image-container').scrollTop(this.elem.offsetTop - 50)
+            setTimeout(function () {
+                $('#plugin-mount-point .preview-image-container').scrollTop(self.elem.offsetTop - 50)
+            }, 200)
         }
     }
 
