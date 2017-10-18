@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+<file original="gct|8ball-wallet|propsFolder|someFile" source-language="it-IT">
+<body>
+<trans-unit id="NFDBB2FA9-tu0" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">No preview</g></source>
+
+<target xml:lang="it-IT"><g id="1">No Preview</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "none",
+          "note": "This is the caption of a button"
+        },
+        "previews": [],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu1" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Indirizzo email</g></source>
+
+<target xml:lang="it-IT"><g id="1">Indirizzo email</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "login",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/login.png",
+            "file_w":1126,
+            "file_h":559,
+            "w": 362,
+            "h": 42,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 370,
+            "y": 105
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu2" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Password</g></source>
+
+<target xml:lang="it-IT"><g id="1">Password</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "login2",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/login.png",
+            "file_id": 1,
+            "file_w":1126,
+            "file_h":559,
+            "w": 362,
+            "h": 42,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 370,
+            "y": 160
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu3" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Accedi</g></source>
+
+<target xml:lang="it-IT"><g id="1">Accedi</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "login3",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+            {
+               "path":"__reference/login.png",
+                "file_id": 1,
+                "file_w":1126,
+                "file_h":559,
+                "w": 362,
+                "h": 42,
+                "samplePh": [],
+                "fidelity": 100,
+                "x": 370,
+                "y": 233
+            },
+            {
+               "path":"__reference/register.png",
+                "file_id": 2,
+                "file_w":1340,
+                "file_h":648,
+                "w": 85,
+                "h": 40,
+                "samplePh": [],
+                "fidelity": 100,
+                "x": 1123,
+                "y": 3
+            },
+            {
+               "path":"__reference/home1.png",
+                "file_id": 1,
+                "file_w":1683,
+                "file_h":798,
+                "w": 118,
+                "h": 48,
+                "samplePh": [],
+                "fidelity": 100,
+                "x": 1326,
+                "y": 19
+            }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu4" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Problemi di accesso?</g></source>
+
+<target xml:lang="it-IT"><g id="1">Problemi di accesso?</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "login4",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/login.png",
+            "file_id": 1,
+            "file_w":1126,
+            "file_h":559,
+            "w": 191,
+            "h": 43,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 451,
+            "y": 285
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu5" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Registrati Gratis</g></source>
+
+<target xml:lang="it-IT"><g id="1">Registrati Gratis</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "login5",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/login.png",
+            "file_id": 1,
+            "file_w":1126,
+            "file_h":559,
+            "w": 140,
+            "h": 36,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 484,
+            "y": 371
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu6" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Scopri perché milioni di persone preferiscono PayPal.</g></source>
+
+<target xml:lang="it-IT"><g id="1">Scopri perché milioni di persone preferiscono PayPal.</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register1",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 591,
+            "h": 100,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 91,
+            "y": 372
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu7" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Apri un conto PayPal gratuitamente.</g></source>
+
+<target xml:lang="it-IT"><g id="1">Apri un conto PayPal gratuitamente.</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register2",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 342,
+            "h": 33,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 791,
+            "y": 135
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu8" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Scegli tra due tipi di conto:</g></source>
+
+<target xml:lang="it-IT"><g id="1">Scegli tra due tipi di conto:</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register3",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 228,
+            "h": 33,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 791,
+            "y": 169
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu9" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Conto Personale</g></source>
+
+<target xml:lang="it-IT"><g id="1">Conto Personale</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register4",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 134,
+            "h": 33,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 834,
+            "y": 208
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu10" xml:space="preserve">
+<source xml:lang="en-US"><bx id="1"/>Fai acquisti, ricevi denaro o restituisci i soldi del pranzo a un amico. Senza mai condividere i tuoi dati finanziari.<ex id="1"/></source>
+<target xml:lang="it-IT"><bx id="1"/>Fai acquisti, ricevi denaro o restituisci i soldi del pranzo a un amico. Senza mai condividere i tuoi dati finanziari.<ex id="1"/></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register5",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 402,
+            "h": 77,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 838,
+            "y": 249
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu11" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Conto Business</g></source>
+<target xml:lang="it-IT"><g id="1">Conto Business</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register6",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 134,
+            "h": 33,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 834,
+            "y": 338
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu12" xml:space="preserve">
+<source xml:lang="en-US"><bx id="1"/>Accetta pagamenti e invia fatture pro-forma ai tuoi clienti. È semplice e sicuro vendere a chiunque, sempre e dovunque.<ex id="1"/></source>
+
+<target xml:lang="it-IT"><bx id="1"/>Accetta pagamenti e invia fatture pro-forma ai tuoi clienti. È semplice e sicuro vendere a chiunque, sempre e dovunque.<ex id="1"/></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register7",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 402,
+            "h": 77,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 838,
+            "y": 376
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+<trans-unit id="NFDBB2FA9-tu13" xml:space="preserve">
+<source xml:lang="en-US"><g id="1">Continua</g></source>
+
+<target xml:lang="it-IT"><g id="1">Continua</g></target>
+<note><![CDATA[{
+        "txt": {
+          "file": "gct|8ball-wallet|propsFolder|someFile",
+          "sid": "register7",
+          "note": "This is the caption of a button"
+        },
+        "previews": [
+          {
+            "path": "__reference/register.png",
+            "file_id": 2,
+            "file_w":1340,
+            "file_h":648,
+            "w": 399,
+            "h": 48,
+            "samplePh": [],
+            "fidelity": 100,
+            "x": 809,
+            "y": 467
+          }
+        ],
+        "hints": [
+          {
+            "sev": 3,
+            "conf": 80,
+            "catId": "grammar.spelling",
+            "note": "Check your dictionary"
+          }
+        ]
+      }]]></note>
+</trans-unit>
+</body>
+</file>
+</xliff>
