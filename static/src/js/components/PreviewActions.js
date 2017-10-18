@@ -200,8 +200,7 @@ class PreviewActions extends React.Component {
             </div>
         } else {
             return <div className="preview-actions-container">
-                <div className="preview-pp actions-segment"/>
-                <div className="preview-pp change-window">
+                    <div className="preview-pp actions-segment"/>
                     <div className="preview-pp actions-image">
                         <button className="preview-button previous"
                                 onClick={this.previousImage.bind(this)}>
@@ -219,17 +218,16 @@ class PreviewActions extends React.Component {
                         </button>
                     </div>
 
-                    <div className="preview-pp change-window"/>
-
-                    {this.props.showFullScreenButton ? (
-                        <div>
-                            <button className="preview-button"
-                                    onClick={this.closePreview.bind(this)}><i className="icon icon-cancel-circle" /> </button>
-                        </div>
-                    ) : (null) }
+                    <div className="preview-pp change-window">
+                        {this.props.showFullScreenButton ? (
+                            <div>
+                                <button className="preview-button"
+                                        onClick={this.closePreview.bind(this)}><i className="icon icon-cancel-circle" /> </button>
+                            </div>
+                        ) : (null) }
+                    </div>
 
                 </div>
-            </div>
         }
 
     }
