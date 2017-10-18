@@ -147,6 +147,7 @@ class PreviewContainer extends React.Component {
                 <PreviewActions
                     currentSid={this.state.currentSid}
                     currentPreview={this.state.currentPreview}
+                    previews={this.state.previews}
                     showFullScreenButton={this.props.showFullScreenButton}
                 />
                 <div className="no-preview">
