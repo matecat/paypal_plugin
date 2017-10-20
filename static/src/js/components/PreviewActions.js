@@ -200,7 +200,7 @@ class PreviewActions extends React.Component {
             </div>
         } else {
             return <div className="preview-actions-container">
-                    <div className="preview-pp actions-segment"/>
+
                     <div className="preview-pp actions-image">
                         <button className="preview-button previous"
                                 onClick={this.previousImage.bind(this)}>
@@ -217,6 +217,8 @@ class PreviewActions extends React.Component {
                             <i className="icon icon-chevron-right" />
                         </button>
                     </div>
+
+                    <div className="preview-pp actions-segment"/>
 
                     <div className="preview-pp change-window">
                         {this.props.showFullScreenButton ? (
