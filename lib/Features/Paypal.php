@@ -9,6 +9,7 @@
 namespace Features;
 
 use BasicFeatureStruct;
+use controller;
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
@@ -80,13 +81,77 @@ class Paypal extends BaseFeature {
         $this->jsonHandler->storePreviewsMetadata( $projectStructure );
     }
 
+    /**
+     * Override the instance decision to convert or not the normal xlf/xliff files
+     *
+     * @param $forceXliff
+     *
+     * @return bool
+     */
     public function forceXLIFFConversion( $forceXliff ){
         return false;
     }
 
+    /**
+     * Remove unwanted options from the UI and add additional filters
+     *
+     * @param $filter_args
+     *
+     * @return mixed
+     */
     public function filterNewProjectInputFilters( $filter_args ){
         unset( $filter_args[ 'tag_projection' ] );
+        $filter_args[ 'project_type' ] = [ 'filter' => FILTER_CALLBACK, 'options' => [ __CLASS__, 'sanitizeProjectTypeValue' ] ];
         return $filter_args;
+    }
+
+    /**
+     * Callback for filters
+     *
+     * @param $fieldVal string
+     *
+     * @return string The sanitized field
+     */
+    public static function sanitizeProjectTypeValue( $fieldVal ) {
+
+        $fieldVal = strtoupper( trim( filter_var( $fieldVal, FILTER_SANITIZE_STRING, [ 'flags' => FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH ] ) ) );
+
+        $accepted_values = [ 'TR', 'LR', 'LQA' ];
+
+        //if $fieldVal is not one of the accepted values, force it to "none"
+        if ( !in_array( $fieldVal, $accepted_values ) ) {
+            throw new \InvalidArgumentException( "Invalid project type $fieldVal", 400 );
+        }
+
+        return $fieldVal;
+
+    }
+
+    /**
+     * Add options to project metadata
+     *
+     * @param $metadata
+     * @param $__postInput
+     *
+     * @return mixed
+     */
+    public function filterProjectMetadata( $metadata, $__postInput ){
+        $metadata[ 'project_type' ] = $__postInput[ 'project_type' ];
+        return $metadata;
+    }
+
+    /**
+     * Force a required authentication
+     *
+     * @param controller $controller
+     */
+    public function catControllerDoActionStart( controller $controller ){
+        if( method_exists( $controller, 'setLoginRequired' ) ){
+            /**
+             * @var $controller \viewController
+             */
+            $controller->setLoginRequired( true ) ;
+        }
     }
 
 }
