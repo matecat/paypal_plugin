@@ -111,6 +111,15 @@ class PreviewActions extends React.Component {
         Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(previous), this.props.currentPreview);
     }
 
+    firstSegment() {
+        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(0), this.props.currentPreview);
+    }
+
+    lastSegment() {
+        let arrLength = this.props.previews.get(this.props.currentPreview).size;
+        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(arrLength-1), this.props.currentPreview);
+    }
+
     openWindow() {
         Actions.openWindow();
     }
@@ -144,7 +153,8 @@ class PreviewActions extends React.Component {
                         <i className="icon icon-chevron-left" />
                     </button>
 
-                    <button className="preview-button previous">
+                    <button className="preview-button previous"
+                            onClick={this.firstSegment.bind(this)}>
                         <i className="icon icon-go-to-first" />
                     </button>
 
@@ -160,7 +170,8 @@ class PreviewActions extends React.Component {
                         <i className="icon icon-chevron-right" />
                     </button>
 
-                    <button className="preview-button previous">
+                    <button className="preview-button previous"
+                            onClick={this.lastSegment.bind(this)}>
                         <i className="icon icon-go-to-last" />
                     </button>
 
