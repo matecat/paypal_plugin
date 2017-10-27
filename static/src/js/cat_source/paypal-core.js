@@ -20,7 +20,7 @@ let interact = require('interactjs');
             originalSetEvents.apply(this);
 
             // To make tab Footer messages opened by default
-            // SegmentActions.registerTab('messages', true, true);
+            SegmentActions.registerTab('messages', true, true);
 
             this.createPreviewContainer();
 
