@@ -3,6 +3,13 @@ body {
     padding: 0;
     font-family: Calibri, Arial, Helvetica, sans-serif;
 }
+
+.preview-container {
+    min-width: 780px;
+    .preview-image-innercontainer {
+        min-width: 780px;
+    }
+}
 .preview-container, .preview-core-container {
     height: 100%;
     position: relative;
