@@ -72,7 +72,7 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+right",
-                    "mac": "alt+meta+ight",
+                    "mac": "alt+meta+right",
                 }
             };
             PREVIEW.shortcuts.previousSegment = {
