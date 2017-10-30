@@ -57,7 +57,7 @@ class CDataHandler {
      */
     public function parseJsonNotes( $jsonNoteString ){
         foreach ( $jsonNoteString as $k => $noteObj ){
-            $jsonNoteString[ $k ][ 0 ][ 'json' ] = $noteObj[ 0 ][ 'json' ][ 'txt' ];
+            $jsonNoteString[ $k ][ 0 ][ 'json' ] = $noteObj[ 0 ][ 'json' ][ 'note' ];
         }
         return $jsonNoteString;
     }
