@@ -125,7 +125,7 @@ let interact = require('interactjs');
                 "label": "Previous Preview Segment",
                 "equivalent": "",
                 "keystrokes": {
-                    "standard": "shift+ctrl+left",
+                    "standard": "alt+ctrl+left",
                     "mac": "alt+ctrl+left",
                 }
             };
@@ -133,7 +133,7 @@ let interact = require('interactjs');
                 "label" : "Last Preview Segment",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "shift+ctrl+pagedown",
+                    "standard": "alt+ctrl+pagedown",
                     "mac": "alt+ctrl+pagedown",
                 }
             };
@@ -141,7 +141,7 @@ let interact = require('interactjs');
                 "label" : "First Preview Segment",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "shift+ctrl+pageup",
+                    "standard": "alt+ctrl+pageup",
                     "mac": "alt+ctrl+pageup",
                 }
             };
