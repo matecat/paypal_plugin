@@ -23,7 +23,7 @@ let interact = require('interactjs');
             // To make tab Footer messages opened by default
             SegmentActions.registerTab('messages', true, true);
 
-            this.createPreviewContainer();
+
 
             Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
@@ -89,7 +89,9 @@ let interact = require('interactjs');
                 PreviewActions.lastSegment();
             }).on('keydown.shortcuts', null, UI.shortcuts.lastSegment.keystrokes.mac, function(e) {
                 PreviewActions.lastSegment();
-            })
+            });
+
+            this.createPreviewContainer();
 
         },
         setShortcuts: function() {
@@ -201,7 +203,7 @@ let interact = require('interactjs');
         },
         selectSegmentFromPreview: function (e) {
             if (e.key === UI.localStorageCurrentSegmentId) {
-                this.gotoSegment(e.newValue);
+                this.selectSegment(e.newValue);
             }
         },
         createPreviewContainer: function () {
@@ -213,7 +215,9 @@ let interact = require('interactjs');
                 sid: currentId,
                 classContainer: "preview-core-container",
                 showInfo: false,
-                showFullScreenButton: true
+                showFullScreenButton: true,
+                isMac: UI.isMac,
+                Shortcuts: UI.shortcuts
             }), mountPoint);
             this.getPreviewData().done(function (response) {
                 self.segmentsPreviews = response.data;

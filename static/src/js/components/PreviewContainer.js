@@ -128,6 +128,8 @@ class PreviewContainer extends React.Component {
                     segmentsInfo={this.state.segmentsInfo}
                     segmentPreviews={segmentPreviews.get('previews')}
                     showFullScreenButton={this.props.showFullScreenButton}
+                    isMac={this.props.isMac}
+                    shortcuts={this.props.Shortcuts}
                 />
                 <div className="preview-image-container">
                     <div className="preview-image-innercontainer" style={styleDimension}>

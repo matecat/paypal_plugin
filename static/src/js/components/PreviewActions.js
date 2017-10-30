@@ -166,27 +166,27 @@ class PreviewActions extends React.Component {
     componentDidUpdate() {}
 
     render() {
-        let keyShortcuts = (UI.isMac) ? "mac" : "standard";
+        let keyShortcuts = (this.props.isMac) ? "mac" : "standard";
         if (this.props.currentPreview) {
             return <div className="preview-actions-container">
 
 
                 <div className="preview-pp actions-image">
                     <button className="preview-button previous"
-                            title={UI.shortcuts.previousPreview.label + " (" + UI.shortcuts.previousPreview.keystrokes[keyShortcuts] + ")"}
+                            title={this.props.shortcuts.previousPreview.label + " (" + this.props.shortcuts.previousPreview.keystrokes[keyShortcuts] + ")"}
                             onClick={this.previousImage.bind(this)}>
                         <i className="icon icon-chevron-left" />
                         <i className="icon icon-chevron-left" />
                     </button>
 
                     <button className="preview-button previous"
-                            title={UI.shortcuts.firstSegment.label + " (" + UI.shortcuts.firstSegment.keystrokes[keyShortcuts] + ")"}
+                            title={this.props.shortcuts.firstSegment.label + " (" + this.props.shortcuts.firstSegment.keystrokes[keyShortcuts] + ")"}
                         onClick={this.firstSegment.bind(this)}>
                         <i className="icon icon-go-to-first" />
                     </button>
 
                     <button className="preview-button previous"
-                            title={UI.shortcuts.previousSegment.label + " (" + UI.shortcuts.previousSegment.keystrokes[keyShortcuts] + ")"}
+                            title={this.props.shortcuts.previousSegment.label + " (" + this.props.shortcuts.previousSegment.keystrokes[keyShortcuts] + ")"}
                             onClick={this.previousSegment.bind(this)}>
                         <i className="icon icon-chevron-left" />
                     </button>
@@ -196,18 +196,18 @@ class PreviewActions extends React.Component {
                     </div>
 
                     <button onClick={this.nextSegment.bind(this)}
-                            title={UI.shortcuts.nextSegment.label + " (" + UI.shortcuts.nextSegment.keystrokes[keyShortcuts] + ")"}>
+                            title={this.props.shortcuts.nextSegment.label + " (" + this.props.shortcuts.nextSegment.keystrokes[keyShortcuts] + ")"}>
                         <i className="icon icon-chevron-right" />
                     </button>
 
                     <button className="preview-button previous"
-                            title={UI.shortcuts.lastSegment.label + " (" + UI.shortcuts.lastSegment.keystrokes[keyShortcuts] + ")"}
+                            title={this.props.shortcuts.lastSegment.label + " (" + this.props.shortcuts.lastSegment.keystrokes[keyShortcuts] + ")"}
                             onClick={this.lastSegment.bind(this)}>
                         <i className="icon icon-go-to-last" />
                     </button>
 
                     <button onClick={this.nextImage.bind(this)}
-                            title={UI.shortcuts.nextPreview.label + " (" + UI.shortcuts.nextPreview.keystrokes[keyShortcuts] + ")"}>
+                            title={this.props.shortcuts.nextPreview.label + " (" + this.props.shortcuts.nextPreview.keystrokes[keyShortcuts] + ")"}>
                         <i className="icon icon-chevron-right" />
                         <i className="icon icon-chevron-right" />
                     </button>
