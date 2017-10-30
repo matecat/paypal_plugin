@@ -78,12 +78,10 @@ AppDispatcher.register(function(action) {
                 Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
             }
             break;
-        case Constants.OPEN_WINDOW:
-            Store.emitChange(action.actionType,);
+        default:
+            Store.emitChange(action.actionType);
             break;
-        case Constants.CLOSE_WINDOW:
-            Store.emitChange(action.actionType,);
-            break;
+
     }
 });
 

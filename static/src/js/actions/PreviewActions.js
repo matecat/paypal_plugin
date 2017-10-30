@@ -36,7 +36,43 @@ let PreviewActions = {
         AppDispatcher.dispatch({
             actionType: Constants.CLOSE_WINDOW,
         });
-    }
+    },
+
+    nextPreview: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.NEXT_PREVIEW,
+        });
+    },
+
+    prevPreview: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.PREV_PREVIEW,
+        });
+    },
+
+    nextSegment: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.NEXT_SEGMENT,
+        });
+    },
+
+    prevSegment: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.PREV_SEGMENT
+        });
+    },
+
+    lastSegment: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.LAST_SEGMENT,
+        });
+    },
+
+    firstSegment: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.FIRST_SEGMENT
+        });
+    },
 
 };
 

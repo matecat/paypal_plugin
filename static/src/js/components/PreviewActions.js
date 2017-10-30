@@ -1,5 +1,6 @@
 let Actions = require('./../actions/PreviewActions');
-
+let Store = require('../store/PreviewsStore');
+let Constants = require('../costansts');
 
 class PreviewActions extends React.Component {
 
@@ -8,6 +9,12 @@ class PreviewActions extends React.Component {
         this.state = {
             index: 1
         }
+        this.nextImage = this.nextImage.bind(this);
+        this.previousImage = this.previousImage.bind(this);
+        this.nextSegment = this.nextSegment.bind(this);
+        this.previousSegment = this.previousSegment.bind(this);
+        this.lastSegment = this.lastSegment.bind(this);
+        this.firstSegment = this.firstSegment.bind(this);
     }
 
 
@@ -56,68 +63,73 @@ class PreviewActions extends React.Component {
 
     nextImage() {
         let self = this;
-        let index = this.props.previews.keySeq().findIndex(function (k, i) {
-            return k === self.props.currentPreview;
-        });
-        let nextIndex = index+1;
-        let previewName;
-        let next;
-        if (!this.props.previews.toArray()[nextIndex]) {
-            nextIndex = 0;
+        if (this.props.segmentPreviews) {
+            let currentPreviewJson = this.props.segmentPreviews.find(function (item) {
+                return item.get('file_index') === self.props.currentPreview;
+            });
+            let next = currentPreviewJson.get('nextPreview');
+            setTimeout(function () {
+                Actions.selectSegment(self.props.previews.get(next).first(), next);
+            }, 0);
+        } else {
+            setTimeout(function () {
+                Actions.selectSegment(self.props.previews.get(self.props.previews.keySeq().first()).first(), self.props.previews.keySeq().first());
+            }, 0);
         }
-        next = this.props.previews.toArray()[nextIndex];
-        this.props.previews.keySeq().findIndex(function (k, i) {
-            if (i === nextIndex) {
-                previewName = k;
-            }
-            return false;
-        });
-        Actions.selectSegment(next.first(), previewName);
+
 
     }
 
     previousImage() {
         let self = this;
-        let index = this.props.previews.keySeq().findIndex(function (k, i) {
-            return k === self.props.currentPreview;
-        });
-        let nextIndex = index-1;
-        let previewName;
-        let next;
-        if (!this.props.previews.toArray()[nextIndex]) {
-            nextIndex = this.props.previews.size-1;
+        if (this.props.segmentPreviews) {
+            let currentPreviewJson = this.props.segmentPreviews.find(function (item) {
+                return item.get('file_index') === self.props.currentPreview;
+            });
+            let previous = currentPreviewJson.get('previousPreview');
+            setTimeout(function () {
+                Actions.selectSegment(self.props.previews.get(previous).first(), previous);
+            }, 0);
+        } else {
+            setTimeout(function () {
+                Actions.selectSegment(self.props.previews.get(self.props.previews.keySeq().last()).first(), self.props.previews.keySeq().last());
+            }, 0);
         }
-        next = this.props.previews.toArray()[nextIndex];
-        this.props.previews.keySeq().findIndex(function (k, i) {
-            if (i === nextIndex) {
-                previewName = k;
-            }
-            return false;
-        });
-        Actions.selectSegment(next.first(), previewName);
     }
 
     nextSegment() {
+        let self = this;
         let arrLength = this.props.previews.get(this.props.currentPreview).size;
         let index = this.props.previews.get(this.props.currentPreview).indexOf(parseInt(this.props.currentSid));
         let next = ((index + 1) < arrLength ) ? index + 1 : 0;
-        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(next), this.props.currentPreview);
+        setTimeout(function () {
+            Actions.selectSegment(self.props.previews.get(self.props.currentPreview).get(next), self.props.currentPreview);
+        }, 0);
     }
 
     previousSegment() {
+        let self = this;
         let arrLength = this.props.previews.get(this.props.currentPreview).size;
         let index = this.props.previews.get(this.props.currentPreview).indexOf(parseInt(this.props.currentSid));
         let previous = ((index - 1) < 0 ) ? arrLength - 1 : index-1;
-        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(previous), this.props.currentPreview);
+        setTimeout(function () {
+            Actions.selectSegment(self.props.previews.get(self.props.currentPreview).get(previous), self.props.currentPreview);
+        }, 0);
     }
 
     firstSegment() {
-        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(0), this.props.currentPreview);
+        let self = this;
+        setTimeout(function () {
+            Actions.selectSegment(self.props.previews.get(self.props.currentPreview).get(0), self.props.currentPreview);
+        }, 0);
     }
 
     lastSegment() {
+        let self = this;
         let arrLength = this.props.previews.get(this.props.currentPreview).size;
-        Actions.selectSegment(this.props.previews.get(this.props.currentPreview).get(arrLength-1), this.props.currentPreview);
+        setTimeout(function () {
+            Actions.selectSegment(self.props.previews.get(self.props.currentPreview).get(arrLength - 1), self.props.currentPreview);
+        }, 0);
     }
 
     openWindow() {
@@ -134,31 +146,48 @@ class PreviewActions extends React.Component {
     }
 
     componentDidMount() {
+        Store.addListener(Constants.NEXT_PREVIEW, this.nextImage);
+        Store.addListener(Constants.PREV_PREVIEW, this.previousImage);
+        Store.addListener(Constants.NEXT_SEGMENT, this.nextSegment);
+        Store.addListener(Constants.PREV_SEGMENT, this.previousSegment);
+        Store.addListener(Constants.LAST_SEGMENT, this.lastSegment);
+        Store.addListener(Constants.FIRST_SEGMENT, this.firstSegment);
     }
 
     componentWillUnmount() {
+        Store.removeListener(Constants.NEXT_PREVIEW, this.nextImage);
+        Store.removeListener(Constants.PREV_PREVIEW, this.previousImage);
+        Store.removeListener(Constants.NEXT_SEGMENT, this.nextSegment);
+        Store.removeListener(Constants.PREV_SEGMENT, this.previousSegment);
+        Store.removeListener(Constants.LAST_SEGMENT, this.lastSegment);
+        Store.removeListener(Constants.FIRST_SEGMENT, this.firstSegment);
     }
 
     componentDidUpdate() {}
 
     render() {
+        let keyShortcuts = (UI.isMac) ? "mac" : "standard";
         if (this.props.currentPreview) {
             return <div className="preview-actions-container">
 
 
                 <div className="preview-pp actions-image">
                     <button className="preview-button previous"
+                            title={UI.shortcuts.previousPreview.label + " (" + UI.shortcuts.previousPreview.keystrokes[keyShortcuts] + ")"}
                             onClick={this.previousImage.bind(this)}>
                         <i className="icon icon-chevron-left" />
                         <i className="icon icon-chevron-left" />
                     </button>
 
                     <button className="preview-button previous"
-                            onClick={this.firstSegment.bind(this)}>
+                            title={UI.shortcuts.firstSegment.label + " (" + UI.shortcuts.firstSegment.keystrokes[keyShortcuts] + ")"}
+                        onClick={this.firstSegment.bind(this)}>
                         <i className="icon icon-go-to-first" />
                     </button>
 
-                    <button className="preview-button previous" onClick={this.previousSegment.bind(this)}>
+                    <button className="preview-button previous"
+                            title={UI.shortcuts.previousSegment.label + " (" + UI.shortcuts.previousSegment.keystrokes[keyShortcuts] + ")"}
+                            onClick={this.previousSegment.bind(this)}>
                         <i className="icon icon-chevron-left" />
                     </button>
 
@@ -166,16 +195,19 @@ class PreviewActions extends React.Component {
                         <i className="icon icon-picture" />
                     </div>
 
-                    <button onClick={this.nextSegment.bind(this)}>
+                    <button onClick={this.nextSegment.bind(this)}
+                            title={UI.shortcuts.nextSegment.label + " (" + UI.shortcuts.nextSegment.keystrokes[keyShortcuts] + ")"}>
                         <i className="icon icon-chevron-right" />
                     </button>
 
                     <button className="preview-button previous"
+                            title={UI.shortcuts.lastSegment.label + " (" + UI.shortcuts.lastSegment.keystrokes[keyShortcuts] + ")"}
                             onClick={this.lastSegment.bind(this)}>
                         <i className="icon icon-go-to-last" />
                     </button>
 
-                    <button onClick={this.nextImage.bind(this)}>
+                    <button onClick={this.nextImage.bind(this)}
+                            title={UI.shortcuts.nextPreview.label + " (" + UI.shortcuts.nextPreview.keystrokes[keyShortcuts] + ")"}>
                         <i className="icon icon-chevron-right" />
                         <i className="icon icon-chevron-right" />
                     </button>

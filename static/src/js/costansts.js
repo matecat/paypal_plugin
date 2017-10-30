@@ -6,5 +6,11 @@ module.exports = keyMirror({
     RENDER_VIEW: null,
     SELECT_SEGMENT: null,
     OPEN_WINDOW: null,
-    CLOSE_PREVIEW: null
+    CLOSE_PREVIEW: null,
+    NEXT_PREVIEW: null,
+    PREV_PREVIEW: null,
+    NEXT_SEGMENT: null,
+    PREV_SEGMENT: null,
+    LAST_SEGMENT: null,
+    FIRST_SEGMENT: null
 });

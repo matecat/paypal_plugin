@@ -10,6 +10,7 @@ let interact = require('interactjs');
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
     var originalActiveteSegment = UI.activateSegment;
     var originalAnimateScroll = UI.animateScroll;
+    var originalSetShortcuts = UI.setShortcuts;
     $.extend(UI, {
         windowPreview: null,
 
@@ -64,6 +65,84 @@ let interact = require('interactjs');
                     // target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
                 });
 
+            $("body").on('keydown.shortcuts', null, UI.shortcuts.nextPreview.keystrokes.standard, function(e) {
+                PreviewActions.nextPreview();
+            }).on('keydown.shortcuts', null, UI.shortcuts.nextPreview.keystrokes.mac, function(e) {
+                PreviewActions.nextPreview();
+            }).on('keydown.shortcuts', null, UI.shortcuts.previousPreview.keystrokes.standard, function(e) {
+                PreviewActions.prevPreview();
+            }).on('keydown.shortcuts', null, UI.shortcuts.previousPreview.keystrokes.mac, function(e) {
+                PreviewActions.prevPreview();
+            }).on('keydown.shortcuts', null, UI.shortcuts.nextSegment.keystrokes.standard, function(e) {
+                PreviewActions.nextSegment();
+            }).on('keydown.shortcuts', null, UI.shortcuts.nextSegment.keystrokes.mac, function(e) {
+                PreviewActions.nextSegment();
+            }).on('keydown.shortcuts', null, UI.shortcuts.previousSegment.keystrokes.standard, function(e) {
+                PreviewActions.prevSegment();
+            }).on('keydown.shortcuts', null, UI.shortcuts.previousSegment.keystrokes.mac, function(e) {
+                PreviewActions.prevSegment();
+            }).on('keydown.shortcuts', null, UI.shortcuts.firstSegment.keystrokes.standard, function(e) {
+                PreviewActions.firstSegment();
+            }).on('keydown.shortcuts', null, UI.shortcuts.firstSegment.keystrokes.mac, function(e) {
+                PreviewActions.firstSegment();
+            }).on('keydown.shortcuts', null, UI.shortcuts.lastSegment.keystrokes.standard, function(e) {
+                PreviewActions.lastSegment();
+            }).on('keydown.shortcuts', null, UI.shortcuts.lastSegment.keystrokes.mac, function(e) {
+                PreviewActions.lastSegment();
+            })
+
+        },
+        setShortcuts: function() {
+            originalSetShortcuts.apply(this);
+
+            UI.shortcuts.nextPreview = {
+                "label" : "Next Preview",
+                "equivalent": "",
+                "keystrokes" : {
+                    "standard": "ctrl+right",
+                    "mac": "meta+right",
+                }
+            };
+            UI.shortcuts.previousPreview = {
+                "label" : "Next Preview",
+                "equivalent": "",
+                "keystrokes" : {
+                    "standard": "ctrl+left",
+                    "mac": "meta+left",
+                }
+            };
+            UI.shortcuts.nextSegment = {
+                "label" : "Next Preview Segment",
+                "equivalent": "",
+                "keystrokes" : {
+                    "standard": "alt+ctrl+right",
+                    "mac": "alt+meta+ight",
+                }
+            };
+            UI.shortcuts.previousSegment = {
+                "label": "Previous Preview Segment",
+                "equivalent": "",
+                "keystrokes": {
+                    "standard": "alt+ctrl+left",
+                    "mac": "alt+meta+left",
+                }
+            };
+            UI.shortcuts.lastSegment = {
+                "label" : "Last Preview Segment",
+                "equivalent": "",
+                "keystrokes" : {
+                    "standard": "alt+ctrl+pagedown",
+                    "mac": "alt+meta+pagedown",
+                }
+            };
+            UI.shortcuts.firstSegment = {
+                "label" : "First Preview Segment",
+                "equivalent": "",
+                "keystrokes" : {
+                    "standard": "alt+ctrl+pageup",
+                    "mac": "alt+meta+pageup",
+                }
+            };
         },
         activateSegment: function (segment) {
             originalActiveteSegment.apply(this, segment);
