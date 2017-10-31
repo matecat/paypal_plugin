@@ -119,7 +119,9 @@ class PreviewContainer extends React.Component {
                         segmentPreviews={segmentPreviews.get('previews')}
                         currentPreview={this.state.currentPreview}
                     />
-                ) : (null)}
+                ) : (
+                    <div className="preview-drag-area"/>
+                )}
 
                 <PreviewActions
                     currentSid={this.state.currentSid}
