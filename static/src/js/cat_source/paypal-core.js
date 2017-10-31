@@ -11,6 +11,7 @@ let interact = require('interactjs');
     var originalActiveteSegment = UI.activateSegment;
     var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
+    var originalLoadCustimization = UI.loadCustomization;
     $.extend(UI, {
         windowPreview: null,
 
@@ -18,6 +19,7 @@ let interact = require('interactjs');
 
         setEvents: function () {
             let self  = this;
+
             originalSetEvents.apply(this);
 
             // To make tab Footer messages opened by default
@@ -257,7 +259,10 @@ let interact = require('interactjs');
 
         },
 
-
+        loadCustomization: function () {
+            originalLoadCustimization.apply(this);
+            UI.custom.extended_tagmode = true;
+        }
     });
 
 })() ;
