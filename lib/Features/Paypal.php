@@ -92,6 +92,10 @@ class Paypal extends BaseFeature {
         return false;
     }
 
+    public function skipTagLessFeature( $boolean ){
+        return true;
+    }
+
     /**
      * Remove unwanted options from the UI and add additional filters
      *
