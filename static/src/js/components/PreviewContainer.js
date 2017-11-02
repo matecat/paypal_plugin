@@ -153,6 +153,8 @@ class PreviewContainer extends React.Component {
                     currentPreview={this.state.currentPreview}
                     previews={this.state.previews}
                     showFullScreenButton={this.props.showFullScreenButton}
+                    isMac={this.props.isMac}
+                    shortcuts={this.props.Shortcuts}
                 />
                 <div className="no-preview">
                     <div className="no-preview-img">
