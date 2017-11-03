@@ -28,7 +28,7 @@ class Paypal extends BaseFeature {
 
     public static function loadRoutes( Klein $klein ) {
         $klein->respond( 'GET', '/preview',              [__CLASS__, 'previewRoute'] );
-        route( '/reference-files/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
+        route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
     }
 
