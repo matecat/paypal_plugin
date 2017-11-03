@@ -15,6 +15,8 @@ class PreviewActions extends React.Component {
         this.previousSegment = this.previousSegment.bind(this);
         this.lastSegment = this.lastSegment.bind(this);
         this.firstSegment = this.firstSegment.bind(this);
+        this.goToNextSegmentImage = this.goToNextSegmentImage.bind(this);
+        this.goToPreviousSegmentImage = this.goToPreviousSegmentImage.bind(this);
     }
 
 
@@ -36,8 +38,9 @@ class PreviewActions extends React.Component {
         } else {
             next = 0;
         }
-
-        Actions.selectSegment(this.props.currentSid, this.props.segmentPreviews.get(next).get('file_index'));
+        setTimeout(function () {
+            Actions.selectSegment(self.props.currentSid, self.props.segmentPreviews.get(next).get('file_index'));
+        }, 0);
         this.setState({
             index: next+1
         });
@@ -55,7 +58,9 @@ class PreviewActions extends React.Component {
             next = this.props.segmentPreviews.size - 1;
         }
 
-        Actions.selectSegment(this.props.currentSid, this.props.segmentPreviews.get(next).get('file_index'));
+        setTimeout(function () {
+            Actions.selectSegment(self.props.currentSid, self.props.segmentPreviews.get(next).get('file_index'));
+        }, 0);
         this.setState({
             index: next+1
         });
@@ -152,6 +157,8 @@ class PreviewActions extends React.Component {
         Store.addListener(Constants.PREV_SEGMENT, this.previousSegment);
         Store.addListener(Constants.LAST_SEGMENT, this.lastSegment);
         Store.addListener(Constants.FIRST_SEGMENT, this.firstSegment);
+        Store.addListener(Constants.NEXT_SEGMENT_PREVIEW, this.goToNextSegmentImage);
+        Store.addListener(Constants.PREV_SEGMENT_PREVIEW, this.goToPreviousSegmentImage);
     }
 
     componentWillUnmount() {
@@ -161,6 +168,8 @@ class PreviewActions extends React.Component {
         Store.removeListener(Constants.PREV_SEGMENT, this.previousSegment);
         Store.removeListener(Constants.LAST_SEGMENT, this.lastSegment);
         Store.removeListener(Constants.FIRST_SEGMENT, this.firstSegment);
+        Store.removeListener(Constants.NEXT_SEGMENT_PREVIEW, this.goToNextSegmentImage);
+        Store.removeListener(Constants.PREV_SEGMENT_PREVIEW, this.goToPreviousSegmentImage);
     }
 
     componentDidUpdate() {}
@@ -218,10 +227,16 @@ class PreviewActions extends React.Component {
                     { this.props.segmentPreviews.size > 1 ? (
                         <div>
                             <button className="preview-button previous"
-                                    onClick={this.goToPreviousSegmentImage.bind(this)}> <i className="icon icon-chevron-left" /> </button>
+                                    onClick={this.goToPreviousSegmentImage.bind(this)}
+                                    title={this.props.shortcuts.previousSegmentPreview.label + " (" + this.props.shortcuts.previousSegmentPreview.keystrokes[keyShortcuts] + ")"}
+                                >
+                                <i className="icon icon-chevron-left" /> </button>
                             <div className="n-segments-available">{this.state.index}/{this.props.segmentPreviews.size}</div>
                             <button className="preview-button next"
-                                    onClick={this.goToNextSegmentImage.bind(this)}> <i className="icon icon-chevron-right" /> </button>
+                                    onClick={this.goToNextSegmentImage.bind(this)}
+                                    title={this.props.shortcuts.nextSegmentPreview.label + " (" + this.props.shortcuts.nextSegmentPreview.keystrokes[keyShortcuts] + ")"}
+                                >
+                                <i className="icon icon-chevron-right" /> </button>
                             <div className="text-n-segments-available">available screens for this segment</div>
                         </div>
 

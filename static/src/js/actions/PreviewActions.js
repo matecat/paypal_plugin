@@ -73,6 +73,16 @@ let PreviewActions = {
             actionType: Constants.FIRST_SEGMENT
         });
     },
+    nextSegmentPreview: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.NEXT_SEGMENT_PREVIEW
+        });
+    },
+    previousSegmentPreview: function () {
+        AppDispatcher.dispatch({
+            actionType: Constants.PREV_SEGMENT_PREVIEW
+        });
+    }
 
 };
 

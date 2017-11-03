@@ -99,48 +99,50 @@ let Store = require('./store/PreviewsStore');
                     "mac": "alt+ctrl+pageup",
                 }
             };
+            PREVIEW.shortcuts.nextSegmentPreview = {
+                "label" : "Next Segment Preview",
+                "equivalent": "",
+                "keystrokes" : {
+                    "standard": "alt+ctrl+n",
+                    "mac": "alt+ctrl+n",
+                }
+            };
+            PREVIEW.shortcuts.previousSegmentPreview = {
+                "label" : "Previous Segment Preview",
+                "equivalent": "",
+                "keystrokes" : {
+                    "standard": "alt+ctrl+p",
+                    "mac": "alt+ctrl+p",
+                }
+            };
 
-            if (this.isMac) {
-                $("body").on('keydown.shortcuts', null, PREVIEW.shortcuts.nextPreview.keystrokes.mac, function(e) {
-                    e.preventDefault();
-                    PreviewActions.nextPreview();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.previousPreview.keystrokes.mac, function(e) {
-                    e.preventDefault();
-                    PreviewActions.prevPreview();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.nextSegment.keystrokes.mac, function(e) {
-                    e.preventDefault();
-                    PreviewActions.nextSegment();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.previousSegment.keystrokes.mac, function(e) {
-                    e.preventDefault();
-                    PreviewActions.prevSegment();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.firstSegment.keystrokes.mac, function(e) {
-                    e.preventDefault();
-                    PreviewActions.firstSegment();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.lastSegment.keystrokes.mac, function(e) {
-                    e.preventDefault();
-                    PreviewActions.lastSegment();
-                });
-            } else {
-                $("body").on('keydown.shortcuts', null, PREVIEW.shortcuts.nextPreview.keystrokes.standard, function(e) {
-                    e.preventDefault();
-                    PreviewActions.nextPreview();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.previousPreview.keystrokes.standard, function(e) {
-                    e.preventDefault();
-                    PreviewActions.prevPreview();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.nextSegment.keystrokes.standard, function(e) {
-                    e.preventDefault();
-                    PreviewActions.nextSegment();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.previousSegment.keystrokes.standard, function(e) {
-                    e.preventDefault();
-                    PreviewActions.prevSegment();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.firstSegment.keystrokes.standard, function(e) {
-                    e.preventDefault();
-                    PreviewActions.firstSegment();
-                }).on('keydown.shortcuts', null, PREVIEW.shortcuts.lastSegment.keystrokes.standard, function(e) {
-                    e.preventDefault();
-                    PreviewActions.lastSegment();
-                });
-            }
+
+            $("body").on('keydown.shortcuts', null, PREVIEW.shortcuts.nextPreview.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.nextPreview();
+            }).on('keydown.shortcuts', null, PREVIEW.shortcuts.previousPreview.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.prevPreview();
+            }).on('keydown.shortcuts', null, PREVIEW.shortcuts.nextSegment.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.nextSegment();
+            }).on('keydown.shortcuts', null, PREVIEW.shortcuts.previousSegment.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.prevSegment();
+            }).on('keydown.shortcuts', null, PREVIEW.shortcuts.firstSegment.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.firstSegment();
+            }).on('keydown.shortcuts', null, PREVIEW.shortcuts.lastSegment.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.lastSegment();
+            }).on('keydown.shortcuts', null, PREVIEW.shortcuts.nextSegmentPreview.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.nextSegmentPreview();
+            }).on('keydown.shortcuts', null, PREVIEW.shortcuts.previousSegmentPreview.keystrokes.standard, function(e) {
+                e.preventDefault();
+                PreviewActions.previousSegmentPreview();
+            });
+
         },
 
     };
