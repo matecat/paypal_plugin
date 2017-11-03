@@ -118,32 +118,32 @@ let interact = require('interactjs');
                 "label" : "Next Preview",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "alt+right",
-                    "mac": "ctrl+right",
+                    "standard": "alt+ctrl+right",
+                    "mac": "alt+ctrl+right",
                 }
             };
             UI.shortcuts.previousPreview = {
                 "label" : "Next Preview",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "alt+left",
-                    "mac": "ctrl+left",
+                    "standard": "alt+ctrl+left",
+                    "mac": "alt+ctrl+left",
                 }
             };
             UI.shortcuts.nextSegment = {
                 "label" : "Next Preview Segment",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "alt+ctrl+right",
-                    "mac": "alt+ctrl+right",
+                    "standard": "alt+ctrl+down",
+                    "mac": "alt+ctrl+down",
                 }
             };
             UI.shortcuts.previousSegment = {
                 "label": "Previous Preview Segment",
                 "equivalent": "",
                 "keystrokes": {
-                    "standard": "alt+ctrl+left",
-                    "mac": "alt+ctrl+left",
+                    "standard": "alt+ctrl+up",
+                    "mac": "alt+ctrl+up",
                 }
             };
             UI.shortcuts.lastSegment = {

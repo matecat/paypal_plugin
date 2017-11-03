@@ -55,23 +55,23 @@ let Store = require('./store/PreviewsStore');
                 "label" : "Next Preview",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "alt+right",
-                    "mac": "ctrl+right",
+                    "standard": "alt+ctrl+right",
+                    "mac": "alt+ctrl+right",
                 }
             };
             PREVIEW.shortcuts.previousPreview = {
                 "label" : "Next Preview",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "alt+left",
-                    "mac": "ctrl+left",
+                    "standard": "alt+ctrl+left",
+                    "mac": "alt+ctrl+left",
                 }
             };
             PREVIEW.shortcuts.nextSegment = {
                 "label" : "Next Preview Segment",
                 "equivalent": "",
                 "keystrokes" : {
-                    "standard": "alt+ctrl+right",
+                    "standard": "alt+ctrl+down",
                     "mac": "alt+ctrl+right",
                 }
             };
@@ -79,7 +79,7 @@ let Store = require('./store/PreviewsStore');
                 "label": "Previous Preview Segment",
                 "equivalent": "",
                 "keystrokes": {
-                    "standard": "alt+ctrl+left",
+                    "standard": "alt+ctrl+up",
                     "mac": "alt+ctrl+left",
                 }
             };
