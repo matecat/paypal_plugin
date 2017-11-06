@@ -38,7 +38,7 @@ class CDataHandler {
                          * When the user navigate between the flows, the segment focus must be placed to the first segment in the preview,
                          * so MateCat must order the segment list in the reverse lookup from top [x,y] position to lower ( y top -> y down ).
                          */
-                        $orderingVector[ $fileName ][ $id_segment ] = $preview->y . $preview->x;
+                        $orderingVector[ $fileName ][ $id_segment ] = ( 10000 + $preview->y ) . "-" . ( 10000 - $preview->x );
 
                     }
                     $projectStructure[ 'notes' ][ $internal_id ][ 'json' ][ $jsonPos ] = json_encode( $decodedJson );
