@@ -18,6 +18,8 @@ class CDataHandler {
 
     public function formatJson( $projectStructure ){
 
+        $orderingVector = [];
+
         foreach ( $projectStructure[ 'notes' ] as $internal_id => $v ) {
 
             foreach ( $projectStructure[ 'notes' ][ $internal_id ][ 'json_segment_ids' ] as $segPos => $id_segment ) {
@@ -29,7 +31,15 @@ class CDataHandler {
                     foreach( $decodedJson->previews as $preview ){
                         $fileName = \FilesStorage::pathinfo_fix( $preview->path, PATHINFO_BASENAME );
                         list( $preview->path, $preview->file_index ) = array_values( Routes::projectImageReferences( $projectStructure, $fileName ) );
-                        $projectStructure[ 'json_previews' ][ $fileName ][] = $id_segment;
+
+                        /*
+                         * Prepare for Schwartzian transform
+                         *
+                         * When the user navigate between the flows, the segment focus must be placed to the first segment in the preview,
+                         * so MateCat must order the segment list in the reverse lookup from top [x,y] position to lower ( y top -> y down ).
+                         */
+                        $orderingVector[ $fileName ][ $id_segment ] = $preview->x . $preview->y;
+
                     }
                     $projectStructure[ 'notes' ][ $internal_id ][ 'json' ][ $jsonPos ] = json_encode( $decodedJson );
 
@@ -37,6 +47,12 @@ class CDataHandler {
 
             }
 
+        }
+
+        //Schwartzian transform
+        foreach( $orderingVector as $fileName => $segmentVector ){
+            asort( $segmentVector );
+            $projectStructure[ 'json_previews' ][ $fileName ] = array_keys( $segmentVector );
         }
 
     }
