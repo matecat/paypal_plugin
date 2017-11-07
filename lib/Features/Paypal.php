@@ -9,6 +9,7 @@
 namespace Features;
 
 use BasicFeatureStruct;
+use Constants_TranslationStatus;
 use controller;
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Utils\CDataHandler;
@@ -156,6 +157,59 @@ class Paypal extends BaseFeature {
              */
             $controller->setLoginRequired( true ) ;
         }
+    }
+
+    /**
+     * Disable the TM ICES
+     *
+     * @param $tm_data
+     * @param $queueElementParams
+     *
+     * @return mixed
+     */
+    public function checkIceLocked( $tm_data, $queueElementParams ){
+        $tm_data[ 'status' ] = Constants_TranslationStatus::STATUS_NEW;
+        $tm_data[ 'locked' ] = false;
+        return $tm_data;
+    }
+
+    /**
+     * Rewrite 101% to 100% from matches retrieved by getContributionController
+     *
+     * @param $match
+     *
+     * @return mixed
+     */
+    public function iceMatchRewriteForContribution( $match ){
+        if( $match[ 'match' ] == '101%' ){
+            $match[ 'match' ] = '100%';
+        }
+        return $match;
+    }
+
+    /**
+     * @param $iceLockArray array
+     *
+     * <code>
+     *  [
+     *      'approved'      => $translation_row [ 4 ],
+     *      'locked'        => 0,
+     *      'match_type'    => 'ICE',
+     *      'eq_word_count' => 0,
+     *      'status'        => $status
+     * ]
+     * </code>
+     *
+     * @return array $iceLockArray
+     */
+    public function setICESLockFromXliffValues( $iceLockArray ){
+
+        if( $iceLockArray[ 'approved' ] ){
+            $iceLockArray[ 'locked' ] = 1;
+            $iceLockArray[ 'status' ] = Constants_TranslationStatus::STATUS_APPROVED;
+        }
+        return $iceLockArray;
+
     }
 
 }
