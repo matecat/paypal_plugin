@@ -11,6 +11,7 @@ namespace Features;
 use BasicFeatureStruct;
 use Constants_TranslationStatus;
 use controller;
+use Features;
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
@@ -21,6 +22,12 @@ class Paypal extends BaseFeature {
      * @var CDataHandler
      */
     protected $jsonHandler;
+
+    public static $dependencies = [
+            Features::PROJECT_COMPLETION,
+            Features::TRANSLATION_VERSIONS,
+            Features::REVIEW_EXTENDED
+    ] ;
 
     public function __construct( BasicFeatureStruct $feature ) {
         parent::__construct( $feature );
