@@ -10,6 +10,7 @@ namespace Features\Paypal\Controller\API;
 
 use API\V2\KleinController;
 use API\V2\KleinResponseFileStream;
+use API\V2\Validators\JobPasswordValidator;
 use API\V2\Validators\LoginValidator;
 use API\V2\Validators\ProjectPasswordValidator;
 use Features\Paypal\Controller\API\Validators\WhitelistAccessValidator;
@@ -22,23 +23,17 @@ class ReferenceFilesController extends KleinController {
      */
     protected $project;
 
-    /**
-     * @var ProjectPasswordValidator
-     */
-    protected $projectValidator;
-
     protected function afterConstruct() {
-        $this->projectValidator = new ProjectPasswordValidator( $this );
-
         $this->appendValidator( new WhitelistAccessValidator( $this ) );
         $this->appendValidator( new LoginValidator( $this ) );
-        $this->appendValidator( $this->projectValidator );
-
     }
 
     public function flushStream() {
 
-        $this->project = $this->projectValidator->getProject();
+        $projectValidator = new ProjectPasswordValidator( $this );
+        $this->appendValidator( $projectValidator )->validateRequest();
+
+        $this->project = $projectValidator->getProject();
 
         list( $fileName, $filePointer, $mimeType ) = array_values(
                 ( new ZipArchiveReference() )->getFileStreamPointerInfo( $this->project, $this->params[ 'file_name_in_zip' ] )
@@ -50,14 +45,26 @@ class ReferenceFilesController extends KleinController {
 
     public function getReferenceFolder(){
 
-        $this->project = $this->projectValidator->getProject();
+        $jobValidator = new JobPasswordValidator( $this );
+        $this->appendValidator( $jobValidator )->validateRequest();
 
         $zipArchiveRef = new ZipArchiveReference();
         list( $fileName, $filePointer, $mimeType ) = array_values(
-                $zipArchiveRef->getDirectoryStreamFilePointer( $this->project, '__reference' )
+                $zipArchiveRef->getDirectoryStreamFilePointer( $jobValidator->getJob()->getProject(), '__reference' )
         );
 
         ( new KleinResponseFileStream( $this->response ) )->streamFileInlineFromPointer( $filePointer, $fileName, $mimeType );
+
+    }
+
+    public function getReferenceFolderList(){
+
+        $jobValidator = new JobPasswordValidator( $this );
+        $this->appendValidator( $jobValidator )->validateRequest();
+
+        $zipArchiveRef = new ZipArchiveReference();
+        $referenceFileList = $zipArchiveRef->getListTree( $jobValidator->getJob()->getProject(), '__reference' );
+        $this->response->json( [ 'reference' => $referenceFileList ] );
 
     }
 
