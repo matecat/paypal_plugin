@@ -200,7 +200,7 @@ class PreviewActions extends React.Component {
                         <i className="icon icon-chevron-left" />
                     </button>
 
-                    <div className="info-icon">
+                    <div className="info-icon-picture">
                         <i className="icon icon-picture" />
                     </div>
 
@@ -276,7 +276,7 @@ class PreviewActions extends React.Component {
                             <i className="icon icon-chevron-left" />
                         </button>
 
-                        <div className="info-icon">
+                        <div className="info-icon-picture">
                             <i className="icon icon-picture" />
                         </div>
 

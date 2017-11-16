@@ -159,7 +159,7 @@ class PreviewContainer extends React.Component {
                 <div className="no-preview">
                     <div className="no-preview-img">
                         <i className="icon icon-no-preview" />
-                        <div>This segment has no preview</div>
+                        <div className="message-no-preview">This segment has no preview</div>
                     </div>
                 </div>
             </div>
