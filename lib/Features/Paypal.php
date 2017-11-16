@@ -8,13 +8,16 @@
 
 namespace Features;
 
+use API\V2\Exceptions\AuthenticationError;
 use BasicFeatureStruct;
 use Constants_TranslationStatus;
-use controller;
 use Features;
+use CustomErrorPage;
+use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
+use viewController;
 
 class Paypal extends BaseFeature {
 
@@ -157,15 +160,37 @@ class Paypal extends BaseFeature {
     /**
      * Force a required authentication
      *
-     * @param controller $controller
+     * viewControllers validation access
+     *
+     * @param viewController $controller
+     * @param                $params
      */
-    public function catControllerDoActionStart( controller $controller ){
+    public function beginDoAction( viewController $controller, $params ) {
+
         if( method_exists( $controller, 'setLoginRequired' ) ){
             /**
-             * @var $controller \viewController
+             * @var $controller viewController
              */
             $controller->setLoginRequired( true ) ;
+            $controller->checkLoginRequiredAndRedirect();
         }
+
+        try {
+            //to use a validator whitelist here
+            ( new TranslatorsWhitelistAccessValidator( $controller ) )->validate();
+        } catch( AuthenticationError $e ){
+
+            $controllerInstance = new CustomErrorPage();
+            $template = new \PHPTALWithAppend( dirname( __FILE__ ) . '/Paypal/View/Html/NotAllowed.html' );
+            $controllerInstance->setTemplate( $template );
+            $controllerInstance->setCode( 401 );
+            $controllerInstance->doAction();
+            \Log::doLog( "TODO Implements Authentication exception behaviour" );
+            trigger_error( "TODO Implements Authentication exception behaviour", E_USER_WARNING );
+            die();
+
+        }
+
     }
 
     /**

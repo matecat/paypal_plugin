@@ -17,5 +17,6 @@ class CatDecorator extends AbstractDecorator
         $this->template->append('footer_js', Routes::staticSrc('build/paypal-core-build.js') );
         $this->template->append('css_resources', Routes::staticSrc('build/paypal-core-build.css') );
         $this->template->splitSegmentEnabled = var_export(false, true);
+        $this->template->allow_link_to_analysis = false ;
     }
 }

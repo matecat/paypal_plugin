@@ -9,9 +9,8 @@
 
 namespace Features\Paypal\Controller;
 
-use Analysis_AnalysisModel ;
 use API\V2\Validators\LoginValidator;
-use Features\Paypal\Controller\API\Validators\WhitelistAccessValidator;
+use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Decorator\PreviewDecorator;
 use PHPTALWithAppend;
 
@@ -25,7 +24,7 @@ class PreviewController extends \BaseKleinViewController {
     protected $model ;
 
     public function afterConstruct() {
-        $this->appendValidator( new WhitelistAccessValidator( $this ) );
+        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
         $this->appendValidator( new LoginValidator( $this ) );
     }
 

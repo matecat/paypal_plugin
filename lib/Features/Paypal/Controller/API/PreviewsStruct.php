@@ -12,7 +12,7 @@ namespace Features\Paypal\Controller\API;
 use API\V2\KleinController;
 use API\V2\Validators\JobPasswordValidator;
 use API\V2\Validators\LoginValidator;
-use Features\Paypal\Controller\API\Validators\WhitelistAccessValidator;
+use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Utils\CDataHandler;
 use Features\Paypal\View\API\JSON\Preview;
 use Jobs\MetadataDao;
@@ -20,7 +20,7 @@ use Jobs\MetadataDao;
 class PreviewsStruct extends KleinController {
 
     public function afterConstruct() {
-        $this->appendValidator( new WhitelistAccessValidator( $this ) );
+        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
         $this->appendValidator( new LoginValidator( $this ) );
         $this->appendValidator( new JobPasswordValidator( $this ) );
     }

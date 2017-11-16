@@ -13,7 +13,7 @@ use API\V2\KleinResponseFileStream;
 use API\V2\Validators\JobPasswordValidator;
 use API\V2\Validators\LoginValidator;
 use API\V2\Validators\ProjectPasswordValidator;
-use Features\Paypal\Controller\API\Validators\WhitelistAccessValidator;
+use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use ZipArchiveReference;
 
 class ReferenceFilesController extends KleinController {
@@ -24,7 +24,7 @@ class ReferenceFilesController extends KleinController {
     protected $project;
 
     protected function afterConstruct() {
-        $this->appendValidator( new WhitelistAccessValidator( $this ) );
+        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
         $this->appendValidator( new LoginValidator( $this ) );
     }
 
