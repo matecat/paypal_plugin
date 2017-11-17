@@ -199,7 +199,7 @@ let interact = require('interactjs');
                 var segmentPreview = this.segmentsPreviews.segments.find(function (item) {
                     return item.segment === parseInt(sid);
                 });
-                if (_.isUndefined(segmentPreview) || segmentPreview.previews.length === 0) {
+                if (_.isUndefined(segmentPreview) || _.isUndefined(segmentPreview.previews) || segmentPreview.previews.length === 0) {
                     UI.getSegmentById(sid).find('.segment-options-container').remove();
                 }
             }

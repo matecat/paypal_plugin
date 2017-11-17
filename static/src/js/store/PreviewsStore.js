@@ -36,7 +36,7 @@ let Store = assign({}, EventEmitter.prototype, {
     getPreviewName: function (segment) {
         if (_.isUndefined(segment)) return;
         let preview = segment.get('previews');
-        if (preview.size > 0 ) {
+        if (preview && preview.size > 0 ) {
             return preview.first().get('file_index')
         }
         return undefined;

@@ -65,7 +65,7 @@ class PreviewContainer extends React.Component {
 
     getImageDimension() {
         let preview = this.getCurrentPreview();
-        let img_w = preview.get('file_w');
+        let img_w = preview.get('fileW');
         let window_w_percent = window.outerWidth;
         if (img_w > window_w_percent) {
             img_w = window_w_percent;
