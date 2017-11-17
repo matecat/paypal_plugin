@@ -22,6 +22,7 @@
     "grunt-string-replace": "~0.2.7",
     "grunt-strip": "^0.2.1",
     "grunt-text-replace": "^0.4.0",
+    "node-sass": "^4.6.1",
     "interactjs": "^1.2.9",
     "keymirror": "^0.1.1",
     "sprintf": "^0.1.5"
