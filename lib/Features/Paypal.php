@@ -21,6 +21,8 @@ use viewController;
 
 class Paypal extends BaseFeature {
 
+    const FEATURE_CODE = 'paypal';
+
     /**
      * @var CDataHandler
      */

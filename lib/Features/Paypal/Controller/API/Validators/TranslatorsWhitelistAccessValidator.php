@@ -22,8 +22,10 @@ class TranslatorsWhitelistAccessValidator extends WListAccessValidator {
     public function validate() {
 
         $user = $this->controller->getUser();
+        $fs = $this->controller->getFeatureSet();
+//        if( array_key_exists( \Features::$VALID_CODES )  )
         if( stripos( $user->getEmail(), '@translated.net' ) === false ){ //TODO implement a better rule
-            throw new AuthenticationError("Nein");
+//            throw new AuthenticationError("Nein");
         }
 
     }
