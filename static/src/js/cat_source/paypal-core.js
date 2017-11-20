@@ -6,16 +6,23 @@ let interact = require('interactjs');
 
 
 (function() {
+    var originalStart = UI.start;
     var originalSetEvents = UI.setEvents;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
     var originalActiveteSegment = UI.activateSegment;
     var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
+
     $.extend(UI, {
         windowPreview: null,
 
         scrollSelector: "#outer",
+
+        start: function () {
+            originalStart.apply(this);
+            this.checkReferenceFiles();
+        },
 
         setEvents: function () {
             let self  = this;
@@ -60,7 +67,7 @@ let interact = require('interactjs');
                     y += event.deltaRect.top;
 
                     // target.style.webkitTransform = target.style.transform =
-                        'translate(' + x + 'px,' + y + 'px)';
+                    'translate(' + x + 'px,' + y + 'px)';
 
                     // target.setAttribute('data-x', x);
                     target.setAttribute('data-y', y);
@@ -279,7 +286,41 @@ let interact = require('interactjs');
         loadCustomization: function () {
             originalLoadCustimization.apply(this);
             UI.custom.extended_tagmode = true;
+        },
+
+        checkReferenceFiles: function () {
+            var path = sprintf(
+                '/plugins/paypal/reference-files/%s/%s/list',
+                config.id_job, config.password
+            );
+            $.ajax({
+                type: "GET",
+                url : path
+            }).done(function (response) {
+                if (response.reference.files && response.reference.files.length > 0 ) {
+                    var htmlButton = '<li>' +
+                        '<a title="References" alt="References" class="download-references" href="#" >' +
+                        '<span class="icon-download"></span>REFERENCES' +
+                        '</a>' +
+                        '</li>';
+                    $("#previewDropdown").append(htmlButton);
+                    $('.download-references').on('click', function () {
+                        var path = sprintf(
+                            '/plugins/paypal/reference-files/%s/%s',
+                            config.id_job, config.password
+                        );
+
+                        var iFrameDownload = $( document.createElement( 'iframe' ) ).hide().prop( {
+                            id: 'iframeDownload_' + new Date().getTime() + "_" + parseInt( Math.random( 0, 1 ) * 10000000 ),
+                            src: path
+                        } );
+                        $( "body" ).append( iFrameDownload );
+                    });
+                }
+            });
         }
+
+
     });
 
 })() ;
