@@ -173,7 +173,7 @@ let interact = require('interactjs');
             };
         },
         activateSegment: function (segment) {
-            originalActiveteSegment.apply(this, segment);
+            originalActiveteSegment.apply(this, [segment]);
             let sid = UI.getSegmentId(segment);
             this.hideShowSegmentButton(sid);
 
