@@ -116,7 +116,7 @@ let interact = require('interactjs');
                 }
             };
             UI.shortcuts.previousPreview = {
-                "label" : "Next Preview",
+                "label" : "Previous Preview",
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+left",
@@ -202,7 +202,7 @@ let interact = require('interactjs');
             return scrollAnimation.promise() ;
         },
         hideShowSegmentButton: function(sid) {
-            if (this.segmentsPreviews) {
+            if (this.segmentsPreviews && this.segmentsPreviews.segments) {
                 var segmentPreview = this.segmentsPreviews.segments.find(function (item) {
                     return item.segment === parseInt(sid);
                 });
@@ -246,9 +246,11 @@ let interact = require('interactjs');
                 Shortcuts: UI.shortcuts
             }), mountPoint);
             this.getPreviewData().done(function (response) {
-                self.segmentsPreviews = response.data;
-                self.hideShowSegmentButton(currentId);
-                PreviewActions.renderPreview(currentId, response.data);
+                if (!_.isNull(response.data.previews)) {
+                    self.segmentsPreviews = response.data;
+                    self.hideShowSegmentButton(currentId);
+                    PreviewActions.renderPreview(currentId, response.data);
+                }
             });
         },
 
