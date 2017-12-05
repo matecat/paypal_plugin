@@ -10,20 +10,20 @@ namespace Features\Paypal\Controller\API;
 
 use API\V2\KleinController;
 use API\V2\Validators\LoginValidator;
+use API\V2\Exceptions\ValidationError;
+use API\V2\Exceptions\NotFoundException;
 use API\V2\Validators\ProjectPasswordValidator;
-use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
+use Features\Paypal\Utils\Constants;
 use Projects_MetadataDao;
 
 class WhitelistController extends KleinController {
 
-    const PAYPAL_WHITELIST_KEY = "paypal_whitelist";
     /**
      * @var \Projects_ProjectStruct
      */
     protected $project;
 
     protected function afterConstruct() {
-        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
         $this->appendValidator( new LoginValidator( $this ) );
     }
 
@@ -35,32 +35,21 @@ class WhitelistController extends KleinController {
 
         $emails = json_decode($this->params['emails']);
         if (!is_array($emails)) {
-            $this->result['success'] = false;
-            $this->result[ 'errors' ][] = array( "code" => -1, "message" => "Param 'emails' is not a list" );
-            $this->response->code(400);
-            $this->response->json($this->result);
-            return false;
+            throw new ValidationError("Param 'emails' is not a list", -1);
         }
 
         foreach ($emails as $email) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                $this->result[ 'success' ] = false;
-                $this->result[ 'errors' ][] = array( "code" => -2, "message" => $email." is not a valid email address" );
-                $this->response->code(400);
-                $this->response->json($this->result);
-                return false;
+                throw new ValidationError($email." is not a valid email address", -2);
             }
         }
 
         $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
-        $data = $metadata->set($this->project->id, self::PAYPAL_WHITELIST_KEY, json_encode($emails));
+        $data = $metadata->set($this->project->id, Constants::PAYPAL_WHITELIST_KEY, json_encode($emails));
 
-        $this->result[ 'success' ] = true;
-        $this->result['code'] = 1;
-        $this->result['data'] = $data;
-        $this->response->json($this->result);
+        $this->response->json(['code' => 1, 'data' => $data]);
     }
 
     public function delete()
@@ -71,18 +60,10 @@ class WhitelistController extends KleinController {
         $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
-        if(!$metadata->get($this->project->id, self::PAYPAL_WHITELIST_KEY))
-        {
-            $this->result[ 'success' ] = false;
-            $this->result[ 'errors' ][] = array( "code" => -1, "message" => "No emails found for this project");
-            $this->response->json($this->result);
-            return false;
+        if(!$metadata->get($this->project->id, self::PAYPAL_WHITELIST_KEY)) {
+            throw new NotFoundException("No emails found for this project", -1);
         }
-        $metadata->delete($this->project->id, self::PAYPAL_WHITELIST_KEY);
-        $this->result[ 'success' ] = true;
-        $this->result['code'] = 1;
-        $this->result['data'] = "Done";
-        $this->response->json($this->result);
-
+        $metadata->delete($this->project->id, Constants::PAYPAL_WHITELIST_KEY);
+        $this->response->json(['code' => 1, 'data' => true]);
     }
 }
