@@ -15,7 +15,6 @@ use Features;
 use CustomErrorPage;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
-//use Features\Paypal\Controller\API\WhitelistController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
 use viewController;
@@ -177,7 +176,7 @@ class Paypal extends BaseFeature {
              * @var $controller viewController
              */
             $controller->setLoginRequired( true ) ;
-            //$controller->checkLoginRequiredAndRedirect();
+            $controller->checkLoginRequiredAndRedirect();
         }
 
         try {
