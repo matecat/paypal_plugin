@@ -15,6 +15,7 @@ use Features;
 use CustomErrorPage;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
+//use Features\Paypal\Controller\API\WhitelistController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
 use viewController;
@@ -45,6 +46,8 @@ class Paypal extends BaseFeature {
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
         route( '/reference-files/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolder' );
         route( '/reference-files/[:id_job]/[:password]/list', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolderList' );
+        route( '/projects/[:id_project]/[:password]/whitelist', 'POST', 'Features\Paypal\Controller\API\WhitelistController', 'create' );
+        route( '/projects/[:id_project]/[:password]/whitelist', 'DELETE', 'Features\Paypal\Controller\API\WhitelistController', 'delete' );
     }
 
     public static function previewRoute($request, $response, $service, $app) {
@@ -174,7 +177,7 @@ class Paypal extends BaseFeature {
              * @var $controller viewController
              */
             $controller->setLoginRequired( true ) ;
-            $controller->checkLoginRequiredAndRedirect();
+            //$controller->checkLoginRequiredAndRedirect();
         }
 
         try {
