@@ -11,7 +11,9 @@ namespace Features\Paypal\Controller\API\Validators;
 
 use API\V2\Exceptions\AuthenticationError;
 use API\V2\Validators\WhitelistAccessValidator as WListAccessValidator;
-use Users\MetadataDao;
+use Projects_MetadataDao;
+use Features\Paypal\Utils\Constants;
+use Teams\MembershipDao;
 
 
 class TranslatorsWhitelistAccessValidator extends WListAccessValidator {
@@ -21,11 +23,19 @@ class TranslatorsWhitelistAccessValidator extends WListAccessValidator {
      */
     public function validate() {
 
-        $user = $this->controller->getUser();
-        $fs = $this->controller->getFeatureSet();
-//        if( array_key_exists( \Features::$VALID_CODES )  )
-        if( stripos( $user->getEmail(), '@translated.net' ) === false ){ //TODO implement a better rule
-//            throw new AuthenticationError("Nein");
+        $user    = $this->controller->getUser();
+        $project = $this->controller->getProject();
+        $membership_dao = new MembershipDao;
+
+        if (! $membership_dao->findTeamByIdAndUser( $project->id_team, $user ) ) { // not is in team
+
+            $metadata_dao = new Projects_MetadataDao;
+            $metadata     = $metadata_dao->get( $project->id, Constants::PAYPAL_WHITELIST_KEY );
+            $metadata_value = json_decode($metadata->value);
+
+            if ( !in_array( $user->getEmail(), $metadata_value->emails ) ) { // not is in whitelist
+                throw new AuthenticationError( "Nein" );
+            }
         }
 
     }

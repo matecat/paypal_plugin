@@ -47,7 +47,15 @@ class WhitelistController extends KleinController {
         $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
-        $data = $metadata->set($this->project->id, Constants::PAYPAL_WHITELIST_KEY, json_encode($emails));
+        if($metadata_row = $metadata->get($this->project->id, Constants::PAYPAL_WHITELIST_KEY)) {
+            $metadata_value = json_decode($metadata_row->value, true);
+            $metadata_value['emails'] = $emails;
+        }
+        else{
+            $metadata_value = array('emails' => $emails);
+        }
+
+        $data = $metadata->set($this->project->id, Constants::PAYPAL_WHITELIST_KEY, json_encode($metadata_value));
 
         $this->response->json(['code' => 1, 'data' => $data]);
     }
