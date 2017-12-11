@@ -68,10 +68,21 @@ class WhitelistController extends KleinController {
         $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
-        if(!$metadata->get($this->project->id, Constants::PAYPAL_WHITELIST_KEY)) {
+
+        if($metadata_row = $metadata->get($this->project->id, Constants::PAYPAL_WHITELIST_KEY)) {
+            $metadata_value = json_decode($metadata_row->value, true);
+            unset($metadata_value['emails']);
+            if(!empty($metadata_value)){
+                $metadata->set($this->project->id, Constants::PAYPAL_WHITELIST_KEY, json_encode($metadata_value));
+            } else {
+                $metadata->delete($this->project->id, Constants::PAYPAL_WHITELIST_KEY);
+            }
+
+            $this->response->json(['code' => 1, 'data' => true]);
+        }
+        else{
             throw new NotFoundException("No emails found for this project", -1);
         }
-        $metadata->delete($this->project->id, Constants::PAYPAL_WHITELIST_KEY);
-        $this->response->json(['code' => 1, 'data' => true]);
+
     }
 }

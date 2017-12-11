@@ -27,7 +27,11 @@ class TranslatorsWhitelistAccessValidator extends WListAccessValidator {
         $project = $this->controller->getProject();
 
         $membership_dao = new MembershipDao;
-        if($project != null){ //i'm watching a project
+        /*
+         * $project is null only when controller is supposed to handle multiple projects,
+         * in the other cases the user must to be validated when bumps into a project
+         */
+        if($project != null){
             if (! $membership_dao->findTeamByIdAndUser( $project->id_team, $user ) ) { // not is in team
 
                 $metadata_dao = new Projects_MetadataDao;
