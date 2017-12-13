@@ -27,61 +27,57 @@ class WhitelistController extends KleinController {
         $this->appendValidator( new LoginValidator( $this ) );
     }
 
-    public function create()
-    {
+    public function create() {
 
-        $projectValidator = new ProjectPasswordValidator($this);
-        $this->appendValidator($projectValidator)->validateRequest();
+        $projectValidator = new ProjectPasswordValidator( $this );
+        $this->appendValidator( $projectValidator )->validateRequest();
 
-        $emails = json_decode($this->params['emails']);
-        if (!is_array($emails)) {
-            throw new ValidationError("Param 'emails' is not a list", -1);
+        $emails = json_decode( $this->params[ 'emails' ] );
+        if ( !is_array( $emails ) ) {
+            throw new ValidationError( "Param 'emails' is not a list", -1 );
         }
 
-        foreach ($emails as $email) {
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                throw new ValidationError($email." is not a valid email address", -2);
+        foreach ( $emails as $email ) {
+            if ( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+                throw new ValidationError( $email . " is not a valid email address", -2 );
             }
         }
 
         $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
-        if($metadata_row = $metadata->get($this->project->id, Constants::PAYPAL_WHITELIST_KEY)) {
-            $metadata_value = json_decode($metadata_row->value, true);
-            $metadata_value['emails'] = $emails;
-        }
-        else{
-            $metadata_value = array('emails' => $emails);
+        if ( $metadata_row = $metadata->get( $this->project->id, Constants::PAYPAL_METADATA_KEY ) ) {
+            $metadata_value             = json_decode( $metadata_row->value, true );
+            $metadata_value[ 'emails' ] = $emails;
+        } else {
+            $metadata_value = [ 'emails' => $emails ];
         }
 
-        $data = $metadata->set($this->project->id, Constants::PAYPAL_WHITELIST_KEY, json_encode($metadata_value));
+        $data = $metadata->set( $this->project->id, Constants::PAYPAL_METADATA_KEY, json_encode( $metadata_value ) );
 
-        $this->response->json(['code' => 1, 'data' => $data]);
+        $this->response->json( [ 'code' => 1, 'data' => $data ] );
     }
 
-    public function delete()
-    {
-        $projectValidator = new ProjectPasswordValidator($this);
-        $this->appendValidator($projectValidator)->validateRequest();
+    public function delete() {
+        $projectValidator = new ProjectPasswordValidator( $this );
+        $this->appendValidator( $projectValidator )->validateRequest();
 
         $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
 
-        if($metadata_row = $metadata->get($this->project->id, Constants::PAYPAL_WHITELIST_KEY)) {
-            $metadata_value = json_decode($metadata_row->value, true);
-            unset($metadata_value['emails']);
-            if(!empty($metadata_value)){
-                $metadata->set($this->project->id, Constants::PAYPAL_WHITELIST_KEY, json_encode($metadata_value));
+        if ( $metadata_row = $metadata->get( $this->project->id, Constants::PAYPAL_METADATA_KEY ) ) {
+            $metadata_value = json_decode( $metadata_row->value, true );
+            unset( $metadata_value[ 'emails' ] );
+            if ( !empty( $metadata_value ) ) {
+                $metadata->set( $this->project->id, Constants::PAYPAL_METADATA_KEY, json_encode( $metadata_value ) );
             } else {
-                $metadata->delete($this->project->id, Constants::PAYPAL_WHITELIST_KEY);
+                $metadata->delete( $this->project->id, Constants::PAYPAL_METADATA_KEY );
             }
 
-            $this->response->json(['code' => 1, 'data' => true]);
-        }
-        else{
-            throw new NotFoundException("No emails found for this project", -1);
+            $this->response->json( [ 'code' => 1, 'data' => true ] );
+        } else {
+            throw new NotFoundException( "No emails found for this project", -1 );
         }
 
     }
