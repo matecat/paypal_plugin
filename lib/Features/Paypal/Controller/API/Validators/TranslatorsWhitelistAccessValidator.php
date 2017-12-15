@@ -22,6 +22,10 @@ class TranslatorsWhitelistAccessValidator extends WListAccessValidator {
     public function validate() {
 
         $user    = $this->controller->getUser();
+
+        /**
+         * WARNING the controllers used by this validator must have the project loaded and a method getProject to get it
+         */
         $project = $this->controller->getProject();
 
         $membership_dao = new MembershipDao;
@@ -40,8 +44,8 @@ class TranslatorsWhitelistAccessValidator extends WListAccessValidator {
                     throw new AuthenticationError( "You are not in team or in whitelist" );
                 }
             }
-        }
 
+        }
 
     }
 
