@@ -3,5 +3,5 @@
 namespace Features\Paypal\Utils ;
 
 class Constants {
-    const PAYPAL_WHITELIST_KEY = "paypal_whitelist";
+    const PAYPAL_METADATA_KEY = "paypal_metadata";
 }
