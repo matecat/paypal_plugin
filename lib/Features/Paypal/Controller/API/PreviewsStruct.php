@@ -9,7 +9,9 @@
 
 namespace Features\Paypal\Controller\API;
 
+use AbstractControllers\IController;
 use API\V2\KleinController;
+use API\V2\Validators\Base;
 use API\V2\Validators\JobPasswordValidator;
 use API\V2\Validators\LoginValidator;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
@@ -31,13 +33,31 @@ class PreviewsStruct extends KleinController {
         return $this->project;
     }
 
+    /**
+     * @param \Projects_ProjectStruct $project
+     *
+     * @return $this
+     */
+    public function setProject( $project ) {
+        $this->project = $project;
+
+        return $this;
+    }
+
     public function afterConstruct() {
         $this->appendValidator( new LoginValidator( $this ) );
         $jobValidator = new JobPasswordValidator( $this );
-        $this->appendValidator( $jobValidator )->validateRequest();
+        $Controller = $this;
+        $jobValidator->onSuccess( function() use( $jobValidator, $Controller ) {
+            /**
+             * @var $jobValidator JobPasswordValidator
+             */
+            $Controller->setProject( $jobValidator->getJob()->getProject( 60 * 60 ) );
+        } );
 
-        $this->project = $jobValidator->getJob()->getProject( 60 * 60 );
+        $this->appendValidator( $jobValidator );
         $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
+
     }
 
     public function getPreviewsStruct() {

@@ -19,7 +19,7 @@ use Teams\MembershipDao;
 class TranslatorsWhitelistAccessValidator extends WListAccessValidator {
 
 
-    public function validate() {
+    public function _validate() {
 
         $user    = $this->controller->getUser();
 

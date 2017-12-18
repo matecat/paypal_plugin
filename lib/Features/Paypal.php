@@ -168,6 +168,8 @@ class Paypal extends BaseFeature {
      *
      * @param viewController $controller
      * @param                $params
+     *
+     * @throws \Exception
      */
     public function beginDoAction( viewController $controller, $params ) {
 
