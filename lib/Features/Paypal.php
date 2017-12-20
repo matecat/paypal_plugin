@@ -9,6 +9,7 @@
 namespace Features;
 
 use API\V2\Exceptions\AuthenticationError;
+use API\V2\Json\ProjectUrls;
 use BasicFeatureStruct;
 use Constants_TranslationStatus;
 use Features;
@@ -54,6 +55,10 @@ class Paypal extends BaseFeature {
         $template_path = dirname( __FILE__ ) . '/Paypal/View/Html/preview.html';
         $controller->setView( $template_path );
         $controller->respond();
+    }
+
+    public static function projectUrls( ProjectUrls $formatted ){
+        sleep(1);
     }
 
     /**
