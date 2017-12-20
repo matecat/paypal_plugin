@@ -40,39 +40,39 @@ let interact = require('interactjs');
 
             $(document).on('click', '.open-screenshot-button', this.openPreview.bind(this));
 
-            interact('#plugin-mount-point')
-                .resizable({
-                    preserveAspectRatio: true,
-                    edges: { left: false, right: false, bottom: false, top: true }
-                })
-                .on('resizemove', function (event) {
-                    var target = event.target,
-                        x = (parseFloat(target.getAttribute('data-x')) || 0),
-                        y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-
-
-                    // update the element's style
-                    // target.style.width  = event.rect.width + 'px';
-                    if (event.rect.height > (window.innerHeight -26) || event.rect.height < 82) {
-                        return
-                    }
-                    target.style.height = event.rect.height + 'px';
-
-                    var outerH = window.innerHeight - event.rect.height;
-                    $('#outer').height(outerH);
-
-                    // translate when resizing from top or left edges
-                    // x += event.deltaRect.left;
-                    y += event.deltaRect.top;
-
-                    // target.style.webkitTransform = target.style.transform =
-                    'translate(' + x + 'px,' + y + 'px)';
-
-                    // target.setAttribute('data-x', x);
-                    target.setAttribute('data-y', y);
-                    // target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
-                });
+            // interact('#plugin-mount-point')
+            //     .resizable({
+            //         preserveAspectRatio: true,
+            //         edges: { left: false, right: false, bottom: true, top: true }
+            //     })
+            //     .on('resizemove', function (event) {
+            //         var target = event.target,
+            //             x = (parseFloat(target.getAttribute('data-x')) || 0),
+            //             y = (parseFloat(target.getAttribute('data-y')) || 0);
+            //
+            //
+            //
+            //         // update the element's style
+            //         // target.style.width  = event.rect.width + 'px';
+            //         if (event.rect.height > (window.innerHeight -26) || event.rect.height < 82) {
+            //             return
+            //         }
+            //         target.style.height = event.rect.height + 'px';
+            //
+            //         var outerH = window.innerHeight - event.rect.height;
+            //         $('#outer').height(outerH);
+            //
+            //         // translate when resizing from top or left edges
+            //         // x += event.deltaRect.left;
+            //         y += event.deltaRect.top;
+            //
+            //         // target.style.webkitTransform = target.style.transform =
+            //         'translate(' + x + 'px,' + y + 'px)';
+            //
+            //         // target.setAttribute('data-x', x);
+            //         target.setAttribute('data-y', y);
+            //         // target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
+            //     });
 
             $("body").on('keydown.shortcuts', null, UI.shortcuts.nextPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
@@ -276,8 +276,8 @@ let interact = require('interactjs');
         },
 
         openPreview: function () {
-            $('#plugin-mount-point').css('height', '50%');
-            $('#outer').css('height', '50%');
+            $('#plugin-mount-point').css('height', '70%');
+            $('#outer').css('height', '30%');
             setTimeout(function () {
                 UI.scrollSegment(UI.currentSegment);
             }, 100);

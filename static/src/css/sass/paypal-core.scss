@@ -15,7 +15,9 @@ body.cattool {
     width: 100%;
     overflow: hidden;
 }
-
+#plugin-mount-point {
+    height: 0;
+}
 //#review-side-panel {
 //    height: 46px;
 //    overflow-y: scroll;
@@ -82,5 +84,19 @@ body.cattool {
         cursor: ns-resize;
     }
 }
+
+//TODO: Move this in other file for lqa
+
+.lqa-page {
+    #outer {
+        margin-top: 0px !important;
+        height: 30%;
+    }
+    #plugin-mount-point {
+        margin-top: 50px;
+        height: 70%;
+    }
+}
+
 
 

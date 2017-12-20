@@ -124,19 +124,23 @@ class PreviewContainer extends React.Component {
                         currentPreview={this.state.currentPreview}
                     />
                 ) : (
-                    <div className="preview-drag-area"/>
+                    !config.isLQA ? (
+                        <div className="preview-drag-area"/>
+                    ): (null)
                 )}
+                {!config.isLQA ? (
+                    <PreviewActions
+                        currentSid={this.state.currentSid}
+                        currentPreview={this.state.currentPreview}
+                        previews={this.state.previews}
+                        segmentsInfo={this.state.segmentsInfo}
+                        segmentPreviews={segmentPreviews.get('previews')}
+                        showFullScreenButton={this.props.showFullScreenButton}
+                        isMac={this.props.isMac}
+                        shortcuts={this.props.Shortcuts}
+                    />
+                ): (null) }
 
-                <PreviewActions
-                    currentSid={this.state.currentSid}
-                    currentPreview={this.state.currentPreview}
-                    previews={this.state.previews}
-                    segmentsInfo={this.state.segmentsInfo}
-                    segmentPreviews={segmentPreviews.get('previews')}
-                    showFullScreenButton={this.props.showFullScreenButton}
-                    isMac={this.props.isMac}
-                    shortcuts={this.props.Shortcuts}
-                />
                 <div className="preview-image-container" ref={(container)=> this.imageContainer = container}>
                     <div className="preview-image-innercontainer" style={styleDimension}>
                         {/*<div className="preview-image-layer" style={styleDimension}/>*/}
@@ -149,6 +153,24 @@ class PreviewContainer extends React.Component {
                         {this.getPreviewHighLighter()}
                     </div>
                 </div>
+
+                {config.isLQA ? (
+                    <PreviewActions
+                        currentSid={this.state.currentSid}
+                        currentPreview={this.state.currentPreview}
+                        previews={this.state.previews}
+                        segmentsInfo={this.state.segmentsInfo}
+                        segmentPreviews={segmentPreviews.get('previews')}
+                        showFullScreenButton={this.props.showFullScreenButton}
+                        isMac={this.props.isMac}
+                        shortcuts={this.props.Shortcuts}
+                    />
+                ): (null) }
+                {config.isLQA ? (
+                    <div className="preview-drag-area"/>
+                ): (null) }
+
+
             </div>;
         } else  {
             return <div className={this.props.classContainer}>
