@@ -9,6 +9,7 @@
 namespace Features;
 
 use API\V2\Exceptions\AuthenticationError;
+use API\V2\Json\ProjectUrls;
 use BasicFeatureStruct;
 use Constants_TranslationStatus;
 use Features;
@@ -41,10 +42,10 @@ class Paypal extends BaseFeature {
     }
 
     public static function loadRoutes( Klein $klein ) {
-        $klein->respond( 'GET', '/preview',              [__CLASS__, 'previewRoute'] );
 
-        //TODO Refactory
+        //TODO Refactor
         //$klein->respond( 'GET', '/lqa/[:id_job]/[:password]', [__CLASS__, 'lqaRoute'] );
+        $klein->respond( 'GET', '/preview',              [__CLASS__, 'previewRoute'] );
 
         route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
@@ -61,6 +62,10 @@ class Paypal extends BaseFeature {
         $controller->respond();
     }
 
+    public static function projectUrls( ProjectUrls $formatted ){
+        sleep(1);
+    }
+
     //TODO Refactory
 //    public static function lqaRoute($request, $response, $service, $app) {
 //        $controller    = new LqaController( $request, $response, $service, $app);
@@ -69,7 +74,6 @@ class Paypal extends BaseFeature {
 //        $controller->performValidations();
 //        $controller->respond();
 //    }
-
     /**
      * Ignore all glossaries. Temporary hack to avoid something unknown on MyMemory side.
      * We simply change the array_files key to avoid any glossary to be sent to MyMemory.
