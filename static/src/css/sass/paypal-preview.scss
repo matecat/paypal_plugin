@@ -139,6 +139,7 @@ body.review-side-panel-opened {
             &.actions-image {
                 flex: 1 0px;
                 text-align: left;
+                min-width: 300px;
                 .info-icon-picture {
                     display: inline-block;
                     margin: 0 5px;

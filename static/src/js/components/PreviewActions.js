@@ -8,7 +8,7 @@ class PreviewActions extends React.Component {
         super(props);
         this.state = {
             index: 1
-        }
+        };
         this.nextImage = this.nextImage.bind(this);
         this.previousImage = this.previousImage.bind(this);
         this.nextSegment = this.nextSegment.bind(this);

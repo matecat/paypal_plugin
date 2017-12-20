@@ -15,6 +15,7 @@ use Features;
 use CustomErrorPage;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
+use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
 use viewController;
@@ -41,6 +42,10 @@ class Paypal extends BaseFeature {
 
     public static function loadRoutes( Klein $klein ) {
         $klein->respond( 'GET', '/preview',              [__CLASS__, 'previewRoute'] );
+
+        //TODO Refactory
+        //$klein->respond( 'GET', '/lqa/[:id_job]/[:password]', [__CLASS__, 'lqaRoute'] );
+
         route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
         route( '/reference-files/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolder' );
@@ -55,6 +60,15 @@ class Paypal extends BaseFeature {
         $controller->setView( $template_path );
         $controller->respond();
     }
+
+    //TODO Refactory
+//    public static function lqaRoute($request, $response, $service, $app) {
+//        $controller    = new LqaController( $request, $response, $service, $app);
+//        $template_path = dirname( __FILE__ ) . '/Paypal/View/Html/lqa.html';
+//        $controller->setView( $template_path );
+//        $controller->performValidations();
+//        $controller->respond();
+//    }
 
     /**
      * Ignore all glossaries. Temporary hack to avoid something unknown on MyMemory side.
