@@ -9,6 +9,7 @@
 namespace Features;
 
 use API\V2\Exceptions\AuthenticationError;
+use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use API\V2\Json\ProjectUrls;
 use BasicFeatureStruct;
 use Constants_TranslationStatus;
@@ -62,8 +63,10 @@ class Paypal extends BaseFeature {
         $controller->respond();
     }
 
-    public static function projectUrls( ProjectUrls $formatted ){
-        sleep(1);
+    public static function projectUrls( ProjectUrls $formatted ) {
+        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted );
+
+        return $projectUrlsDecorator;
     }
 
     //TODO Refactory
