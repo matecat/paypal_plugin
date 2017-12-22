@@ -1,4 +1,5 @@
 $(function () {
+    console.log(window.swaggerUi.api.spec.paths);
     window.swaggerUi.api.spec.paths["/v2/teams/{id_team}"] = {
             "put": {
                 "tags": [

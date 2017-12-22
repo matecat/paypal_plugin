@@ -51,7 +51,7 @@ class Paypal extends BaseFeature {
      * @return array
      */
     public static function overloadAPIDocs( array $jsIncludes ){
-        $jsIncludes[] = "<script src='" . Routes::staticSrc( 'src/js/swagger.js' ) . "' type=‘text/javascript'/>";
+        $jsIncludes[] = '<script src="' . Routes::staticSrc( 'src/js/swagger.js' ) . '" type="text/javascript" ></script>';
         return $jsIncludes;
     }
 
