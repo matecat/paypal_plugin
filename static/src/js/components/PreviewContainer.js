@@ -3,6 +3,7 @@ let Constants = require('../costansts');
 let PreviewHighlighter = require('./PreviewHighlighter').default;
 let PreviewInfo = require('./PreviewInfo').default;
 let PreviewActions = require('./PreviewActions').default;
+let PreviewWidget = require('./PreviewWidget').default;
 let Actions = require('../actions/PreviewActions');
 
 class PreviewContainer extends React.Component {
@@ -151,6 +152,12 @@ class PreviewContainer extends React.Component {
                             // height={preview.get('file_h')}
                         />
                         {this.getPreviewHighLighter()}
+                        <PreviewWidget
+                            currentSid={this.state.currentSid}
+                            currentPreview={this.state.currentPreview}
+                            imageWidth = {this.getImageDimension()}
+                            segmentsInfo={this.state.segmentsInfo}
+                        />
                     </div>
                 </div>
 
