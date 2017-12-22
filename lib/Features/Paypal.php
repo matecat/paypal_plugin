@@ -9,6 +9,7 @@
 namespace Features;
 
 use API\V2\Exceptions\AuthenticationError;
+use Features\Paypal\Utils\Routes;
 use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use API\V2\Json\ProjectUrls;
 use BasicFeatureStruct;
@@ -40,6 +41,18 @@ class Paypal extends BaseFeature {
     public function __construct( BasicFeatureStruct $feature ) {
         parent::__construct( $feature );
         $this->jsonHandler = new CDataHandler();
+    }
+
+    /**
+     * Called from API page to overload swagger api definitions
+     *
+     * @param array $jsIncludes
+     *
+     * @return array
+     */
+    public static function overloadAPIDocs( array $jsIncludes ){
+        $jsIncludes[] = "<script src='" . Routes::staticSrc( 'src/js/swagger.js' ) . "' type=‘text/javascript'/>";
+        return $jsIncludes;
     }
 
     public static function loadRoutes( Klein $klein ) {
