@@ -9,14 +9,16 @@
 namespace Features;
 
 use API\V2\Exceptions\AuthenticationError;
+use Features\Paypal\Utils\Routes;
 use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use API\V2\Json\ProjectUrls;
 use BasicFeatureStruct;
 use Constants_TranslationStatus;
 use Features;
-use CustomErrorPage;
+use CustomPage;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
+use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
 use viewController;
@@ -41,8 +43,24 @@ class Paypal extends BaseFeature {
         $this->jsonHandler = new CDataHandler();
     }
 
+    /**
+     * Called from API page to overload swagger api definitions
+     *
+     * @param array $jsIncludes
+     *
+     * @return array
+     */
+    public static function overloadAPIDocs( array $jsIncludes ){
+        $jsIncludes[] = "<script src='" . Routes::staticSrc( 'src/js/swagger.js' ) . "' type=‘text/javascript'/>";
+        return $jsIncludes;
+    }
+
     public static function loadRoutes( Klein $klein ) {
+
+        //TODO Refactor
+        //$klein->respond( 'GET', '/lqa/[:id_job]/[:password]', [__CLASS__, 'lqaRoute'] );
         $klein->respond( 'GET', '/preview',              [__CLASS__, 'previewRoute'] );
+
         route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
         route( '/reference-files/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolder' );
@@ -64,6 +82,14 @@ class Paypal extends BaseFeature {
         return $projectUrlsDecorator;
     }
 
+    //TODO Refactory
+//    public static function lqaRoute($request, $response, $service, $app) {
+//        $controller    = new LqaController( $request, $response, $service, $app);
+//        $template_path = dirname( __FILE__ ) . '/Paypal/View/Html/lqa.html';
+//        $controller->setView( $template_path );
+//        $controller->performValidations();
+//        $controller->respond();
+//    }
     /**
      * Ignore all glossaries. Temporary hack to avoid something unknown on MyMemory side.
      * We simply change the array_files key to avoid any glossary to be sent to MyMemory.
@@ -194,7 +220,7 @@ class Paypal extends BaseFeature {
             ( new TranslatorsWhitelistAccessValidator( $controller ) )->validate();
         } catch( AuthenticationError $e ){
 
-            $controllerInstance = new CustomErrorPage();
+            $controllerInstance = new CustomPage();
             $template = new \PHPTALWithAppend( dirname( __FILE__ ) . '/Paypal/View/Html/NotAllowed.html' );
             $controllerInstance->setTemplate( $template );
             $controllerInstance->setCode( 401 );

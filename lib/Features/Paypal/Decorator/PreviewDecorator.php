@@ -23,7 +23,8 @@ class PreviewDecorator extends AbstractModelViewDecorator {
         $template->basepath     = INIT::$BASEURL;
         $template->build_number = INIT::$BUILD_NUMBER;
 
-        $template->append('footer_js', Routes::staticSrc('build/paypal-build.js') );
+        $template->append('footer_js', Routes::staticSrc('build/paypal-components-build.js') );
+        $template->append('footer_js', Routes::staticSrc('build/paypal-preview-build.js') );
         $template->append('css_resources', Routes::staticSrc('build/paypal-build.css') );
 
         $template->googleDriveEnabled = Bootstrap::isGDriveConfigured() ;

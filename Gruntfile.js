@@ -20,9 +20,36 @@ module.exports = function(grunt) {
                     'static/src/js/store/*.js',
                     'static/src/js/components/*.js',
                     'static/src/js/constants.js',
+                ],
+                dest:  'static/build/paypal-components-build.js'
+            },
+            preview: {
+                options: {
+                    transform: [
+                        [ 'babelify', { presets: [ es2015Preset, reactPreset ] } ]
+                    ],
+                    browserifyOptions: {
+                        paths: [ __dirname + '/node_modules' ]
+                    }
+                },
+                src: [
                     'static/src/js/paypal-preview.js',
                 ],
-                dest:  'static/build/paypal-build.js'
+                dest:  'static/build/paypal-preview-build.js'
+            },
+            lqa: {
+                options: {
+                    transform: [
+                        [ 'babelify', { presets: [ es2015Preset, reactPreset ] } ]
+                    ],
+                    browserifyOptions: {
+                        paths: [ __dirname + '/node_modules' ]
+                    }
+                },
+                src: [
+                    'static/src/js/paypal-lqa.js',
+                ],
+                dest:  'static/build/paypal-lqa-build.js'
             },
             core: {
                 options: {
@@ -34,12 +61,7 @@ module.exports = function(grunt) {
                     }
                 },
                 src: [
-                    'static/src/js/actions/*.js',
-                    'static/src/js/dispatcher/*.js',
-                    'static/src/js/store/*.js',
-                    'static/src/js/components/*.js',
-                    'static/src/js/constants.js',
-                    'static/src/js/cat_source/*.js',
+                    'static/src/js/cat_source/paypal-core.js',
                 ],
                 dest:  'static/build/paypal-core-build.js'
             },
@@ -78,6 +100,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('bundle:js', [
         'browserify:components',
+        'browserify:preview',
+        'browserify:lqa',
         'browserify:core',
         'sass'
     ]);
