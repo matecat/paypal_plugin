@@ -15,7 +15,7 @@ use API\V2\Json\ProjectUrls;
 use BasicFeatureStruct;
 use Constants_TranslationStatus;
 use Features;
-use CustomErrorPage;
+use CustomPage;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Controller\LqaController;
@@ -220,7 +220,7 @@ class Paypal extends BaseFeature {
             ( new TranslatorsWhitelistAccessValidator( $controller ) )->validate();
         } catch( AuthenticationError $e ){
 
-            $controllerInstance = new CustomErrorPage();
+            $controllerInstance = new CustomPage();
             $template = new \PHPTALWithAppend( dirname( __FILE__ ) . '/Paypal/View/Html/NotAllowed.html' );
             $controllerInstance->setTemplate( $template );
             $controllerInstance->setCode( 401 );
