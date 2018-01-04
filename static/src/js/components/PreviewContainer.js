@@ -20,6 +20,10 @@ class PreviewContainer extends React.Component {
     }
 
     renderPreview(sid, previewName, segmentsInfo, previews) {
+        if ( segmentsInfo.size === 0 ) {
+            UI.closePreview();
+            return;
+        }
         this.setState({
             currentSid: sid,
             segmentsInfo: segmentsInfo,
