@@ -24,7 +24,7 @@ class WhitelistController extends KleinController {
     protected $project;
 
     protected function afterConstruct() {
-        $this->appendValidator( new LoginValidator( $this ) );
+        //$this->appendValidator( new LoginValidator( $this ) );
     }
 
     public function create() {
