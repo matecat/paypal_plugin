@@ -3,6 +3,7 @@ let Constants = require('../costansts');
 let PreviewHighlighter = require('./PreviewHighlighter').default;
 let PreviewInfo = require('./PreviewInfo').default;
 let PreviewActions = require('./PreviewActions').default;
+let PreviewWidget = require('./PreviewWidget').default;
 let Actions = require('../actions/PreviewActions');
 
 class PreviewContainer extends React.Component {
@@ -19,6 +20,10 @@ class PreviewContainer extends React.Component {
     }
 
     renderPreview(sid, previewName, segmentsInfo, previews) {
+        if ( segmentsInfo.size === 0 ) {
+            UI.closePreview();
+            return;
+        }
         this.setState({
             currentSid: sid,
             segmentsInfo: segmentsInfo,
@@ -30,13 +35,14 @@ class PreviewContainer extends React.Component {
     getPreviewHighLighter() {
         let highlighters = [];
         let self = this;
+        let imageDim = this.getImageDimension();
         this.state.segmentsInfo.forEach(function (segment, i) {
             highlighters.push (<PreviewHighlighter
             key={segment.get('segment') + i}
             currentId={self.state.currentSid}
             segmentInfo={segment}
             currentPreview={self.state.currentPreview}
-            imageWidth={self.getImageDimension()}
+            imageWidth={imageDim}
                 />
             );
         });
@@ -60,13 +66,16 @@ class PreviewContainer extends React.Component {
         });
         return segment.get('previews').find(function (preview) {
             return preview.get('file_index') === self.state.currentPreview
-        })
+        });
     }
 
     getImageDimension() {
         let preview = this.getCurrentPreview();
         let img_w = preview.get('fileW');
         let window_w_percent = window.outerWidth;
+        if ( this.imageContainer ) {
+            window_w_percent = this.imageContainer.offsetWidth;
+        }
         if (img_w > window_w_percent) {
             img_w = window_w_percent;
         }
@@ -120,20 +129,24 @@ class PreviewContainer extends React.Component {
                         currentPreview={this.state.currentPreview}
                     />
                 ) : (
-                    <div className="preview-drag-area"/>
+                    !config.isLQA ? (
+                        <div className="preview-drag-area"/>
+                    ): (null)
                 )}
+                {!config.isLQA ? (
+                    <PreviewActions
+                        currentSid={this.state.currentSid}
+                        currentPreview={this.state.currentPreview}
+                        previews={this.state.previews}
+                        segmentsInfo={this.state.segmentsInfo}
+                        segmentPreviews={segmentPreviews.get('previews')}
+                        showFullScreenButton={this.props.showFullScreenButton}
+                        isMac={this.props.isMac}
+                        shortcuts={this.props.Shortcuts}
+                    />
+                ): (null) }
 
-                <PreviewActions
-                    currentSid={this.state.currentSid}
-                    currentPreview={this.state.currentPreview}
-                    previews={this.state.previews}
-                    segmentsInfo={this.state.segmentsInfo}
-                    segmentPreviews={segmentPreviews.get('previews')}
-                    showFullScreenButton={this.props.showFullScreenButton}
-                    isMac={this.props.isMac}
-                    shortcuts={this.props.Shortcuts}
-                />
-                <div className="preview-image-container">
+                <div className="preview-image-container" ref={(container)=> this.imageContainer = container}>
                     <div className="preview-image-innercontainer" style={styleDimension}>
                         {/*<div className="preview-image-layer" style={styleDimension}/>*/}
                         <img className="preview-image"
@@ -143,8 +156,34 @@ class PreviewContainer extends React.Component {
                             // height={preview.get('file_h')}
                         />
                         {this.getPreviewHighLighter()}
+                        {config.isLQA ? (
+                        <PreviewWidget
+                            currentSid={this.state.currentSid}
+                            currentPreview={this.state.currentPreview}
+                            imageWidth = {this.getImageDimension()}
+                            segmentsInfo={this.state.segmentsInfo}
+                        />
+                        ): (null) }
                     </div>
                 </div>
+
+                {config.isLQA ? (
+                    <PreviewActions
+                        currentSid={this.state.currentSid}
+                        currentPreview={this.state.currentPreview}
+                        previews={this.state.previews}
+                        segmentsInfo={this.state.segmentsInfo}
+                        segmentPreviews={segmentPreviews.get('previews')}
+                        showFullScreenButton={this.props.showFullScreenButton}
+                        isMac={this.props.isMac}
+                        shortcuts={this.props.Shortcuts}
+                    />
+                ): (null) }
+                {config.isLQA ? (
+                    <div className="preview-drag-area"/>
+                ): (null) }
+
+
             </div>;
         } else  {
             return <div className={this.props.classContainer}>

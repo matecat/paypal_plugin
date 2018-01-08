@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # IDE stuffs
 .settings
 .idea
@@ -15,3 +16,9 @@ static/build
 .vagrant
 
 package-lock.json
+=======
+vendor
+composer.phar
+node_modules
+static/build
+>>>>>>> 55a44a7554ee2a2569ae4a38f3c0203cbfbabc2c

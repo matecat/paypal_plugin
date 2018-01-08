@@ -23,17 +23,42 @@ class ReferenceFilesController extends KleinController {
      */
     protected $project;
 
+    /**
+     * @return \Projects_ProjectStruct
+     */
+    public function getProject() {
+        return $this->project;
+    }
+
+    /**
+     * @param \Projects_ProjectStruct $project
+     *
+     * @return $this
+     */
+    public function setProject( $project ) {
+        $this->project = $project;
+
+        return $this;
+    }
+
     protected function afterConstruct() {
-        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
         $this->appendValidator( new LoginValidator( $this ) );
     }
 
     public function flushStream() {
 
         $projectValidator = new ProjectPasswordValidator( $this );
-        $this->appendValidator( $projectValidator )->validateRequest();
 
-        $this->project = $projectValidator->getProject();
+        $Controller = $this;
+        $projectValidator->onSuccess( function() use( $projectValidator, $Controller ) {
+            /**
+             * @var $jobValidator JobPasswordValidator
+             */
+            $Controller->setProject( $projectValidator->getProject() );
+        } );
+
+        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
+        $this->appendValidator( $projectValidator )->validateRequest();
 
         list( $fileName, $filePointer, $mimeType ) = array_values(
                 ( new ZipArchiveReference() )->getFileStreamPointerInfo( $this->project, $this->params[ 'file_name_in_zip' ] )
@@ -43,27 +68,47 @@ class ReferenceFilesController extends KleinController {
 
     }
 
-    public function getReferenceFolder(){
+    public function getReferenceFolder() {
 
         $jobValidator = new JobPasswordValidator( $this );
-        $this->appendValidator( $jobValidator )->validateRequest();
+
+        $Controller = $this;
+        $jobValidator->onSuccess( function() use( $jobValidator, $Controller ) {
+            /**
+             * @var $jobValidator JobPasswordValidator
+             */
+            $Controller->setProject( $jobValidator->getJob()->getProject( 60 * 60 ) );
+        } );
+
+        $this->appendValidator( $jobValidator );
+        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) )->validateRequest();
 
         $zipArchiveRef = new ZipArchiveReference();
         list( $fileName, $filePointer, $mimeType ) = array_values(
-                $zipArchiveRef->getDirectoryStreamFilePointer( $jobValidator->getJob()->getProject(), '__reference' )
+                $zipArchiveRef->getDirectoryStreamFilePointer( $this->project, '__reference' )
         );
 
         ( new KleinResponseFileStream( $this->response ) )->streamFileInlineFromPointer( $filePointer, $fileName, $mimeType );
 
     }
 
-    public function getReferenceFolderList(){
+    public function getReferenceFolderList() {
 
         $jobValidator = new JobPasswordValidator( $this );
-        $this->appendValidator( $jobValidator )->validateRequest();
 
-        $zipArchiveRef = new ZipArchiveReference();
-        $referenceFileList = $zipArchiveRef->getListTree( $jobValidator->getJob()->getProject(), '__reference' );
+        $Controller = $this;
+        $jobValidator->onSuccess( function() use( $jobValidator, $Controller ) {
+            /**
+             * @var $jobValidator JobPasswordValidator
+             */
+            $Controller->setProject( $jobValidator->getJob()->getProject( 60 * 60 ) );
+        } );
+
+        $this->appendValidator( $jobValidator );
+        $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) )->validateRequest();
+
+        $zipArchiveRef     = new ZipArchiveReference();
+        $referenceFileList = $zipArchiveRef->getListTree( $this->project, '__reference' );
         $this->response->json( [ 'reference' => $referenceFileList ] );
 
     }
