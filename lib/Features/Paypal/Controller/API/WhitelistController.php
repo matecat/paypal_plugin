@@ -24,13 +24,15 @@ class WhitelistController extends KleinController {
     protected $project;
 
     protected function afterConstruct() {
-        //$this->appendValidator( new LoginValidator( $this ) );
+        $projectValidator = (new ProjectPasswordValidator( $this ));
+
+        $projectValidator->onSuccess(function() use ($projectValidator){
+            $this->project = $projectValidator->getProject();
+        });
+        $this->appendValidator( $projectValidator )->validateRequest();
     }
 
     public function create() {
-
-        $projectValidator = new ProjectPasswordValidator( $this );
-        $this->appendValidator( $projectValidator )->validateRequest();
 
         $emails = json_decode( $this->params[ 'emails' ] );
         if ( !is_array( $emails ) ) {
@@ -42,8 +44,6 @@ class WhitelistController extends KleinController {
                 throw new ValidationError( $email . " is not a valid email address", -2 );
             }
         }
-
-        $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
         if ( $metadata_row = $metadata->get( $this->project->id, Constants::PAYPAL_METADATA_KEY ) ) {
@@ -59,10 +59,6 @@ class WhitelistController extends KleinController {
     }
 
     public function delete() {
-        $projectValidator = new ProjectPasswordValidator( $this );
-        $this->appendValidator( $projectValidator )->validateRequest();
-
-        $this->project = $projectValidator->getProject();
 
         $metadata = new Projects_MetadataDao;
 
