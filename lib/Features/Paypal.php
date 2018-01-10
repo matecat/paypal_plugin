@@ -235,6 +235,13 @@ class Paypal extends BaseFeature {
 
     }
 
+
+    /**
+     * Callback for manage project type redirect
+     *
+     * @param viewController $controller
+     *
+     */
     public function manageProjectType( viewController $controller ) {
 
         if ( $controller instanceof \catController ) {
@@ -251,20 +258,19 @@ class Paypal extends BaseFeature {
                 if ( $project_type->value == "TR" && $page == "revision" ) {
                     $chunk = $controller->getChunk();
                     header( 'Location: ' . \Routes::translate( $project->name, $chunk->id, $chunk->password, $chunk->source, $chunk->target ) );
-                    //sleep(1);
+                    die;
                 }
 
                 if ( $project_type->value == "LR" && $page == "translation" ) {
                     $chunk = $controller->getChunk();
                     $job   = \LQA\ChunkReviewDao::findByIdJob( $chunk->id );
                     header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job[ 0 ]->review_password, $chunk->source, $chunk->target ) );
-                    //sleep(1);
+                    die;
                 }
-
-
             }
-
         }
+        
+    }
 
     }
 
