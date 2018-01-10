@@ -20,6 +20,10 @@ class PreviewContainer extends React.Component {
     }
 
     renderPreview(sid, previewName, segmentsInfo, previews) {
+        if ( segmentsInfo.size === 0 ) {
+            UI.closePreview();
+            return;
+        }
         this.setState({
             currentSid: sid,
             segmentsInfo: segmentsInfo,
@@ -152,12 +156,14 @@ class PreviewContainer extends React.Component {
                             // height={preview.get('file_h')}
                         />
                         {this.getPreviewHighLighter()}
+                        {config.isLQA ? (
                         <PreviewWidget
                             currentSid={this.state.currentSid}
                             currentPreview={this.state.currentPreview}
                             imageWidth = {this.getImageDimension()}
                             segmentsInfo={this.state.segmentsInfo}
                         />
+                        ): (null) }
                     </div>
                 </div>
 

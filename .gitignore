@@ -1,4 +1,24 @@
+<<<<<<< HEAD
+# IDE stuffs
+.settings
+.idea
+.project
+nbproject/
+
+
+# NodeJs stuff
+nodejs/*.log
+node_modules
+static/build
+
+# Development env config files
+.agignore
+.vagrant
+
+package-lock.json
+=======
 vendor
 composer.phar
 node_modules
 static/build
+>>>>>>> 55a44a7554ee2a2569ae4a38f3c0203cbfbabc2c

@@ -9,7 +9,7 @@ let interact = require('interactjs');
     var originalStart = UI.start;
     var originalSetEvents = UI.setEvents;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
-    var originalActiveteSegment = UI.activateSegment;
+    var originalActivateSegment = UI.activateSegment;
     var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
@@ -38,41 +38,39 @@ let interact = require('interactjs');
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
             Store.addListener(Constants.CLOSE_WINDOW, this.closePreview.bind(this));
 
-            $(document).on('click', '.open-screenshot-button', this.openPreview.bind(this));
+            interact('#plugin-mount-point')
+                .resizable({
+                    preserveAspectRatio: true,
+                    edges: { left: false, right: false, bottom: true, top: true }
+                })
+                .on('resizemove', function (event) {
+                    var target = event.target,
+                        x = (parseFloat(target.getAttribute('data-x')) || 0),
+                        y = (parseFloat(target.getAttribute('data-y')) || 0);
 
-            // interact('#plugin-mount-point')
-            //     .resizable({
-            //         preserveAspectRatio: true,
-            //         edges: { left: false, right: false, bottom: true, top: true }
-            //     })
-            //     .on('resizemove', function (event) {
-            //         var target = event.target,
-            //             x = (parseFloat(target.getAttribute('data-x')) || 0),
-            //             y = (parseFloat(target.getAttribute('data-y')) || 0);
-            //
-            //
-            //
-            //         // update the element's style
-            //         // target.style.width  = event.rect.width + 'px';
-            //         if (event.rect.height > (window.innerHeight -26) || event.rect.height < 82) {
-            //             return
-            //         }
-            //         target.style.height = event.rect.height + 'px';
-            //
-            //         var outerH = window.innerHeight - event.rect.height;
-            //         $('#outer').height(outerH);
-            //
-            //         // translate when resizing from top or left edges
-            //         // x += event.deltaRect.left;
-            //         y += event.deltaRect.top;
-            //
-            //         // target.style.webkitTransform = target.style.transform =
-            //         'translate(' + x + 'px,' + y + 'px)';
-            //
-            //         // target.setAttribute('data-x', x);
-            //         target.setAttribute('data-y', y);
-            //         // target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
-            //     });
+
+
+                    // update the element's style
+                    // target.style.width  = event.rect.width + 'px';
+                    if (event.rect.height > (window.innerHeight -26) || event.rect.height < 82) {
+                        return
+                    }
+                    target.style.height = event.rect.height + 'px';
+
+                    var outerH = window.innerHeight - event.rect.height;
+                    $('#outer').height(outerH);
+
+                    // translate when resizing from top or left edges
+                    // x += event.deltaRect.left;
+                    y += event.deltaRect.top;
+
+                    // target.style.webkitTransform = target.style.transform =
+                    'translate(' + x + 'px,' + y + 'px)';
+
+                    // target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                    // target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
+                });
 
             $("body").on('keydown.shortcuts', null, UI.shortcuts.nextPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
@@ -173,10 +171,7 @@ let interact = require('interactjs');
             };
         },
         activateSegment: function (segment) {
-            originalActiveteSegment.apply(this, [segment]);
-            let sid = UI.getSegmentId(segment);
-            this.hideShowSegmentButton(sid);
-
+            originalActivateSegment.apply(this, [segment]);
         },
         animateScroll: function (segment, speed) {
             var scrollAnimation = $( UI.scrollSelector ).stop().delay( 300 );
@@ -201,16 +196,7 @@ let interact = require('interactjs');
 
             return scrollAnimation.promise() ;
         },
-        hideShowSegmentButton: function(sid) {
-            if (this.segmentsPreviews && this.segmentsPreviews.segments) {
-                var segmentPreview = this.segmentsPreviews.segments.find(function (item) {
-                    return item.segment === parseInt(sid);
-                });
-                if (_.isUndefined(segmentPreview) || _.isUndefined(segmentPreview.previews) || segmentPreview.previews.length === 0) {
-                    UI.getSegmentById(sid).find('.segment-options-container').remove();
-                }
-            }
-        },
+
         openWindow: function () {
             if (this.windowPreview && !this.windowPreview.closed) {
                 this.windowPreview.focus()
@@ -248,8 +234,10 @@ let interact = require('interactjs');
             this.getPreviewData().done(function (response) {
                 if (!_.isNull(response.data.previews)) {
                     self.segmentsPreviews = response.data;
-                    self.hideShowSegmentButton(currentId);
+                    self.previewsData = response.data;
                     PreviewActions.renderPreview(currentId, response.data);
+                    // Event captured by the footer Messages to show the preview
+                    SegmentActions.renderPreview(currentId, response.data);
                 }
             });
         },
@@ -263,8 +251,11 @@ let interact = require('interactjs');
         },
 
         setLastSegmentFromLocalStorage: function (segmentId) {
+            let self = this;
             setTimeout(function () {
                 PreviewActions.updatePreview(segmentId);
+                // Event captured by the footer Messages to show the preview
+                SegmentActions.renderPreview(segmentId, self.previewsData);
             });
             originalSetLastSegmentFromLocalStorage.call(this, segmentId);
         },
@@ -272,17 +263,14 @@ let interact = require('interactjs');
         closePreview: function () {
             $('#plugin-mount-point').css('height', 0);
             $('#outer').css('height', '100%');
-            $('.segment-options-container').show();
         },
 
         openPreview: function () {
-            $('#plugin-mount-point').css('height', '70%');
-            $('#outer').css('height', '30%');
+            $('#plugin-mount-point').css('height', '40%');
+            $('#outer').css('height', '60%');
             setTimeout(function () {
                 UI.scrollSegment(UI.currentSegment);
             }, 100);
-            $('.segment-options-container').hide();
-
         },
 
         loadCustomization: function () {
