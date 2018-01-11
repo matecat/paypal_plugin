@@ -265,9 +265,12 @@ let interact = require('interactjs');
             $('#outer').css('height', '100%');
         },
 
-        openPreview: function () {
+        openPreview: function (sid,preview) {
             $('#plugin-mount-point').css('height', '40%');
             $('#outer').css('height', '60%');
+            if(sid && preview){
+                PreviewActions.selectSegment(sid,preview)
+            }
             setTimeout(function () {
                 UI.scrollSegment(UI.currentSegment);
             }, 100);
