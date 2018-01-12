@@ -30,6 +30,9 @@ class CDataHandler {
                     $decodedJson->segment = $id_segment;
                     foreach( $decodedJson->previews as $preview ){
                         $fileName = \FilesStorage::pathinfo_fix( $preview->path, PATHINFO_BASENAME );
+                        $preview->previousPreview = \FilesStorage::pathinfo_fix( $preview->previousPreview, PATHINFO_BASENAME );
+                        $preview->nextPreview = \FilesStorage::pathinfo_fix( $preview->nextPreview, PATHINFO_BASENAME );
+
                         list( $preview->path, $preview->file_index ) = array_values( Routes::projectImageReferences( $projectStructure, $fileName ) );
 
                         /*

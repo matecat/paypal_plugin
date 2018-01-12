@@ -22,6 +22,7 @@ use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
 use viewController;
+use Projects_MetadataDao;
 
 class Paypal extends BaseFeature {
 
@@ -230,6 +231,46 @@ class Paypal extends BaseFeature {
             die();
 
         }
+
+
+    }
+
+
+    /**
+     * Callback for manage project type redirect
+     *
+     * @param viewController $controller
+     *
+     */
+    public function manageProjectType( viewController $controller ) {
+
+        if ( $controller instanceof \catController ) {
+            $project      = $controller->project;
+            $metadata     = new Projects_MetadataDao;
+            $project_type = $metadata->get( $project->id, "project_type" );
+            if ( !empty( $project_type ) ) {
+                if ( $controller->isRevision() ) {
+                    $page = "revision";
+                } else {
+                    $page = "translation";
+                }
+
+                if ( $project_type->value == "TR" && $page == "revision" ) {
+                    $chunk = $controller->getChunk();
+                    header( 'Location: ' . \Routes::translate( $project->name, $chunk->id, $chunk->password, $chunk->source, $chunk->target ) );
+                    die;
+                }
+
+                if ( $project_type->value == "LR" && $page == "translation" ) {
+                    $chunk = $controller->getChunk();
+                    $job   = \LQA\ChunkReviewDao::findByIdJob( $chunk->id );
+                    header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job[ 0 ]->review_password, $chunk->source, $chunk->target ) );
+                    die;
+                }
+            }
+        }
+        
+    }
 
     }
 
