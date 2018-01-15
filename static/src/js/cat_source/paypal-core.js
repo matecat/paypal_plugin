@@ -207,6 +207,17 @@ let Store = require('../store/PreviewsStore');
             }
             this.closePreview();
         },
+
+        setHideMatches: function () {
+            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
+            $.cookie(cookieName + '-' + config.id_job, false, { expires: 30 });
+            UI.body.removeClass('hideMatches');
+            if(UI.currentSegment){
+                UI.currentSegment.find('.footer').removeClass('showMatches');
+            }
+
+        },
+
         selectSegment: function (sid) {
             var el = $("section:not(.opened) #segment-" + sid + "-target").find(".editarea, .targetarea");
             if (el.length > 0 ) {
