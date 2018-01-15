@@ -272,8 +272,6 @@ class Paypal extends BaseFeature {
         
     }
 
-    }
-
     /**
      * Disable the TM ICES
      *
