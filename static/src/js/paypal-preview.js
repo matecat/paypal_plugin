@@ -9,8 +9,8 @@ let Store = require('./store/PreviewsStore');
 
         init: function () {
             this.isMac = (navigator.platform == 'MacIntel')? true : false;
-            this.idJob = APP.getParameterByName("id");
-            this.passJob = APP.getParameterByName("pass");
+            this.idJob = config.id_job;
+            this.passJob = config.password;
             this.storageKey = 'currentSegmentId-' + this.idJob + this.passJob;
             let currentId = localStorage.getItem(this.storageKey);
             this.setShortcuts();

@@ -8,19 +8,24 @@
         <script type="text/javascript" src="${basepath}public/js/build/react.js?build=${build_number}"></script>
         <script type="text/javascript" src="${basepath}public/js/build/cat-react.js?build=${build_number}"></script>
 
-        <!--<script type="text/javascript" src="${basepath}plugins/paypal/static/build/paypal-components-build.js?build=${build_number}"></script>-->
-        <!--<script type="text/javascript" src="${basepath}plugins/paypal/static/build/paypal-preview-build.js?build=${build_number}"></script>-->
-
         <link href="${basepath}public/css/build/icons.css?build=${build_number}" rel="stylesheet" type="text/css"/>
-
-        <!--<link href="${basepath}plugins/paypal/static/build/paypal-build.css?build=${build_number}" rel="stylesheet" type="text/css"/>-->
 
         <tal:block  tal:repeat="css_url css_resources">
             <link rel="stylesheet" tal:attributes="href css_url"/>
         </tal:block>
+
+
+        <script type="text/javascript">
+            /*<![CDATA[*/
+            var config = {
+                id_job: ${id_job},
+                password: '${password }',
+            }
+            /*]]>*/
+        </script>
+
     </head>
     <body>
-        pippo
         <div id="preview-container"></div>
         <div metal:use-macro="${php: INIT::$TEMPLATE_ROOT}/common.html/footer_includes" />
     </body>
