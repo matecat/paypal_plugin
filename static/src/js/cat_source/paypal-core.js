@@ -202,7 +202,7 @@ let Store = require('../store/PreviewsStore');
                 this.windowPreview.focus()
             } else {
                 window.addEventListener("storage", this.selectSegmentFromPreview.bind(this), true);
-                let url = '/plugins/paypal/preview?id='+ config.id_job + '&pass=' + config.password;
+                let url = '/plugins/paypal/preview/template/' + config.id_job + '/' + config.password;
                 this.windowPreview = window.open(url, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1024,height=600");
             }
             this.closePreview();

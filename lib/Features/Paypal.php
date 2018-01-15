@@ -56,11 +56,14 @@ class Paypal extends BaseFeature {
         return $jsIncludes;
     }
 
+    /**
+     * @param Klein $klein
+     */
     public static function loadRoutes( Klein $klein ) {
 
         //TODO Refactor
         //$klein->respond( 'GET', '/lqa/[:id_job]/[:password]', [__CLASS__, 'lqaRoute'] );
-        $klein->respond( 'GET', '/preview',              [__CLASS__, 'previewRoute'] );
+        $klein->respond( 'GET', '/preview/template/[:id_job]/[:password]',              [__CLASS__, 'previewRoute'] );
 
         route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
@@ -74,7 +77,7 @@ class Paypal extends BaseFeature {
         $controller    = new PreviewController( $request, $response, $service, $app);
         $template_path = dirname( __FILE__ ) . '/Paypal/View/Html/preview.html';
         $controller->setView( $template_path );
-        $controller->respond();
+        $controller->respond( 'composeView' );
     }
 
     public static function projectUrls( ProjectUrls $formatted ) {
@@ -269,7 +272,7 @@ class Paypal extends BaseFeature {
                 }
             }
         }
-        
+
     }
 
     /**
