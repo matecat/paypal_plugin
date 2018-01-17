@@ -87,6 +87,20 @@ module.exports = function(grunt) {
                 ],
                 dest: 'static/build/paypal-core-build.css'
             },
+        },
+        replace: {
+            css: {
+                src: [
+                    'static/build/*'
+                ],
+                dest: 'static/build/',
+                replacements: [
+                    {
+                        from: 'url(../img',
+                        to: 'url(../src/css/img'
+                    }
+                ]
+            }
         }
 
     });
@@ -94,6 +108,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-text-replace');
 
     // Define your tasks here
     grunt.registerTask('default', ['bundle:js']);
@@ -103,7 +118,8 @@ module.exports = function(grunt) {
         'browserify:preview',
         'browserify:lqa',
         'browserify:core',
-        'sass'
+        'sass',
+        'replace'
     ]);
 
 

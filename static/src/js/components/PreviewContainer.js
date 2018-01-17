@@ -128,11 +128,7 @@ class PreviewContainer extends React.Component {
                         segmentPreviews={segmentPreviews.get('previews')}
                         currentPreview={this.state.currentPreview}
                     />
-                ) : (
-                    !config.isLQA ? (
-                        <div className="preview-drag-area"/>
-                    ): (null)
-                )}
+                ): (null)}
                 {!config.isLQA ? (
                     <PreviewActions
                         currentSid={this.state.currentSid}
@@ -178,9 +174,6 @@ class PreviewContainer extends React.Component {
                         isMac={this.props.isMac}
                         shortcuts={this.props.Shortcuts}
                     />
-                ): (null) }
-                {config.isLQA ? (
-                    <div className="preview-drag-area"/>
                 ): (null) }
 
 
