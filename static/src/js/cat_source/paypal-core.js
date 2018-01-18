@@ -38,11 +38,6 @@ var Split = require('split.js');
             Store.addListener(Constants.OPEN_WINDOW, this.openWindow.bind(this));
             Store.addListener(Constants.CLOSE_WINDOW, this.closePreview.bind(this));
 
-            Split(['#outer', '#plugin-mount-point'], {
-                sizes: [60, 40],
-                direction: 'vertical'
-            });
-
 
             $("body").on('keydown.shortcuts', null, UI.shortcuts.nextPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
@@ -221,6 +216,10 @@ var Split = require('split.js');
                     PreviewActions.renderPreview(currentId, response.data);
                     // Event captured by the footer Messages to show the preview
                     SegmentActions.renderPreview(currentId, response.data);
+                    Split(['#outer', '#plugin-mount-point'], {
+                        sizes: [100, 0],
+                        direction: 'vertical'
+                    });
                 }
             });
         },
