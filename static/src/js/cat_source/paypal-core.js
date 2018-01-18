@@ -98,7 +98,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+down",
-                    "mac": "alt+ctrl+down",
+                    "mac": "option+ctrl+down",
                 }
             };
             UI.shortcuts.previousSegment = {
@@ -106,7 +106,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes": {
                     "standard": "alt+ctrl+up",
-                    "mac": "alt+ctrl+up",
+                    "mac": "option+ctrl+up",
                 }
             };
             UI.shortcuts.lastSegment = {
@@ -114,7 +114,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+pagedown",
-                    "mac": "alt+ctrl+pagedown",
+                    "mac": "option+ctrl+fn+down",
                 }
             };
             UI.shortcuts.firstSegment = {
@@ -122,7 +122,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+pageup",
-                    "mac": "alt+ctrl+pageup",
+                    "mac": "option+ctrl+fn+up",
                 }
             };
             UI.shortcuts.nextSegmentPreview = {
@@ -130,7 +130,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+n",
-                    "mac": "alt+ctrl+n",
+                    "mac": "option+ctrl+n",
                 }
             };
             UI.shortcuts.previousSegmentPreview = {
@@ -138,7 +138,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+p",
-                    "mac": "alt+ctrl+p",
+                    "mac": "option+ctrl+p",
                 }
             };
         },
