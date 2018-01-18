@@ -56,15 +56,15 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+right",
-                    "mac": "alt+ctrl+right",
+                    "mac": "option+ctrl+right",
                 }
             };
             PREVIEW.shortcuts.previousPreview = {
-                "label" : "Next Preview",
+                "label" : "Previous Preview",
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+left",
-                    "mac": "alt+ctrl+left",
+                    "mac": "option+ctrl+left",
                 }
             };
             PREVIEW.shortcuts.nextSegment = {
@@ -72,7 +72,7 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+down",
-                    "mac": "alt+ctrl+right",
+                    "mac": "option+ctrl+down",
                 }
             };
             PREVIEW.shortcuts.previousSegment = {
@@ -80,7 +80,7 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes": {
                     "standard": "alt+ctrl+up",
-                    "mac": "alt+ctrl+left",
+                    "mac": "option+ctrl+up",
                 }
             };
             PREVIEW.shortcuts.lastSegment = {
@@ -88,7 +88,7 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+pagedown",
-                    "mac": "alt+ctrl+pagedown",
+                    "mac": "option+ctrl+fn+down",
                 }
             };
             PREVIEW.shortcuts.firstSegment = {
@@ -96,7 +96,7 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+pageup",
-                    "mac": "alt+ctrl+pageup",
+                    "mac": "option+ctrl+fn+up",
                 }
             };
             PREVIEW.shortcuts.nextSegmentPreview = {
@@ -104,7 +104,7 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+n",
-                    "mac": "alt+ctrl+n",
+                    "mac": "option+ctrl+n",
                 }
             };
             PREVIEW.shortcuts.previousSegmentPreview = {
@@ -112,7 +112,7 @@ let Store = require('./store/PreviewsStore');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+p",
-                    "mac": "alt+ctrl+p",
+                    "mac": "option+ctrl+p",
                 }
             };
 

@@ -82,7 +82,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+right",
-                    "mac": "alt+ctrl+right",
+                    "mac": "option+ctrl+right",
                 }
             };
             UI.shortcuts.previousPreview = {
@@ -90,7 +90,7 @@ var Split = require('split.js');
                 "equivalent": "",
                 "keystrokes" : {
                     "standard": "alt+ctrl+left",
-                    "mac": "alt+ctrl+left",
+                    "mac": "option+ctrl+left",
                 }
             };
             UI.shortcuts.nextSegment = {
