@@ -122,13 +122,7 @@ class PreviewContainer extends React.Component {
                 return item.get('segment') === parseInt(self.state.currentSid);
             });
             return <div className={this.props.classContainer}>
-                {this.props.showInfo ? (
-                    <PreviewInfo
-                        currentSid={this.state.currentSid}
-                        segmentPreviews={segmentPreviews.get('previews')}
-                        currentPreview={this.state.currentPreview}
-                    />
-                ): (null)}
+
                 {!config.isLQA ? (
                     <PreviewActions
                         currentSid={this.state.currentSid}
@@ -175,7 +169,13 @@ class PreviewContainer extends React.Component {
                         shortcuts={this.props.Shortcuts}
                     />
                 ): (null) }
-
+                {this.props.showInfo ? (
+                    <PreviewInfo
+                        currentSid={this.state.currentSid}
+                        segmentPreviews={segmentPreviews.get('previews')}
+                        currentPreview={this.state.currentPreview}
+                    />
+                ): (null)}
 
             </div>;
         } else  {

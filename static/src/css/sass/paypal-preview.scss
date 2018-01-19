@@ -16,8 +16,14 @@ body {
 }
 
 body.review-side-panel-opened {
-    &.preview-container, .preview-core-container {
+    &.preview-container, .preview-core-container, .gutter.gutter-vertical {
     width: 75%;
+    }
+}
+
+body.review-side-panel-opened {
+    &.gutter.gutter-vertical {
+        width: 75%;
     }
 }
 
@@ -29,6 +35,9 @@ body.review-side-panel-opened {
         border-bottom: 1px solid #000000;
         color: #ffffff;
         font-weight: 100;
+        bottom: 0;
+        position: fixed;
+        width: 100%;
         .preview-info {
             line-height: 25px;
             font-size: 16px;
