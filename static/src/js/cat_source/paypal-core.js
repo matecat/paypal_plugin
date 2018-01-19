@@ -22,6 +22,14 @@ var Split = require('split.js');
         start: function () {
             originalStart.apply(this);
             this.checkReferenceFiles();
+            this.downOpts = {
+                offset: '100%',
+                context: $('#outer')
+            };
+            this.upOpts = {
+                offset: '-40%',
+                context: $('#outer')
+            };
         },
 
         setEvents: function () {
