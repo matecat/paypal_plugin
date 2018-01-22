@@ -258,16 +258,21 @@ class Paypal extends BaseFeature {
                     $page = "translation";
                 }
 
+
+                // Is it really usefull? Maybe when project type is revision, the user will not must to see the revision button
                 if ( $project_type->value == "TR" && $page == "revision" ) {
                     $chunk = $controller->getChunk();
                     header( 'Location: ' . \Routes::translate( $project->name, $chunk->id, $chunk->password, $chunk->source, $chunk->target ) );
                     die;
                 }
 
+                /**
+                 * If user click on translate button (or open button) and project type is 'LR' (it means revision), he'll be redirected to revision page
+                 */
                 if ( $project_type->value == "LR" && $page == "translation" ) {
                     $chunk = $controller->getChunk();
-                    $job   = \LQA\ChunkReviewDao::findByIdJob( $chunk->id );
-                    header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job[ 0 ]->review_password, $chunk->source, $chunk->target ) );
+                    $job   = \LQA\ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
+                    header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job->review_password, $chunk->source, $chunk->target ) );
                     die;
                 }
             }
