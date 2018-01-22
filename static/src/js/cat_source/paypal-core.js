@@ -22,14 +22,6 @@ var Split = require('split.js');
         start: function () {
             originalStart.apply(this);
             this.checkReferenceFiles();
-            this.downOpts = {
-                offset: '100%',
-                context: $('#outer')
-            };
-            this.upOpts = {
-                offset: '-40%',
-                context: $('#outer')
-            };
         },
 
         setEvents: function () {
@@ -163,6 +155,11 @@ var Split = require('split.js');
                 pos = prev.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
             } else {
                 pos = 0;
+            }
+
+            var segmentOpen = $('section.editor');
+            if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId($('section.editor'))) {
+                pos = pos - segmentOpen.find('.footer').height();
             }
 
             scrollAnimation.animate({
