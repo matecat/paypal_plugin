@@ -281,6 +281,33 @@ class Paypal extends BaseFeature {
     }
 
     /**
+     * This method is used for add editLog csv in __meta of preview's zip
+     * @param $controller
+     * @param $output_content
+     */
+
+    public function appendEditLogToDownload( $controller, $output_content ) {
+        $project      = $controller->getProject();
+        $metadata     = new Projects_MetadataDao;
+        $project_type = $metadata->get( $project->id, "project_type" );
+        if ( !empty( $project_type ) ) {
+
+            $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
+            if ( $file_parts[ 'extension' ] == "zip" ) {
+                $zip = new \ZipArchive();
+                $zip->open( $output_content[ 0 ]->input_filename );
+
+                $this->model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
+                $output      = $this->model->generateCSVOutput();
+                $zip->addFromString( "__meta/Edit-log-export-" . $controller->id_job . ".csv", $output );
+                $zip->close();
+            }
+
+        }
+    }
+
+
+    /**
      * Disable the TM ICES
      *
      * @param $tm_data
