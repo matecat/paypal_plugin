@@ -21,6 +21,7 @@ use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
+use LQA\ChunkReviewDao;
 use viewController;
 use Projects_MetadataDao;
 
@@ -245,7 +246,7 @@ class Paypal extends BaseFeature {
      * @param viewController $controller
      *
      */
-    public function manageProjectType( viewController $controller ) {
+    public function handleProjectType( viewController $controller ) {
 
         if ( $controller instanceof \catController ) {
             $project      = $controller->project;
