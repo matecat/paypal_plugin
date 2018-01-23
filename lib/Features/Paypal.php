@@ -21,6 +21,7 @@ use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
 use Klein\Klein;
+use LQA\ChunkReviewDao;
 use viewController;
 use Projects_MetadataDao;
 
@@ -245,7 +246,7 @@ class Paypal extends BaseFeature {
      * @param viewController $controller
      *
      */
-    public function manageProjectType( viewController $controller ) {
+    public function handleProjectType( viewController $controller ) {
 
         if ( $controller instanceof \catController ) {
             $project      = $controller->project;
@@ -266,7 +267,7 @@ class Paypal extends BaseFeature {
 
                 if ( $project_type->value == "LR" && $page == "translation" ) {
                     $chunk = $controller->getChunk();
-                    $job   = \LQA\ChunkReviewDao::findByIdJob( $chunk->id );
+                    $job   = ChunkReviewDao::findByIdJob( $chunk->id );
                     header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job[ 0 ]->review_password, $chunk->source, $chunk->target ) );
                     die;
                 }
