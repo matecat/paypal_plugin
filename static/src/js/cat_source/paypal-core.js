@@ -182,7 +182,7 @@ var Split = require('split.js');
 
         setHideMatches: function () {
             var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
-            $.cookie(cookieName + '-' + config.id_job, false, { expires: 30 });
+            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
             UI.body.removeClass('hideMatches');
             if(UI.currentSegment){
                 UI.currentSegment.find('.footer').removeClass('showMatches');
