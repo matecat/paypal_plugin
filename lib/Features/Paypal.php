@@ -259,22 +259,54 @@ class Paypal extends BaseFeature {
                     $page = "translation";
                 }
 
+
+                // Is it really usefull? Maybe when project type is revision, the user will not must to see the revision button
                 if ( $project_type->value == "TR" && $page == "revision" ) {
                     $chunk = $controller->getChunk();
                     header( 'Location: ' . \Routes::translate( $project->name, $chunk->id, $chunk->password, $chunk->source, $chunk->target ) );
                     die;
                 }
 
+                /**
+                 * If user click on translate button (or open button) and project type is 'LR' (it means revision), he'll be redirected to revision page
+                 */
                 if ( $project_type->value == "LR" && $page == "translation" ) {
                     $chunk = $controller->getChunk();
-                    $job   = ChunkReviewDao::findByIdJob( $chunk->id );
-                    header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job[ 0 ]->review_password, $chunk->source, $chunk->target ) );
+                    $job   = \LQA\ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
+                    header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job->review_password, $chunk->source, $chunk->target ) );
                     die;
                 }
             }
         }
 
     }
+
+    /**
+     * This method is used for add editLog csv in __meta of preview's zip
+     * @param $controller
+     * @param $output_content
+     */
+
+    public function appendEditLogToDownload( $controller, $output_content ) {
+        $project      = $controller->getProject();
+        $metadata     = new Projects_MetadataDao;
+        $project_type = $metadata->get( $project->id, "project_type" );
+        if ( !empty( $project_type ) ) {
+
+            $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
+            if ( $file_parts[ 'extension' ] == "zip" ) {
+                $zip = new \ZipArchive();
+                $zip->open( $output_content[ 0 ]->input_filename );
+
+                $this->model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
+                $output      = $this->model->generateCSVOutput();
+                $zip->addFromString( "__meta/Edit-log-export-" . $controller->id_job . ".csv", $output );
+                $zip->close();
+            }
+
+        }
+    }
+
 
     /**
      * Disable the TM ICES
