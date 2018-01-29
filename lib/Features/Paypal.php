@@ -291,7 +291,8 @@ class Paypal extends BaseFeature {
         $project      = $controller->getProject();
         $metadata     = new Projects_MetadataDao;
         $project_type = $metadata->get( $project->id, "project_type" );
-        if ( !empty( $project_type ) ) {
+
+        if ( !empty( $project_type ) && in_array($project_type->value, [ 'TR', 'LR', 'LQA' ]) ) {
 
             $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
             if ( $file_parts[ 'extension' ] == "zip" ) {
@@ -303,8 +304,8 @@ class Paypal extends BaseFeature {
                 $zip->addFromString( "__meta/Edit-log-export-" . $controller->id_job . ".csv", $output );
                 $zip->close();
             }
-
         }
+
     }
 
 
