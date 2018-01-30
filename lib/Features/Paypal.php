@@ -24,15 +24,19 @@ use Klein\Klein;
 use LQA\ChunkReviewDao;
 use viewController;
 use Projects_MetadataDao;
+use API\V2\Json\SegmentComment;
 
 class Paypal extends BaseFeature {
 
     const FEATURE_CODE = 'paypal';
 
+
     /**
      * @var CDataHandler
      */
     protected $jsonHandler;
+
+    protected $project_types = [ 'TR', 'LR', 'LQA' ];
 
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
@@ -291,7 +295,8 @@ class Paypal extends BaseFeature {
         $project      = $controller->getProject();
         $metadata     = new Projects_MetadataDao;
         $project_type = $metadata->get( $project->id, "project_type" );
-        if ( !empty( $project_type ) ) {
+
+        if ( !empty( $project_type ) && in_array($project_type->value, $this->project_types) ) {
 
             $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
             if ( $file_parts[ 'extension' ] == "zip" ) {
@@ -303,8 +308,43 @@ class Paypal extends BaseFeature {
                 $zip->addFromString( "__meta/Edit-log-export-" . $controller->id_job . ".csv", $output );
                 $zip->close();
             }
-
         }
+
+    }
+
+    /**
+     * This method is used for add segments comments csv in __meta of preview's zip
+     * @param $controller
+     * @param $output_content
+     */
+
+    public function appendSegmentsCommentsToDownload( $controller, $output_content ) {
+        $project      = $controller->getProject();
+        $metadata     = new Projects_MetadataDao;
+        $project_type = $metadata->get( $project->id, "project_type" );
+
+        if ( !empty( $project_type ) && in_array($project_type->value, $this->project_types) )
+        {
+
+            $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
+            if ( $file_parts[ 'extension' ] == "zip" ) {
+                $zip = new \ZipArchive();
+                $job = $controller->getJob();
+                $zip->open( $output_content[ 0 ]->input_filename );
+
+                $chunk = \Chunks_ChunkDao::getByIdAndPassword(
+                        $job->id,
+                        $job->password
+                );
+
+                $comments = \Comments_CommentDao::getCommentsForChunk( $chunk );
+                $formatter = new SegmentComment( $comments ) ;
+                $output = $formatter->genCSV();
+                $zip->addFromString( "__meta/SegmentsComments_" . $controller->id_job . ".csv", $output );
+                $zip->close();
+            }
+        }
+
     }
 
 
