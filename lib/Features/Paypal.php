@@ -20,6 +20,7 @@ use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidato
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
+use FilesStorage;
 use Klein\Klein;
 use LQA\ChunkReviewDao;
 use viewController;
@@ -326,7 +327,7 @@ class Paypal extends BaseFeature {
         if ( !empty( $project_type ) && in_array($project_type->value, $this->project_types) )
         {
 
-            $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
+            $file_parts = FilesStorage::pathinfo_fix( $output_content[ 0 ]->output_filename );
             if ( $file_parts[ 'extension' ] == "zip" ) {
                 $zip = new \ZipArchive();
                 $job = $controller->getJob();
