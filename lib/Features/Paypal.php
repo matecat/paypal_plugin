@@ -25,6 +25,7 @@ use LQA\ChunkReviewDao;
 use viewController;
 use Projects_MetadataDao;
 use API\V2\Json\SegmentComment;
+use API\V2\Json\SegmentTranslationIssue;
 
 class Paypal extends BaseFeature {
 
@@ -286,65 +287,76 @@ class Paypal extends BaseFeature {
     }
 
     /**
-     * This method is used for add editLog csv in __meta of preview's zip
+     * This method is used for add export csv in __meta of preview's zip
+     *
      * @param $controller
      * @param $output_content
+     *
      */
 
-    public function appendEditLogToDownload( $controller, $output_content ) {
-        $project      = $controller->getProject();
-        $metadata     = new Projects_MetadataDao;
-        $project_type = $metadata->get( $project->id, "project_type" );
+    public function processZIPDownloadPreview($controller, $output_content){
+        $project = $controller->getProject();
 
-        if ( !empty( $project_type ) && in_array($project_type->value, $this->project_types) ) {
-
-            $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
-            if ( $file_parts[ 'extension' ] == "zip" ) {
-                $zip = new \ZipArchive();
-                $zip->open( $output_content[ 0 ]->input_filename );
-
-                $this->model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
-                $output      = $this->model->generateCSVOutput();
-                $zip->addFromString( "__meta/Edit-log-export-" . $controller->id_job . ".csv", $output );
-                $zip->close();
-            }
-        }
-
-    }
-
-    /**
-     * This method is used for add segments comments csv in __meta of preview's zip
-     * @param $controller
-     * @param $output_content
-     */
-
-    public function appendSegmentsCommentsToDownload( $controller, $output_content ) {
-        $project      = $controller->getProject();
-        $metadata     = new Projects_MetadataDao;
-        $project_type = $metadata->get( $project->id, "project_type" );
-
-        if ( !empty( $project_type ) && in_array($project_type->value, $this->project_types) )
-        {
-
-            $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
+        if ( $this->isPaypalProject( $project ) ) {
+            $file_parts = \FilesStorage::pathinfo_fix( $output_content[ 0 ]->output_filename );
             if ( $file_parts[ 'extension' ] == "zip" ) {
                 $zip = new \ZipArchive();
                 $job = $controller->getJob();
                 $zip->open( $output_content[ 0 ]->input_filename );
+
+                /**
+                 * appendEditLogToDownload
+                 */
+
+                $editlog_model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
+                $filePath    = $editlog_model->genCSVTmpFile();
+                $zip->addFile( $filePath, "__meta/Edit-log-export-" . $controller->id_job . ".csv" );
+
+                /**
+                 * appendSegmentsCommentsToDownload
+                 */
 
                 $chunk = \Chunks_ChunkDao::getByIdAndPassword(
                         $job->id,
                         $job->password
                 );
 
-                $comments = \Comments_CommentDao::getCommentsForChunk( $chunk );
-                $formatter = new SegmentComment( $comments ) ;
-                $output = $formatter->genCSV();
-                $zip->addFromString( "__meta/SegmentsComments_" . $controller->id_job . ".csv", $output );
+                $comments  = \Comments_CommentDao::getCommentsForChunk( $chunk );
+                $formatter = new SegmentComment( $comments );
+                $filePath  = $formatter->genCSVTmpFile();
+                $zip->addFile( $filePath, "__meta/Segments-comments-export_" . $controller->id_job . ".csv" );
+
+                /**
+                 * appendSegmentsIssuesCommentsToDownload
+                 */
+
+                $entries   = \LQA\EntryDao::findAllByChunk( $chunk );
+                $formatter = new SegmentTranslationIssue;
+                $filePath  = $formatter->genCSVTmpFile( $entries );
+                $zip->addFile( $filePath, "__meta/Segments-issues-comments-export_" . $controller->id_job . ".csv" );
+
                 $zip->close();
             }
         }
+    }
 
+    /**
+     * This method can be used to check if project has been made by paypal
+     *
+     * @param \Projects_ProjectStruct $project
+     *
+     * @return bool
+     */
+
+    private function isPaypalProject( \Projects_ProjectStruct $project ) {
+        $metadata     = new Projects_MetadataDao;
+        $project_type = $metadata->get( $project->id, "project_type" );
+
+        if ( !empty( $project_type ) && in_array( $project_type->value, $this->project_types ) ) {
+            return true;
+        }
+
+        return false;
     }
 
 
