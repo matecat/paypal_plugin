@@ -20,6 +20,7 @@ use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidato
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
+use FilesStorage;
 use Klein\Klein;
 use LQA\ChunkReviewDao;
 use viewController;
