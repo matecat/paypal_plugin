@@ -353,7 +353,7 @@ class Paypal extends BaseFeature {
         $metadata     = new Projects_MetadataDao;
         $project_type = $metadata->get( $project->id, "features" );
 
-        if ( !empty( $project_type ) && in_array( "paypal", explode(",", $project_type->value) ) ) {
+        if ( !empty( $project_type ) && in_array( self::FEATURE_CODE, explode(",", $project_type->value) ) ) {
             return true;
         }
 
