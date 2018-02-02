@@ -351,9 +351,9 @@ class Paypal extends BaseFeature {
 
     private function isPaypalProject( \Projects_ProjectStruct $project ) {
         $metadata     = new Projects_MetadataDao;
-        $project_type = $metadata->get( $project->id, "project_type" );
+        $project_type = $metadata->get( $project->id, "features" );
 
-        if ( !empty( $project_type ) && in_array( $project_type->value, $this->project_types ) ) {
+        if ( !empty( $project_type ) && in_array( "paypal", explode(",", $project_type->value) ) ) {
             return true;
         }
 
