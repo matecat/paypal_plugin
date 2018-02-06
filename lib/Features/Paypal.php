@@ -336,6 +336,33 @@ class Paypal extends BaseFeature {
                 $filePath  = $formatter->genCSVTmpFile( $entries );
                 $zip->addFile( $filePath, "__meta/Segments-issues-comments-export_" . $controller->id_job . ".csv" );
 
+                /**
+                 * appendJobsInfoToDownload
+                 */
+
+                $metadata     = new Projects_MetadataDao;
+                $project_type = $metadata->get( $project->id, "project_type" );
+                $csv_array    = [];
+                if ( !empty( $project_type ) ) {
+                    $csv_array[] = [ 'project_type', $project_type->value ];
+                }
+                $csv_array[] = [ 'start_date', \Utils::api_timestamp( $job->create_date ) ];
+
+                $translation = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => false ] );
+                $revise      = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => true ] );
+
+                if ( $translation != false ) {
+                    $csv_array[] = [ 'end_translation_date', \Utils::api_timestamp( $translation[ 'create_date' ] ) ];
+                }
+
+                if ( $revise != false ) {
+                    $csv_array[] = [ 'end_revise_date', \Utils::api_timestamp( $revise[ 'create_date' ] ) ];
+                }
+
+                $filePath = $this->genCSVKeyValueFile( $csv_array );
+                $zip->addFile( $filePath, "__meta/Job-info-export_" . $controller->id_job . ".csv" );
+
+
                 $zip->close();
             }
         }
@@ -358,6 +385,19 @@ class Paypal extends BaseFeature {
         }
 
         return false;
+    }
+
+    private function genCSVKeyValueFile($array){
+        $filePath   = tempnam( "/tmp", "KeyValueCSV_" );
+        $csvHandler = new \SplFileObject( $filePath, "w" );
+        $csvHandler->setCsvControl( ';' );
+
+        foreach($array as $row)
+        {
+            $csvHandler->fputcsv( $row );
+        }
+
+        return $filePath;
     }
 
 
