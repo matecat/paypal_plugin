@@ -343,21 +343,22 @@ class Paypal extends BaseFeature {
                 $metadata     = new Projects_MetadataDao;
                 $project_type = $metadata->get( $project->id, "project_type" );
                 $csv_array    = [];
-                if ( !empty( $project_type ) ) {
-                    $csv_array[] = [ 'project_type', $project_type->value ];
-                }
-                $csv_array[] = [ 'start_date', \Utils::api_timestamp( $job->create_date ) ];
+                $csv_array[] = [ 'project_id', $project->id ];
+                $csv_array[] = [ 'project_type', ( !empty( $project_type ) )?$project_type->value:"General" ];
+                $csv_array[] = [ 'job_id', $job->id ];
+                $csv_array[] = [ 'translate_password', $job->password ];
+
+                $revise_chunk   = \LQA\ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
+
+                $csv_array[] = [ 'revise_password', $revise_chunk->review_password ];
+                $csv_array[] = [ 'create_date', \Utils::api_timestamp( $job->create_date ) ];
 
                 $translation = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => false ] );
                 $revise      = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => true ] );
 
-                if ( $translation != false ) {
-                    $csv_array[] = [ 'end_translation_date', \Utils::api_timestamp( $translation[ 'create_date' ] ) ];
-                }
-
-                if ( $revise != false ) {
-                    $csv_array[] = [ 'end_revise_date', \Utils::api_timestamp( $revise[ 'create_date' ] ) ];
-                }
+                $csv_array[] = [ 'end_translation_date', ($translation)?\Utils::api_timestamp( $translation[ 'create_date' ] ):"N/A" ];
+                $csv_array[] = [ 'end_revision_date', ($revise)?\Utils::api_timestamp( $revise[ 'create_date' ] ):"N/A" ];
+                $csv_array[] = [ 'project_password', $project->password ];
 
                 $filePath = $this->genCSVKeyValueFile( $csv_array );
                 $zip->addFile( $filePath, "__meta/Job-info-export_" . $controller->id_job . ".csv" );
