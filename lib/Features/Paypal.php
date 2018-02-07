@@ -401,6 +401,16 @@ class Paypal extends BaseFeature {
         return $filePath;
     }
 
+    public function project_completion_event_saved( \Jobs_JobStruct $chunk, $eventStruct, $chunkCompletionEventId ) {
+        $translations_segments_dao = new \Translations_SegmentTranslationDao;
+        if ( $eventStruct->is_review ) {
+            $translations_segments_dao->setApprovedByChunk( $chunk );
+        } else {
+            $translations_segments_dao->setTranslatedByChunk( $chunk );
+        }
+
+    }
+
 
     /**
      * Disable the TM ICES
