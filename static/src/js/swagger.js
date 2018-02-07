@@ -21,10 +21,10 @@ $(function () {
                         "required" : true,
                     },
                     {
-                        "name" : "email",
+                        "name" : "emails",
                         "type" : "string",
-                        "in" : "fromData",
-                        "description" : "This parameter must be a json array of email",
+                        "in" : "formData",
+                        "description" : 'This parameter must be a json array of email. Es: ["email1@example.com", "email2@example.com"]',
                         "required" : true
                     }
                 ],
