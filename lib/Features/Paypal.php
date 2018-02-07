@@ -334,7 +334,7 @@ class Paypal extends BaseFeature {
                 $entries   = \LQA\EntryDao::findAllByChunk( $chunk );
                 $formatter = new SegmentTranslationIssue;
                 $filePath  = $formatter->genCSVTmpFile( $entries );
-                $zip->addFile( $filePath, "__meta/Segments-issues-comments-export_" . $controller->id_job . ".csv" );
+                $zip->addFile( $filePath, "__meta/Segments-issues-export_" . $controller->id_job . ".csv" );
 
                 /**
                  * appendJobsInfoToDownload
