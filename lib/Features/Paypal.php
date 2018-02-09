@@ -465,4 +465,23 @@ class Paypal extends BaseFeature {
 
     }
 
+    /**
+     * Ebay customisation requires that identical source and target are considered identical
+     *
+     * @param $originalValue
+     * @param $projectStructure
+     * @param $xliff_trans_unit
+     *
+     * @return bool
+     */
+    public function filterIdenticalSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
+
+        if( isset( $xliff_trans_unit[ 'attr' ][ 'approved'] ) && $xliff_trans_unit[ 'attr' ][ 'approved'] ){
+            return $xliff_trans_unit[ 'attr' ][ 'approved'];
+        }
+
+        return $originalValue;
+
+    }
+
 }
