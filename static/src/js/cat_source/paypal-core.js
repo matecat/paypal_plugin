@@ -14,6 +14,8 @@ var Split = require('split.js');
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
     var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
+    var originalIsReadonlySegment = UI.isReadonlySegment;
+    var original_messageForClickOnReadonly = UI.messageForClickOnReadonly ;
 
     $.extend(UI, {
         windowPreview: null,
@@ -291,6 +293,24 @@ var Split = require('split.js');
                  */
                 return config.job_completion_current_phase == 'translate' &&
                     stats.TRANSLATED > 0 ;
+            }
+        },
+
+        isReadonlySegment: function( segment ) {
+            let result = originalIsReadonlySegment.apply(this, [segment]);
+            let isReviewReadOnly = config.isReview && config.job_completion_current_phase !== 'revise' && config.job_marked_complete;
+            return result || isReviewReadOnly ;
+        },
+
+        messageForClickOnReadonly: function( section ) {
+            let isReviewReadOnly = config.isReview && config.job_completion_current_phase !== 'revise' && config.job_marked_complete;
+
+            if ( UI.translateAndReadonly()) {
+                return 'This job is currently under review. Segments are in read-only mode.';
+            } else if (isReviewReadOnly){
+                return 'This job is marked as complete. Segments are in read-only mode.';
+            } else {
+                return original_messageForClickOnReadonly() ;
             }
         },
 
