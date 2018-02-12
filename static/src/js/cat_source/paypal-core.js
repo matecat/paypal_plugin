@@ -13,6 +13,7 @@ var Split = require('split.js');
     var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
+    var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
 
     $.extend(UI, {
         windowPreview: null,
@@ -266,6 +267,31 @@ var Split = require('split.js');
         loadCustomization: function () {
             originalLoadCustimization.apply(this);
             UI.custom.extended_tagmode = true;
+        },
+
+        isMarkedAsCompleteClickable: function ( stats ) {
+            if (config.isReview) {
+                /**
+                 * Review step
+                 *
+                 * In this case the job is markable as complete when 'DRAFT' count is 0
+                 * and 'TRANSLATED' is < 0 and 'APPROVED' + 'REJECTED' > 0.
+                 */
+
+                return config.job_completion_current_phase == 'revise' &&
+                    stats.APPROVED > 0 ;
+            }
+            else {
+                /**
+                 * Translation step
+                 *
+                 * This condition covers the case in which the project is pretranslated.
+                 * When a project is pretranslated, the 'translated' count can be 0 or
+                 * less.
+                 */
+                return config.job_completion_current_phase == 'translate' &&
+                    stats.TRANSLATED > 0 ;
+            }
         },
 
         checkReferenceFiles: function () {
