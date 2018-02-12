@@ -22,6 +22,9 @@ class CatDecorator extends AbstractDecorator {
 
         $this->stats = $this->controller->getJobStats();
 
+        $dao                 = new \Chunks_ChunkCompletionEventDao();
+        $this->current_phase = $dao->currentPhase( $this->controller->getChunk() );
+
         $job = $this->controller->getChunk();
 
         $completed = $job->isMarkedComplete( array( 'is_review' => $this->controller->isRevision() ) );
@@ -66,11 +69,13 @@ class CatDecorator extends AbstractDecorator {
     private function completable() {
 
         if ( $this->controller->isRevision() ) {
-            return $this->stats[ 'APPROVED' ] > 0;
+            $completable = $this->current_phase == \Chunks_ChunkCompletionEventDao::REVISE &&
+                    $this->stats[ 'APPROVED' ] > 0;
         } else {
-            return $this->stats[ 'TRANSLATED' ] > 0;
+            $completable = $this->current_phase == \Chunks_ChunkCompletionEventDao::TRANSLATE &&
+                    $this->stats[ 'TRANSLATED' ] > 0;
         }
 
+        return $completable;
     }
-
 }
