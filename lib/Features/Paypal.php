@@ -20,19 +20,25 @@ use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidato
 use Features\Paypal\Controller\PreviewController;
 use Features\Paypal\Controller\LqaController;
 use Features\Paypal\Utils\CDataHandler;
+use FilesStorage;
 use Klein\Klein;
 use LQA\ChunkReviewDao;
 use viewController;
 use Projects_MetadataDao;
+use API\V2\Json\SegmentComment;
+use API\V2\Json\SegmentTranslationIssue;
 
 class Paypal extends BaseFeature {
 
     const FEATURE_CODE = 'paypal';
 
+
     /**
      * @var CDataHandler
      */
     protected $jsonHandler;
+
+    protected $project_types = [ 'TR', 'LR', 'LQA' ];
 
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
@@ -282,29 +288,127 @@ class Paypal extends BaseFeature {
     }
 
     /**
-     * This method is used for add editLog csv in __meta of preview's zip
+     * This method is used for add export csv in __meta of preview's zip
+     *
      * @param $controller
      * @param $output_content
+     *
      */
 
-    public function appendEditLogToDownload( $controller, $output_content ) {
-        $project      = $controller->getProject();
-        $metadata     = new Projects_MetadataDao;
-        $project_type = $metadata->get( $project->id, "project_type" );
-        if ( !empty( $project_type ) ) {
+    public function processZIPDownloadPreview($controller, $output_content){
+        $project = $controller->getProject();
 
-            $file_parts = pathinfo( $output_content[ 0 ]->output_filename );
+        if ( $this->isPaypalProject( $project ) ) {
+            $file_parts = \FilesStorage::pathinfo_fix( $output_content[ 0 ]->output_filename );
             if ( $file_parts[ 'extension' ] == "zip" ) {
                 $zip = new \ZipArchive();
+                $job = $controller->getJob();
                 $zip->open( $output_content[ 0 ]->input_filename );
 
-                $this->model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
-                $output      = $this->model->generateCSVOutput();
-                $zip->addFromString( "__meta/Edit-log-export-" . $controller->id_job . ".csv", $output );
+                /**
+                 * appendEditLogToDownload
+                 */
+
+                $editlog_model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
+                $filePath    = $editlog_model->genCSVTmpFile();
+                $zip->addFile( $filePath, "__meta/Edit-log-export-" . $controller->id_job . ".csv" );
+
+                /**
+                 * appendSegmentsCommentsToDownload
+                 */
+
+                $chunk = \Chunks_ChunkDao::getByIdAndPassword(
+                        $job->id,
+                        $job->password
+                );
+
+                $comments  = \Comments_CommentDao::getCommentsForChunk( $chunk );
+                $formatter = new SegmentComment( $comments );
+                $filePath  = $formatter->genCSVTmpFile();
+                $zip->addFile( $filePath, "__meta/Segments-comments-export_" . $controller->id_job . ".csv" );
+
+                /**
+                 * appendSegmentsIssuesCommentsToDownload
+                 */
+
+                $entries   = \LQA\EntryDao::findAllByChunk( $chunk );
+                $formatter = new SegmentTranslationIssue;
+                $filePath  = $formatter->genCSVTmpFile( $entries );
+                $zip->addFile( $filePath, "__meta/Segments-issues-export_" . $controller->id_job . ".csv" );
+
+                /**
+                 * appendJobsInfoToDownload
+                 */
+
+                $metadata     = new Projects_MetadataDao;
+                $project_type = $metadata->get( $project->id, "project_type" );
+                $csv_array    = [];
+                $csv_array[] = [ 'project_id', $project->id ];
+                $csv_array[] = [ 'project_type', ( !empty( $project_type ) )?$project_type->value:"General" ];
+                $csv_array[] = [ 'job_id', $job->id ];
+                $csv_array[] = [ 'translate_password', $job->password ];
+
+                $revise_chunk   = \LQA\ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
+
+                $csv_array[] = [ 'revise_password', $revise_chunk->review_password ];
+                $csv_array[] = [ 'create_date', \Utils::api_timestamp( $job->create_date ) ];
+
+                $translation = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => false ] );
+                $revise      = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => true ] );
+
+                $csv_array[] = [ 'end_translation_date', ($translation)?\Utils::api_timestamp( $translation[ 'create_date' ] ):"N/A" ];
+                $csv_array[] = [ 'end_revision_date', ($revise)?\Utils::api_timestamp( $revise[ 'create_date' ] ):"N/A" ];
+                $csv_array[] = [ 'project_password', $project->password ];
+
+                $filePath = $this->genCSVKeyValueFile( $csv_array );
+                $zip->addFile( $filePath, "__meta/Job-info-export_" . $controller->id_job . ".csv" );
+
+
                 $zip->close();
             }
-
         }
+    }
+
+    /**
+     * This method can be used to check if project has been made by paypal
+     *
+     * @param \Projects_ProjectStruct $project
+     *
+     * @return bool
+     */
+
+    private function isPaypalProject( \Projects_ProjectStruct $project ) {
+        $metadata     = new Projects_MetadataDao;
+        $project_type = $metadata->get( $project->id, "features" );
+
+        if ( !empty( $project_type ) && in_array( self::FEATURE_CODE, explode(",", $project_type->value) ) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function genCSVKeyValueFile($array){
+        $filePath   = tempnam( "/tmp", "KeyValueCSV_" );
+        $csvHandler = new \SplFileObject( $filePath, "w" );
+        $csvHandler->setCsvControl( ';' );
+
+        foreach($array as $row)
+        {
+            $csvHandler->fputcsv( $row );
+        }
+
+        return $filePath;
+    }
+
+    public function project_completion_event_saved( \Jobs_JobStruct $chunk, $eventStruct, $chunkCompletionEventId ) {
+        $translations_segments_dao = new \Translations_SegmentTranslationDao;
+        if ( $eventStruct->is_review ) {
+            $translations_segments_dao->setApprovedByChunk( $chunk );
+        } else {
+            $translations_segments_dao->setTranslatedByChunk( $chunk );
+        }
+
     }
 
 
@@ -358,6 +462,25 @@ class Paypal extends BaseFeature {
             $iceLockArray[ 'status' ] = Constants_TranslationStatus::STATUS_APPROVED;
         }
         return $iceLockArray;
+
+    }
+
+    /**
+     * Ebay customisation requires that identical source and target are considered identical
+     *
+     * @param $originalValue
+     * @param $projectStructure
+     * @param $xliff_trans_unit
+     *
+     * @return bool
+     */
+    public function filterIdenticalSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
+
+        if( isset( $xliff_trans_unit[ 'attr' ][ 'approved'] ) && $xliff_trans_unit[ 'attr' ][ 'approved'] ){
+            return $xliff_trans_unit[ 'attr' ][ 'approved'];
+        }
+
+        return $originalValue;
 
     }
 
