@@ -37,6 +37,15 @@ class CatDecorator extends AbstractDecorator
             $this->varsForUncomplete();
         }
 
+        $metadata     = new \Projects_MetadataDao;
+        $project = $this->controller->getProject();
+        $project_type = $metadata->get( $project->id, "project_type" );
+        if($project_type->value == "LR")
+        {
+            $this->template->footer_show_translate_link = false;
+        }
+
+
     }
 
     private function varsForUncomplete() {
