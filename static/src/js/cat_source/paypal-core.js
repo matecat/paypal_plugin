@@ -16,6 +16,7 @@ var Split = require('split.js');
     var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
     var originalIsReadonlySegment = UI.isReadonlySegment;
     var original_messageForClickOnReadonly = UI.messageForClickOnReadonly ;
+    var original_isUnlockedSegment = UI.isUnlockedSegment ;
 
     $.extend(UI, {
         windowPreview: null,
@@ -344,6 +345,14 @@ var Split = require('split.js');
                     });
                 }
             });
+        },
+
+        isUnlockedSegment: function ( segment ) {
+            if (config.isReview) {
+                return true;
+            } else {
+                original_isUnlockedSegment.apply(this, [segment]);
+            }
         }
 
 
