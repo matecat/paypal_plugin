@@ -165,9 +165,11 @@ class Paypal extends BaseFeature {
      *
      * @return mixed
      */
-    public function filterNewProjectInputFilters( $filter_args ){
+    public function filterNewProjectInputFilters( $filter_args ) {
         unset( $filter_args[ 'tag_projection' ] );  //disable Guess Tag Position Feature
         $filter_args[ 'project_type' ] = [ 'filter' => FILTER_CALLBACK, 'options' => [ __CLASS__, 'sanitizeProjectTypeValue' ] ];
+        $filter_args[ 'comments' ]  = [ 'filter' => FILTER_SANITIZE_STRING  ];
+
         return $filter_args;
     }
 

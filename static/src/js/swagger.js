@@ -68,4 +68,11 @@ $(function () {
                 }
             },
         }
+
+    window.swaggerUi.api.spec.paths["/api/new"].post.parameters.push( {
+        "name": "comments",
+        "type": "string",
+        "description": "Write here comments or instructions and they'll be shown in translate page",
+        "in": "formData",
+    } );
 });
