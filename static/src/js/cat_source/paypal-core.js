@@ -146,23 +146,18 @@ var Split = require('split.js');
         },
         animateScroll: function (segment, speed) {
             var scrollAnimation = $( UI.scrollSelector ).stop().delay( 300 );
-            var pos ;
+            var pos = 0;
             var prev = segment.prev('section') ;
+            var segmentOpen = $('section.editor');
 
             // XXX: this condition is necessary **only** because in case of first segment of a file,
             // the previous element (<ul>) has display:none style. Such elements are ignored by the
             // the .offset() function.
             var commonOffset = $('.header-menu').height() +
-                $('.searchbox:visible').height() ;
+                $('.searchbox:visible').height() - 20 ;
+            pos = segment.offset().top  - segment.offsetParent('#outer').offset().top + commonOffset;
 
-            if ( prev.length ) {
-                pos = prev.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
-            } else {
-                pos = 0;
-            }
-
-            var segmentOpen = $('section.editor');
-            if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId($('section.editor'))) {
+            if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
                 pos = pos - segmentOpen.find('.footer').height();
             }
 
@@ -257,8 +252,8 @@ var Split = require('split.js');
         },
 
         openPreview: function (sid,preview) {
-            $('#plugin-mount-point').css('height', '40%');
-            $('#outer').css('height', '60%');
+            $('#plugin-mount-point').css('height', '45%');
+            $('#outer').css('height', '55%');
             if(sid && preview){
                 PreviewActions.selectSegment(sid,preview)
             }
