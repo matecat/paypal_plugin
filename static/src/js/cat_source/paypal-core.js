@@ -13,6 +13,10 @@ var Split = require('split.js');
     var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
+    var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
+    var originalIsReadonlySegment = UI.isReadonlySegment;
+    var original_messageForClickOnReadonly = UI.messageForClickOnReadonly ;
+    var original_isUnlockedSegment = UI.isUnlockedSegment ;
 
     $.extend(UI, {
         windowPreview: null,
@@ -142,23 +146,18 @@ var Split = require('split.js');
         },
         animateScroll: function (segment, speed) {
             var scrollAnimation = $( UI.scrollSelector ).stop().delay( 300 );
-            var pos ;
+            var pos = 0;
             var prev = segment.prev('section') ;
+            var segmentOpen = $('section.editor');
 
             // XXX: this condition is necessary **only** because in case of first segment of a file,
             // the previous element (<ul>) has display:none style. Such elements are ignored by the
             // the .offset() function.
             var commonOffset = $('.header-menu').height() +
-                $('.searchbox:visible').height() ;
+                $('.searchbox:visible').height() - 20 ;
+            pos = segment.offset().top  - segment.offsetParent('#outer').offset().top + commonOffset;
 
-            if ( prev.length ) {
-                pos = prev.offset().top  - prev.offsetParent('#outer').offset().top + commonOffset;
-            } else {
-                pos = 0;
-            }
-
-            var segmentOpen = $('section.editor');
-            if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId($('section.editor'))) {
+            if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
                 pos = pos - segmentOpen.find('.footer').height();
             }
 
@@ -253,8 +252,8 @@ var Split = require('split.js');
         },
 
         openPreview: function (sid,preview) {
-            $('#plugin-mount-point').css('height', '40%');
-            $('#outer').css('height', '60%');
+            $('#plugin-mount-point').css('height', '45%');
+            $('#outer').css('height', '55%');
             if(sid && preview){
                 PreviewActions.selectSegment(sid,preview)
             }
@@ -266,6 +265,49 @@ var Split = require('split.js');
         loadCustomization: function () {
             originalLoadCustimization.apply(this);
             UI.custom.extended_tagmode = true;
+        },
+
+        isMarkedAsCompleteClickable: function ( stats ) {
+            if (config.isReview) {
+                /**
+                 * Review step
+                 *
+                 * In this case the job is markable as complete when 'DRAFT' count is 0
+                 * and 'TRANSLATED' is < 0 and 'APPROVED' + 'REJECTED' > 0.
+                 */
+
+                return config.job_completion_current_phase == 'revise' &&
+                    stats.APPROVED > 0 ;
+            }
+            else {
+                /**
+                 * Translation step
+                 *
+                 * This condition covers the case in which the project is pretranslated.
+                 * When a project is pretranslated, the 'translated' count can be 0 or
+                 * less.
+                 */
+                return config.job_completion_current_phase == 'translate' &&
+                    stats.TRANSLATED > 0 ;
+            }
+        },
+
+        isReadonlySegment: function( segment ) {
+            let result = originalIsReadonlySegment.apply(this, [segment]);
+            let isReviewReadOnly = config.isReview && config.job_completion_current_phase !== 'revise' && config.job_marked_complete;
+            return result || isReviewReadOnly ;
+        },
+
+        messageForClickOnReadonly: function( section ) {
+            let isReviewReadOnly = config.isReview && config.job_completion_current_phase !== 'revise' && config.job_marked_complete;
+
+            if ( UI.translateAndReadonly()) {
+                return 'This job is currently under review. Segments are in read-only mode.';
+            } else if (isReviewReadOnly){
+                return 'This job is marked as complete. Segments are in read-only mode.';
+            } else {
+                return original_messageForClickOnReadonly() ;
+            }
         },
 
         checkReferenceFiles: function () {
@@ -298,6 +340,14 @@ var Split = require('split.js');
                     });
                 }
             });
+        },
+
+        isUnlockedSegment: function ( segment ) {
+            if (config.isReview) {
+                return true;
+            } else {
+                original_isUnlockedSegment.apply(this, [segment]);
+            }
         }
 
 

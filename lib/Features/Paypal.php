@@ -38,6 +38,8 @@ class Paypal extends BaseFeature {
      */
     protected $jsonHandler;
 
+    const PROJECT_TYPE_LR = 'LR' ;
+
     protected $project_types = [ 'TR', 'LR', 'LQA' ];
 
     public static $dependencies = [
@@ -484,6 +486,32 @@ class Paypal extends BaseFeature {
 
         return $originalValue;
 
+    }
+
+    /**
+     * @param $projectStructure
+     */
+    public function postProjectCommit( $projectStructure ) {
+        // find all chunks
+        // for each chunk create a Translation
+        $project = \Projects_ProjectDao::findById( $projectStructure[ 'id_project' ] ) ;
+        if ( $project->getMetadataValue('project_type') == self::PROJECT_TYPE_LR  ) {
+            foreach( $project->getChunks() as $chunk ) {
+                $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
+                $model->setTranslationCompleted([ 'ip_address' => $projectStructure['user_ip'] ] ) ;
+            }
+        }
+    }
+
+    public function postJobSplitted( $projectStructure ) {
+        $chunk = \Chunks_ChunkDao::getByIdAndPassword( $projectStructure['job_to_split'], $projectStructure['job_to_split_pass'] ) ;
+        $project = $chunk->getProject();
+        if ( $project->getMetadataValue('project_type') == self::PROJECT_TYPE_LR ) {
+            foreach( $project->getChunks() as $chunk ) {
+                $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
+                $model->setTranslationCompleted() ;
+            }
+        }
     }
 
 }
