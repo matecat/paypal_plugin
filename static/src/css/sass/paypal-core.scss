@@ -99,22 +99,6 @@ body.cattool {
     }
 }
 
-//TODO: Move this in other file for lqa
-
-.lqa-page {
-    #outer {
-        margin-top: 0px !important;
-        height: 30%;
-    }
-    #plugin-mount-point {
-        margin-top: 50px;
-        height: 70%;
-    }
-    .preview-core-container {
-        padding-top: 56px;
-    }
-}
-
 body:not(.filterOpen) #outer {
     overflow-y: scroll;
     position: relative;
