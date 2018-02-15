@@ -28,6 +28,11 @@ class LqaController extends \BaseKleinViewController {
     protected $project;
 
     /**
+     * @var JobPasswordValidator
+     */
+    protected $jobValidator ;
+
+    /**
      * @param Projects_ProjectStruct $project
      */
     public function setProject( Projects_ProjectStruct $project ) {
@@ -50,29 +55,39 @@ class LqaController extends \BaseKleinViewController {
 
     public function afterConstruct() {
         $this->appendValidator( new LoginValidator( $this ) );
+
         $jobValidator = new JobPasswordValidator( $this );
+
         $Controller = $this;
+
         $jobValidator->onSuccess( function() use( $jobValidator, $Controller ){
             $Controller->setJobStruct( $jobValidator->getJob() );
             $Controller->setProject( $jobValidator->getJob()->getProject( 60 * 60 ) );
         } );
         $this->appendValidator( $jobValidator );
         $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
+
+        $this->setView( \INIT::$TEMPLATE_ROOT . '/index.html' );
+
+        $this->jobValidator = $jobValidator ;
     }
 
     public function setView( $template_name ) {
         $this->view = new PHPTALWithAppend( $template_name );
     }
 
-    /**
-     * @param $method
-     */
-    public function respond( $method = null ) {
-        $decorator = new LqaDecorator( $this );
+
+    public function show() {
+        $decorator = new LqaDecorator( $this, $this->view );
         $this->setDefaultTemplateData();
-        $decorator->decorate( $this->view );
+        $decorator->decorate();
         $this->response->body( $this->view->execute() );
         $this->response->send();
+    }
+
+
+    public function getJobValidator() {
+        return $this->jobValidator ;
     }
 
 
