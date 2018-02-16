@@ -175,6 +175,12 @@ class Paypal extends BaseFeature {
         return $filter_args;
     }
 
+    public function addNewProjectStructureAttributes( $projectStructure, $post_input ) {
+        $projectStructure['comments'] = $post_input['comments'];
+
+        return $projectStructure;
+    }
+
     /**
      * Callback for filters
      *
@@ -486,6 +492,14 @@ class Paypal extends BaseFeature {
 
         return $originalValue;
 
+    }
+
+    public function addCommentsToZipProject( $projectStructure, $zipDir) {
+        $datePath = date_create( $this->projectStructure[ 'create_date' ] )->format( 'Ymd' );
+
+        $newZipDir  = $zipDir . DIRECTORY_SEPARATOR . $datePath . DIRECTORY_SEPARATOR . $projectStructure['id_project'] ;
+
+        file_put_contents( $newZipDir . "/comments.txt", $projectStructure[ 'comments' ] );
     }
 
     /**
