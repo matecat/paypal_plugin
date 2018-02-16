@@ -123,18 +123,16 @@ class PreviewContainer extends React.Component {
             });
             return <div className={this.props.classContainer}>
 
-                {!config.isLQA ? (
-                    <PreviewActions
-                        currentSid={this.state.currentSid}
-                        currentPreview={this.state.currentPreview}
-                        previews={this.state.previews}
-                        segmentsInfo={this.state.segmentsInfo}
-                        segmentPreviews={segmentPreviews.get('previews')}
-                        showFullScreenButton={this.props.showFullScreenButton}
-                        isMac={this.props.isMac}
-                        shortcuts={this.props.Shortcuts}
-                    />
-                ): (null) }
+                <PreviewActions
+                    currentSid={this.state.currentSid}
+                    currentPreview={this.state.currentPreview}
+                    previews={this.state.previews}
+                    segmentsInfo={this.state.segmentsInfo}
+                    segmentPreviews={segmentPreviews.get('previews')}
+                    showFullScreenButton={this.props.showFullScreenButton}
+                    isMac={this.props.isMac}
+                    shortcuts={this.props.Shortcuts}
+                />
 
                 <div className="preview-image-container" ref={(container)=> this.imageContainer = container}>
                     <div className="preview-image-innercontainer" style={styleDimension}>
@@ -146,29 +144,10 @@ class PreviewContainer extends React.Component {
                             // height={preview.get('file_h')}
                         />
                         {this.getPreviewHighLighter()}
-                        {config.isLQA ? (
-                        <PreviewWidget
-                            currentSid={this.state.currentSid}
-                            currentPreview={this.state.currentPreview}
-                            imageWidth = {this.getImageDimension()}
-                            segmentsInfo={this.state.segmentsInfo}
-                        />
-                        ): (null) }
+
                     </div>
                 </div>
 
-                {config.isLQA ? (
-                    <PreviewActions
-                        currentSid={this.state.currentSid}
-                        currentPreview={this.state.currentPreview}
-                        previews={this.state.previews}
-                        segmentsInfo={this.state.segmentsInfo}
-                        segmentPreviews={segmentPreviews.get('previews')}
-                        showFullScreenButton={this.props.showFullScreenButton}
-                        isMac={this.props.isMac}
-                        shortcuts={this.props.Shortcuts}
-                    />
-                ): (null) }
                 {this.props.showInfo ? (
                     <PreviewInfo
                         currentSid={this.state.currentSid}
