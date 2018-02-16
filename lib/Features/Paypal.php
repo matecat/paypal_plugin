@@ -170,13 +170,13 @@ class Paypal extends BaseFeature {
     public function filterNewProjectInputFilters( $filter_args ) {
         unset( $filter_args[ 'tag_projection' ] );  //disable Guess Tag Position Feature
         $filter_args[ 'project_type' ] = [ 'filter' => FILTER_CALLBACK, 'options' => [ __CLASS__, 'sanitizeProjectTypeValue' ] ];
-        $filter_args[ 'comments' ]  = [ 'filter' => FILTER_SANITIZE_STRING  ];
+        $filter_args[ 'instructions' ]  = [ 'filter' => FILTER_SANITIZE_STRING  ];
 
         return $filter_args;
     }
 
     public function addNewProjectStructureAttributes( $projectStructure, $post_input ) {
-        $projectStructure['comments'] = $post_input['comments'];
+        $projectStructure['instructions'] = $post_input['instructions'];
 
         return $projectStructure;
     }
@@ -494,12 +494,12 @@ class Paypal extends BaseFeature {
 
     }
 
-    public function addCommentsToZipProject( $projectStructure, $zipDir) {
+    public function addInstructionsToZipProject( $projectStructure, $zipDir) {
         $datePath = date_create( $this->projectStructure[ 'create_date' ] )->format( 'Ymd' );
 
         $newZipDir  = $zipDir . DIRECTORY_SEPARATOR . $datePath . DIRECTORY_SEPARATOR . $projectStructure['id_project'] ;
 
-        file_put_contents( $newZipDir . "/comments.txt", $projectStructure[ 'comments' ] );
+        file_put_contents( $newZipDir . "/instructions.txt", $projectStructure[ 'instructions' ] );
     }
 
     /**

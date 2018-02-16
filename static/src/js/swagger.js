@@ -70,7 +70,14 @@ $(function () {
         }
 
     window.swaggerUi.api.spec.paths["/api/new"].post.parameters.push( {
-        "name": "comments",
+        "name": "instructions",
+        "type": "string",
+        "description": "Write here comments or instructions and they'll be shown in translate page",
+        "in": "formData",
+    } );
+
+    window.swaggerUi.api.spec.paths["/api/v1/new"].post.parameters.push( {
+        "name": "instructions",
         "type": "string",
         "description": "Write here comments or instructions and they'll be shown in translate page",
         "in": "formData",
