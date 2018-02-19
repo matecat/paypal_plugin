@@ -76,6 +76,7 @@ class Paypal extends BaseFeature {
 
         route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
+        route( '/job/[:id_job]/[:password]/instructions', 'GET', 'Features\Paypal\Controller\API\JobController', 'getInstructions'  );
         route( '/reference-files/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolder' );
         route( '/reference-files/[:id_job]/[:password]/list', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolderList' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'POST', 'Features\Paypal\Controller\API\WhitelistController', 'create' );
@@ -167,10 +168,18 @@ class Paypal extends BaseFeature {
      *
      * @return mixed
      */
-    public function filterNewProjectInputFilters( $filter_args ){
+    public function filterNewProjectInputFilters( $filter_args ) {
         unset( $filter_args[ 'tag_projection' ] );  //disable Guess Tag Position Feature
         $filter_args[ 'project_type' ] = [ 'filter' => FILTER_CALLBACK, 'options' => [ __CLASS__, 'sanitizeProjectTypeValue' ] ];
+        $filter_args[ 'instructions' ]  = [ 'filter' => FILTER_SANITIZE_STRING  ];
+
         return $filter_args;
+    }
+
+    public function addNewProjectStructureAttributes( $projectStructure, $post_input ) {
+        $projectStructure['instructions'] = $post_input['instructions'];
+
+        return $projectStructure;
     }
 
     /**
@@ -484,6 +493,16 @@ class Paypal extends BaseFeature {
 
         return $originalValue;
 
+    }
+
+    public function addInstructionsToZipProject( $projectStructure, $zipDir ) {
+        if ( !empty( $projectStructure[ 'instructions' ] ) ) {
+            $datePath = date_create( $this->projectStructure[ 'create_date' ] )->format( 'Ymd' );
+
+            $newZipDir = $zipDir . DIRECTORY_SEPARATOR . $datePath . DIRECTORY_SEPARATOR . $projectStructure[ 'id_project' ];
+
+            file_put_contents( $newZipDir . "/instructions.txt", $projectStructure[ 'instructions' ] );
+        }
     }
 
     /**
