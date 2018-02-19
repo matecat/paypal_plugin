@@ -78,6 +78,7 @@ class Paypal extends BaseFeature {
         route( '/reference-files/[:id_job]/[:password]/list', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolderList' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'POST', 'Features\Paypal\Controller\API\WhitelistController', 'create' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'DELETE', 'Features\Paypal\Controller\API\WhitelistController', 'delete' );
+        route( '/lqa/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\LQAController', 'show' );
     }
 
     public static function previewRoute($request, $response, $service, $app) {
@@ -484,4 +485,29 @@ class Paypal extends BaseFeature {
 
     }
 
+    /**
+     * @param $projectStructure
+     */
+    public function postProjectCommit( $projectStructure ) {
+        // find all chunks
+        // for each chunk create a Translation
+        $project = \Projects_ProjectDao::findById( $projectStructure[ 'id_project' ] ) ;
+        if ( $project->getMetadataValue('project_type') == self::PROJECT_TYPE_LR  ) {
+            foreach( $project->getChunks() as $chunk ) {
+                $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
+                $model->setTranslationCompleted([ 'ip_address' => $projectStructure['user_ip'] ] ) ;
+            }
+        }
+    }
+
+    public function postJobSplitted( $projectStructure ) {
+        $chunk = \Chunks_ChunkDao::getByIdAndPassword( $projectStructure['job_to_split'], $projectStructure['job_to_split_pass'] ) ;
+        $project = $chunk->getProject();
+        if ( $project->getMetadataValue('project_type') == self::PROJECT_TYPE_LR ) {
+            foreach( $project->getChunks() as $chunk ) {
+                $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
+                $model->setTranslationCompleted() ;
+            }
+        }
+    }
 }
