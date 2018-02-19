@@ -38,6 +38,8 @@ class Paypal extends BaseFeature {
      */
     protected $jsonHandler;
 
+    const PROJECT_TYPE_LR = 'LR' ;
+
     protected $project_types = [ 'TR', 'LR', 'LQA' ];
 
     public static $dependencies = [
@@ -510,4 +512,5 @@ class Paypal extends BaseFeature {
             }
         }
     }
+
 }
