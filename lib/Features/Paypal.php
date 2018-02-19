@@ -495,12 +495,14 @@ class Paypal extends BaseFeature {
 
     }
 
-    public function addInstructionsToZipProject( $projectStructure, $zipDir) {
-        $datePath = date_create( $this->projectStructure[ 'create_date' ] )->format( 'Ymd' );
+    public function addInstructionsToZipProject( $projectStructure, $zipDir ) {
+        if ( !empty( $projectStructure[ 'instructions' ] ) ) {
+            $datePath = date_create( $this->projectStructure[ 'create_date' ] )->format( 'Ymd' );
 
-        $newZipDir  = $zipDir . DIRECTORY_SEPARATOR . $datePath . DIRECTORY_SEPARATOR . $projectStructure['id_project'] ;
+            $newZipDir = $zipDir . DIRECTORY_SEPARATOR . $datePath . DIRECTORY_SEPARATOR . $projectStructure[ 'id_project' ];
 
-        file_put_contents( $newZipDir . "/instructions.txt", $projectStructure[ 'instructions' ] );
+            file_put_contents( $newZipDir . "/instructions.txt", $projectStructure[ 'instructions' ] );
+        }
     }
 
     /**

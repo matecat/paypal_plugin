@@ -25,22 +25,21 @@ class JobController extends KleinController {
         $jobValidator = ( new JobPasswordValidator( $this ) );
 
         $jobValidator->onSuccess( function () use ( $jobValidator ) {
-            $this->job = $jobValidator->getJob();
+            $this->job     = $jobValidator->getJob();
             $this->project = $this->job->getProject();
         } );
 
-
-        $this->appendValidator( $jobValidator )->validateRequest();
+        $this->appendValidator( $jobValidator );
     }
 
     public function getInstructions() {
 
         $fileStorage = new \FilesStorage();
-        $zipDir = $fileStorage->getOriginalZipDir($this->project->create_date, $this->project->id);
-        $filePath = $zipDir."/instructions.txt";
-        if(file_exists($filePath)){
-            $this->response->json( [ 'data' => file_get_contents($filePath) ] );
-        }else{
+        $zipDir      = $fileStorage->getOriginalZipDir( $this->project->create_date, $this->project->id );
+        $filePath    = $zipDir . "/instructions.txt";
+        if ( file_exists( $filePath ) ) {
+            $this->response->json( [ 'data' => file_get_contents( $filePath ) ] );
+        } else {
             throw new NotFoundException( "No instructions found for this project", -1 );
         }
 
