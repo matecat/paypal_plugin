@@ -211,7 +211,8 @@ var Split = require('split.js');
                 showInfo: false,
                 showFullScreenButton: true,
                 isMac: UI.isMac,
-                Shortcuts: UI.shortcuts
+                Shortcuts: UI.shortcuts,
+                isLqa: config.isLQA
             }), mountPoint);
             this.getPreviewData().done(function (response) {
                 if (!_.isNull(response.data.previews)) {
@@ -220,10 +221,17 @@ var Split = require('split.js');
                     PreviewActions.renderPreview(currentId, response.data);
                     // Event captured by the footer Messages to show the preview
                     SegmentActions.renderPreview(currentId, response.data);
-                    Split(['#outer', '#plugin-mount-point'], {
-                        sizes: [100, 0],
-                        direction: 'vertical'
-                    });
+                    if (config.isLQA) {
+                        Split(['#outer', '#plugin-mount-point'], {
+                            sizes: [0, 100],
+                            direction: 'vertical'
+                        });
+                    } else {
+                        Split(['#outer', '#plugin-mount-point'], {
+                            sizes: [100, 0],
+                            direction: 'vertical'
+                        });
+                    }
                 }
             });
         },

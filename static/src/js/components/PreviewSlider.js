@@ -1,31 +1,94 @@
-let Store = require('../store/PreviewsStore');
 let Constants = require('../costansts');
 let Actions = require('../actions/PreviewActions');
-
-class PreviewContainer extends React.Component {
+let Slider = require('react-slick').default;
+class PreviewSlider extends React.Component {
 
     constructor(props) {
         super(props);
+        this.path = this.getPath(0);
         this.state = {
 
         };
-
     }
 
+    getPath(i) {
+        let segment = this.props.segmentsInfo.get(i);
+        let path = "";
+        if (!_.isUndefined(segment.get('previews')) && !_.isUndefined(segment.get('previews').get(0))) {
+            path = segment.get('previews').get(0).get('path');
+        } else if (i < this.props.segmentsInfo.size){
+            i = i++;
+            path = this.getPath(i);
+        }
+        return path;
+    }
+
+    getAllPreviews() {
+        let previews = [];
+        let previewsInfo = this.props.previews.toJS();
+        for ( let key in previewsInfo) {
+            previews.push (<div key={key} onClick={this.openPreview.bind(this, key)}>
+                <img src={this.path + key}/>
+                <p>{key}</p>
+            </div>)
+        }
+        return previews;
+    }
+
+    openPreview(preview) {
+        console.log('Open Preview');
+        let sid = this.props.previews.get(preview).get(0);
+        Actions.selectSegment(sid, preview);
+    }
 
     componentDidMount() {}
 
     componentWillUnmount() {}
 
     render() {
-
-        return <div>
-
+        let slideToShow = (this.props.previews.size < 4) ? 2 : 3;
+        let previews = this.getAllPreviews();
+        let settings = {
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: slideToShow,
+            slidesToScroll: 1,
+            lazyLoad: true,
+            centerMode: true,
+            swipeToSlide: true,
+            nextArrow: <SampleNextArrow className={"slick-next-custom"}/>,
+            prevArrow: <SamplePrevArrow className={"slick-prev-custom"}/>
+        };
+        return <div className="preview-slider-container">
+            <Slider {...settings}>
+                {previews}
+            </Slider>
         </div>;
 
     }
 }
 
+function SampleNextArrow(props) {
+    const {className, onClick} = props;
+    return ( <div
+            className={className}
+            style={{display: 'block', background: 'red'}}
+            onClick={onClick}
+        />
+    );
+}
 
-export default PreviewContainer ;
+function SamplePrevArrow(props) {
+    const {className, style, onClick} = props;
+    return ( <div
+            className={className}
+            style={{display: 'block', background: 'red'}}
+            onClick={onClick}
+        />
+    );
+}
+
+
+export default PreviewSlider ;
 

@@ -82,8 +82,12 @@ let PreviewActions = {
         AppDispatcher.dispatch({
             actionType: Constants.PREV_SEGMENT_PREVIEW
         });
+    },
+    openSliderPreviews: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.OPEN_SLIDER
+        });
     }
-
 };
 
 module.exports = PreviewActions;

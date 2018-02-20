@@ -4,6 +4,7 @@ let PreviewHighlighter = require('./PreviewHighlighter').default;
 let PreviewInfo = require('./PreviewInfo').default;
 let PreviewActions = require('./PreviewActions').default;
 let PreviewWidget = require('./PreviewWidget').default;
+let PreviewSlider = require('./PreviewSlider').default;
 let Actions = require('../actions/PreviewActions');
 
 class PreviewContainer extends React.Component {
@@ -14,7 +15,8 @@ class PreviewContainer extends React.Component {
             currentSid: null,
             segmentsInfo: null,
             dimension: null,
-            previews: null
+            previews: null,
+            showSlider: false
         };
 
     }
@@ -86,10 +88,17 @@ class PreviewContainer extends React.Component {
         this.forceUpdate();
     }
 
+    openSliderPreviews() {
+        this.setState({
+            showSlider: !this.state.showSlider
+        });
+    }
+
     componentDidMount() {
         Store.addListener(Constants.RENDER_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.UPDATE_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
+        Store.addListener(Constants.OPEN_SLIDER, this.openSliderPreviews.bind(this));
         window.addEventListener("resize", this.updateDimensions.bind(this));
     }
 
@@ -97,6 +106,7 @@ class PreviewContainer extends React.Component {
         Store.removeListener(Constants.RENDER_VIEW, this.renderPreview);
         Store.removeListener(Constants.UPDATE_VIEW, this.renderPreview);
         Store.removeListener(Constants.SELECT_SEGMENT, this.selectSegment);
+        Store.removeListener(Constants.OPEN_SLIDER, this.openSliderPreviews);
 
         window.removeEventListener("resize", this.updateDimensions.bind(this));
     }
@@ -104,7 +114,8 @@ class PreviewContainer extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         return (!nextState.currentSid ||
             nextState.currentSid !== this.state.currentSid ||
-            !nextState.segmentsInfo.equals(this.state.segmentsInfo)
+            !nextState.segmentsInfo.equals(this.state.segmentsInfo) ||
+            nextState.showSlider !== this.state.showSlider
         )
     }
 
@@ -132,7 +143,17 @@ class PreviewContainer extends React.Component {
                     showFullScreenButton={this.props.showFullScreenButton}
                     isMac={this.props.isMac}
                     shortcuts={this.props.Shortcuts}
+                    isLqa={this.props.isLqa}
                 />
+
+                {(this.state.showSlider) ? (
+                    <PreviewSlider
+                        isLqa={this.props.isLqa}
+                        previews={this.state.previews}
+                        currentPreview={this.state.currentPreview}
+                        segmentsInfo={this.state.segmentsInfo}
+                    />
+                ) : (null)}
 
                 <div className="preview-image-container" ref={(container)=> this.imageContainer = container}>
                     <div className="preview-image-innercontainer" style={styleDimension}>
@@ -166,6 +187,7 @@ class PreviewContainer extends React.Component {
                     showFullScreenButton={this.props.showFullScreenButton}
                     isMac={this.props.isMac}
                     shortcuts={this.props.Shortcuts}
+                    isLqa={this.props.isLqa}
                 />
                 <div className="no-preview">
                     <div className="no-preview-img">

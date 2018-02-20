@@ -14,5 +14,6 @@ module.exports = keyMirror({
     LAST_SEGMENT: null,
     FIRST_SEGMENT: null,
     NEXT_SEGMENT_PREVIEW: null,
-    PREV_SEGMENT_PREVIEW: null
+    PREV_SEGMENT_PREVIEW: null,
+    OPEN_SLIDER: null
 });

@@ -149,7 +149,9 @@ class PreviewActions extends React.Component {
         window.opener.UI.openPreview();
         window.close();
     }
-
+    openPreviewSlider() {
+        Actions.openSliderPreviews();
+    }
     componentDidMount() {
         Store.addListener(Constants.NEXT_PREVIEW, this.nextImage);
         Store.addListener(Constants.PREV_PREVIEW, this.previousImage);
@@ -181,50 +183,56 @@ class PreviewActions extends React.Component {
 
 
                 <div className="preview-pp actions-image">
+
                     <button className="preview-button previous"
                             title={this.props.shortcuts.previousPreview.label + " (" + this.props.shortcuts.previousPreview.keystrokes[keyShortcuts] + ")"}
                             onClick={this.previousImage.bind(this)}>
                         <i className="icon icon-chevron-left" />
                         <i className="icon icon-chevron-left" />
                     </button>
+                    {(!this.props.isLqa) ? (
+                        <button className="preview-button previous"
+                                title={this.props.shortcuts.firstSegment.label + " (" + this.props.shortcuts.firstSegment.keystrokes[keyShortcuts] + ")"}
+                            onClick={this.firstSegment.bind(this)}>
+                            <i className="icon icon-go-to-first" />
+                        </button>
+                    ) : (null)}
 
-                    <button className="preview-button previous"
-                            title={this.props.shortcuts.firstSegment.label + " (" + this.props.shortcuts.firstSegment.keystrokes[keyShortcuts] + ")"}
-                        onClick={this.firstSegment.bind(this)}>
-                        <i className="icon icon-go-to-first" />
-                    </button>
-
+                    {(!this.props.isLqa) ? (
                     <button className="preview-button previous"
                             title={this.props.shortcuts.previousSegment.label + " (" + this.props.shortcuts.previousSegment.keystrokes[keyShortcuts] + ")"}
                             onClick={this.previousSegment.bind(this)}>
                         <i className="icon icon-chevron-left" />
                     </button>
-
-                    <div className="info-icon-picture">
+                    ) : (null)}
+                    <div className="info-icon-picture" onClick={this.openPreviewSlider.bind(this)}>
                         <i className="icon icon-picture" />
                     </div>
-
+                    {(!this.props.isLqa) ? (
                     <button onClick={this.nextSegment.bind(this)}
                             title={this.props.shortcuts.nextSegment.label + " (" + this.props.shortcuts.nextSegment.keystrokes[keyShortcuts] + ")"}>
                         <i className="icon icon-chevron-right" />
                     </button>
-
+                    ) : (null)}
+                    {(!this.props.isLqa) ? (
                     <button className="preview-button previous"
                             title={this.props.shortcuts.lastSegment.label + " (" + this.props.shortcuts.lastSegment.keystrokes[keyShortcuts] + ")"}
                             onClick={this.lastSegment.bind(this)}>
                         <i className="icon icon-go-to-last" />
                     </button>
+                    ) : (null)}
 
                     <button onClick={this.nextImage.bind(this)}
                             title={this.props.shortcuts.nextPreview.label + " (" + this.props.shortcuts.nextPreview.keystrokes[keyShortcuts] + ")"}>
                         <i className="icon icon-chevron-right" />
                         <i className="icon icon-chevron-right" />
                     </button>
+
                 </div>
 
 
                 <div className="preview-pp actions-segment">
-                    { this.props.segmentPreviews.size > 1 ? (
+                    { !this.props.isLqa && this.props.segmentPreviews.size > 1 ? (
                         <div>
                             <button className="preview-button previous"
                                     onClick={this.goToPreviousSegmentImage.bind(this)}
@@ -248,18 +256,21 @@ class PreviewActions extends React.Component {
 
 
                 <div className="preview-pp change-window">
-                    {this.props.showFullScreenButton ? (
+                    {(!this.props.isLqa) ? (
+                        this.props.showFullScreenButton ? (
                         <div>
                             <button className="preview-button"
                                     onClick={this.openWindow.bind(this)} title="Undock into saparate window"><i className="icon icon-preview-new-window" /> </button>
                             <button className="preview-button"
                                     onClick={this.closePreview.bind(this)} title="Close screenshots preview"><i className="icon icon-cancel-circle" /> </button>
                         </div>
-                    ) : (
-                        <div>
-                            <button className="preview-button"
-                                    onClick={this.openPreviewParent.bind(this)} title="Dock to bottom"><i className="icon icon-preview-bottom-window" /> </button>
-                        </div>) }
+                        ) : (
+                            <div>
+                                <button className="preview-button"
+                                        onClick={this.openPreviewParent.bind(this)} title="Dock to bottom"><i className="icon icon-preview-bottom-window" /> </button>
+                            </div>)
+                            )
+                    : (null)}
 
                 </div>
 

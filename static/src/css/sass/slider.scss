@@ -1,0 +1,37 @@
+
+.preview-slider-container {
+    position: absolute;
+    top: 30px;
+    z-index: 2;
+    width: 100%;
+    background-color: grey;
+    height: 200px;
+    .slick-slider {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 15px;
+        height: 180px;
+        //background-color: #cccdc9;
+        .slick-slide {
+            cursor: pointer;
+            border: 1px solid #cccdc9;
+            img {
+                max-width: 100%;
+                height: auto;
+                vertical-align: middle;
+                max-height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            p {
+                color: #000;
+                line-height: 31px;
+
+
+            }
+        }
+    }
+}
+
+
+
