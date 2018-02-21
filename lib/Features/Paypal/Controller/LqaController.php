@@ -6,6 +6,7 @@ use AbstractControllers\IController;
 use ActivityLog\Activity;
 use ActivityLog\ActivityLogStruct;
 use API\V2\Exceptions\NotFoundException;
+use API\V2\Validators\ChunkReviewPasswordValidator;
 use API\V2\Validators\JobPasswordValidator;
 use API\V2\Validators\LoginValidator;
 use BaseKleinViewController;
@@ -39,7 +40,7 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
     /**
      * @var JobPasswordValidator
      */
-    protected $jobValidator ;
+    protected $chunkValidator ;
 
     /**
      * @var LqaDecorator
@@ -70,19 +71,19 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
     public function afterConstruct() {
         $this->appendValidator( new LoginValidator( $this ) );
 
-        $jobValidator = new JobPasswordValidator( $this );
+        $chunkValidator = new ChunkReviewPasswordValidator( $this );
 
         $Controller = $this;
 
-        $jobValidator->onSuccess( function() use( $jobValidator, $Controller ){
-            $Controller->setJobStruct( $jobValidator->getJob() );
-            $Controller->setProject( $jobValidator->getJob()->getProject( 60 * 60 ) );
+        $chunkValidator->onSuccess( function() use( $chunkValidator, $Controller ){
+            $Controller->setJobStruct( $chunkValidator->getChunk() );
+            $Controller->setProject( $chunkValidator->getChunk()->getProject( 60 * 60 ) );
         } );
 
-        $this->appendValidator( $jobValidator );
+        $this->appendValidator( $chunkValidator );
         $this->appendValidator( new TranslatorsWhitelistAccessValidator( $this ) );
 
-        $this->jobValidator = $jobValidator ;
+        $this->chunkValidator = $chunkValidator ;
 
     }
 
@@ -92,11 +93,11 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
 
     public function show() {
 
-        if ( ! $this->jobValidator->getJob() ) {
+        if ( ! $this->chunkValidator->getChunk() ) {
             $this->setView( INIT::$TEMPLATE_ROOT . '/job_not_found.html' );
-        } elseif ( $this->jobValidator->getJob()->isCanceled() ) {
+        } elseif ( $this->chunkValidator->getChunk()->isCanceled() ) {
             $this->setView( INIT::$TEMPLATE_ROOT . '/job_cancelled.html' );
-        } elseif ($this->jobValidator->getJob()->isArchived() )
+        } elseif ($this->chunkValidator->getChunk()->isArchived() )
             $this->setView( INIT::$TEMPLATE_ROOT . '/job_archived.html' );
         else {
             $this->setView( Paypal::getPluginBasePath() . '/Features/Paypal/View/Html/lqa.html' );
@@ -121,7 +122,7 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
         $action = ActivityLogStruct::ACCESS_REVISE_PAGE;
 
         $activity             = new ActivityLogStruct();
-        $activity->id_job     = $this->jobValidator->getJob()->id;
+        $activity->id_job     = $this->chunkValidator->getChunk()->id;
         $activity->id_project = $this->project->id;
         $activity->action     = $action;
         $activity->ip         = Utils::getRealIpAddr();
@@ -130,8 +131,8 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
         Activity::save( $activity );
     }
 
-    public function getJobValidator() {
-        return $this->jobValidator ;
+    public function getChunkValidator() {
+        return $this->chunkValidator ;
     }
 
     protected function validateRequest() {
@@ -143,7 +144,7 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
     }
 
     public function getChunk() {
-        return new \Chunks_ChunkStruct( $this->jobValidator->getJob()->toArray() );
+        return new \Chunks_ChunkStruct( $this->chunkValidator->getChunk()->toArray() );
     }
 
     public function getJobStats() {

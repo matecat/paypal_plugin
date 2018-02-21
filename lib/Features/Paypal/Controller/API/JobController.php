@@ -25,7 +25,7 @@ class JobController extends KleinController {
         $jobValidator = ( new JobPasswordValidator( $this ) );
 
         $jobValidator->onSuccess( function () use ( $jobValidator ) {
-            $this->job     = $jobValidator->getJob();
+            $this->job     = $jobValidator->getChunk();
             $this->project = $this->job->getProject();
         } );
 

@@ -99,11 +99,11 @@ class LqaDecorator extends AbstractDecorator {
         $this->template->support_mail        = INIT::$SUPPORT_MAIL;
         $this->template->use_compiled_assets  = INIT::$USE_COMPILED_ASSETS;
 
-        if ( !$this->controller->getJobValidator()->getJob() ) {
+        if ( !$this->controller->getChunkValidator()->getChunk() ) {
             $this->__populateFroNotFound() ;
         } elseif (
-                $this->controller->getJobValidator()->getJob()->isArchived() ||
-                $this->controller->getJobValidator()->getJob()->isCanceled() ) {
+                $this->controller->getChunkValidator()->getChunk()->isArchived() ||
+                $this->controller->getChunkValidator()->getChunk()->isCanceled() ) {
             $this->__populateVarsForArchivedOrCanceled();
         }
         else {
@@ -121,7 +121,7 @@ class LqaDecorator extends AbstractDecorator {
     }
 
     private function __popluateForJobOk() {
-        $this->chunk   = new Chunks_ChunkStruct( $this->controller->getJobValidator()->getJob()->toArray() );
+        $this->chunk   = new Chunks_ChunkStruct( $this->controller->getChunkValidator()->getChunk()->toArray() );
         $this->project = $this->chunk->getProject() ;
 
         $this->isGDriveProject = Projects_ProjectDao::isGDriveProject($this->chunk->id_project) ;
