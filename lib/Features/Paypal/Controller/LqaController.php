@@ -109,7 +109,7 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
         $decorator = new LqaDecorator( $this, $this->view );
         $this->setDefaultTemplateData();
 
-        $decorator->setReviewPassword( $this->params->password );
+        $decorator->setReviewPassword( $this->request->password );
         $decorator->decorate();
 
         $this->decorator = $decorator ;
