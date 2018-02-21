@@ -93,6 +93,8 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
 
     public function show() {
 
+        $found = false ;
+
         if ( ! $this->chunkValidator->getChunk() ) {
             $this->setView( INIT::$TEMPLATE_ROOT . '/job_not_found.html' );
         } elseif ( $this->chunkValidator->getChunk()->isCanceled() ) {
@@ -101,6 +103,7 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
             $this->setView( INIT::$TEMPLATE_ROOT . '/job_archived.html' );
         else {
             $this->setView( Paypal::getPluginBasePath() . '/Features/Paypal/View/Html/lqa.html' );
+            $found = true ;
         }
 
         $decorator = new LqaDecorator( $this, $this->view );
@@ -111,8 +114,10 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
 
         $this->decorator = $decorator ;
 
-        $this->project->getFeatures()->appendDecorators('CatDecorator', $this,
-                $this->view );
+        if ( $found ) {
+            $this->project->getFeatures()
+                ->appendDecorators('CatDecorator', $this, $this->view );
+        }
 
         $this->response->body( $this->view->execute() );
         $this->response->send();
