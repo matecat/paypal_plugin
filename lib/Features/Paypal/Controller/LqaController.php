@@ -9,6 +9,7 @@ use API\V2\Exceptions\NotFoundException;
 use API\V2\Validators\JobPasswordValidator;
 use API\V2\Validators\LoginValidator;
 use BaseKleinViewController;
+use Features\Paypal;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Decorator\LqaDecorator;
 use ILegacyCatController;
@@ -98,7 +99,7 @@ class LqaController extends BaseKleinViewController implements ILegacyCatControl
         } elseif ($this->jobValidator->getJob()->isArchived() )
             $this->setView( INIT::$TEMPLATE_ROOT . '/job_archived.html' );
         else {
-            $this->setView( INIT::$TEMPLATE_ROOT . '/index.html' );
+            $this->setView( Paypal::getPluginBasePath() . '/Features/Paypal/View/Html/lqa.html' );
         }
 
         $decorator = new LqaDecorator( $this, $this->view );

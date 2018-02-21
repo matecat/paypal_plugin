@@ -81,7 +81,7 @@ class Paypal extends BaseFeature {
         route( '/reference-files/[:id_job]/[:password]/list', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolderList' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'POST', 'Features\Paypal\Controller\API\WhitelistController', 'create' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'DELETE', 'Features\Paypal\Controller\API\WhitelistController', 'delete' );
-        route( '/lqa/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\LQAController', 'show' );
+        route( '/lqa/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\LqaController', 'show' );
     }
 
     public static function previewRoute($request, $response, $service, $app) {
