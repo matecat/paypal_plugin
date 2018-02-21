@@ -150,20 +150,23 @@ var Split = require('split.js');
             var prev = segment.prev('section') ;
             var segmentOpen = $('section.editor');
 
-            // XXX: this condition is necessary **only** because in case of first segment of a file,
-            // the previous element (<ul>) has display:none style. Such elements are ignored by the
-            // the .offset() function.
-            var commonOffset = $('.header-menu').height() +
-                $('.searchbox:visible').height() - 20 ;
-            pos = segment.offset().top  - segment.offsetParent('#outer').offset().top + commonOffset;
+            if (!config.isLQA) {
+                // XXX: this condition is necessary **only** because in case of first segment of a file,
+                // the previous element (<ul>) has display:none style. Such elements are ignored by the
+                // the .offset() function.
+                var commonOffset = $('.header-menu').height() +
+                    $('.searchbox:visible').height() - 20 ;
+                pos = segment.offset().top  - segment.offsetParent('#outer').offset().top + commonOffset;
 
-            if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
-                pos = pos - segmentOpen.find('.footer').height();
+                if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
+                    pos = pos - segmentOpen.find('.footer').height();
+                }
+
+
+                scrollAnimation.animate({
+                    scrollTop: pos
+                }, speed);
             }
-
-            scrollAnimation.animate({
-                scrollTop: pos
-            }, speed);
 
             return scrollAnimation.promise() ;
         },
@@ -222,8 +225,11 @@ var Split = require('split.js');
                     // Event captured by the footer Messages to show the preview
                     SegmentActions.renderPreview(currentId, response.data);
                     if (config.isLQA) {
+                        var outerHeight = $('section.opened').outerHeight() + 200;
+                        var h = Math.floor((outerHeight / $('.main-container').height()) * 100);
+                        var h2 = 100 - h ;
                         Split(['#outer', '#plugin-mount-point'], {
-                            sizes: [0, 100],
+                            sizes: [h, h2],
                             direction: 'vertical'
                         });
                     } else {
