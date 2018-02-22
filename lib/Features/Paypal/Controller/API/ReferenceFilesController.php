@@ -77,7 +77,7 @@ class ReferenceFilesController extends KleinController {
             /**
              * @var $jobValidator JobPasswordValidator
              */
-            $Controller->setProject( $jobValidator->getChunk()->getProject( 60 * 60 ) );
+            $Controller->setProject( $jobValidator->getJob()->getProject( 60 * 60 ) );
         } );
 
         $this->appendValidator( $jobValidator );
@@ -101,7 +101,7 @@ class ReferenceFilesController extends KleinController {
             /**
              * @var $jobValidator JobPasswordValidator
              */
-            $Controller->setProject( $jobValidator->getChunk()->getProject( 60 * 60 ) );
+            $Controller->setProject( $jobValidator->getJob()->getProject( 60 * 60 ) );
         } );
 
         $this->appendValidator( $jobValidator );
