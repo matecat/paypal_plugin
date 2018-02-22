@@ -1,11 +1,12 @@
 
 .preview-slider-container {
-    position: absolute;
-    top: 30px;
+    position: relative;
     z-index: 2;
     width: 100%;
     background-color: grey;
     height: 200px;
+    margin: auto;
+    display: inline-block;
     .slick-slider {
         width: 90%;
         margin: 0 auto;
@@ -14,7 +15,7 @@
         //background-color: #cccdc9;
         .slick-slide {
             cursor: pointer;
-            border: 1px solid #cccdc9;
+            //border: 1px solid #cccdc9;
             img {
                 max-width: 100%;
                 height: auto;

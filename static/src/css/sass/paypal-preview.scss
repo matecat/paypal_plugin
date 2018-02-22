@@ -15,8 +15,8 @@ body {
     }
 }
 .preview-container, .preview-core-container {
-    height: 100%;
     position: relative;
+    height: 100%;
 }
 
 body.review-side-panel-opened {
@@ -123,7 +123,6 @@ body.review-side-panel-opened {
     }
     .preview-actions-container {
         background: #4d4d4d;
-        height: 30px;
         position: relative;
         width: 100%;
         z-index: 1;
@@ -131,6 +130,8 @@ body.review-side-panel-opened {
         color: #ffffff;
         align-items: center;
         justify-content: space-between;
+        margin: auto;
+        height: 40px;
         .preview-pp {
             display: inline-block;
             button {

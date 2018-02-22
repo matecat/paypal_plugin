@@ -22,12 +22,16 @@ var Split = require('split.js');
         windowPreview: null,
 
         scrollSelector: "#outer",
-
+        /**
+         * Overwrite the start of matecat to che reference files
+         */
         start: function () {
             originalStart.apply(this);
             this.checkReferenceFiles();
         },
-
+        /**
+         * Overwrite the matecat fn to add events and listeners
+         */
         setEvents: function () {
             let self  = this;
 
@@ -67,12 +71,27 @@ var Split = require('split.js');
             }).on('keydown.shortcuts', null, UI.shortcuts.previousSegmentPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.previousSegmentPreview();
+            }).on('keydown', function ( e ) {
+                e.preventDefault();
+                e.stopPropagation();
+                var esc = 27 ;
+
+                var handleEscPressed = function() {
+                    if ( config.isLQA ) {
+                        UI.closeSegmentsContainer();
+                    }
+                }
+
+                if ( e.which == esc ) handleEscPressed() ;
             });
 
 
             this.createPreviewContainer();
 
         },
+        /**
+         * To set custom shortcuts
+         */
         setShortcuts: function() {
             originalSetShortcuts.apply(this);
 
@@ -141,9 +160,19 @@ var Split = require('split.js');
                 }
             };
         },
+        /**
+         * Overwrite matecate function activateSegment
+         * @param segment
+         */
         activateSegment: function (segment) {
             originalActivateSegment.apply(this, [segment]);
         },
+        /**
+         * Overwrite matecate function animateScroll
+         * @param segment
+         * @param speed
+         * @returns {*}
+         */
         animateScroll: function (segment, speed) {
             var scrollAnimation = $( UI.scrollSelector ).stop().delay( 300 );
             var pos = 0;
@@ -154,8 +183,8 @@ var Split = require('split.js');
                 // XXX: this condition is necessary **only** because in case of first segment of a file,
                 // the previous element (<ul>) has display:none style. Such elements are ignored by the
                 // the .offset() function.
-                var commonOffset = $('.header-menu').height() +
-                    $('.searchbox:visible').height() - 20 ;
+                var searchH = ($('.searchbox:visible').length) ? $('.searchbox:visible').height() : 0;
+                var commonOffset = $('.header-menu').height() + searchH - 20 ;
                 pos = segment.offset().top  - segment.offsetParent('#outer').offset().top + commonOffset;
 
                 if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
@@ -170,7 +199,9 @@ var Split = require('split.js');
 
             return scrollAnimation.promise() ;
         },
-
+        /**
+         * To open the preview panel in a new window
+         */
         openWindow: function () {
             if (this.windowPreview && !this.windowPreview.closed) {
                 this.windowPreview.focus()
@@ -181,7 +212,9 @@ var Split = require('split.js');
             }
             this.closePreview();
         },
-
+        /**
+         *
+         */
         setHideMatches: function () {
             var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
             Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
@@ -191,18 +224,59 @@ var Split = require('split.js');
             }
 
         },
-
+        /**
+         * Function called after the click on a segment in the preview panel
+         * @param sid
+         */
         selectSegment: function (sid) {
             var el = $("section:not(.opened) #segment-" + sid + "-target").find(".editarea, .targetarea");
             if (el.length > 0 ) {
                 UI.editAreaClick(el[0]);
             }
         },
+        /**
+         * In LQA, to show the segment
+         */
+        showSegment: function (  ) {
+            if (config.isLQA) {
+                if ( this.spliInstance ) {
+                    this.spliInstance.destroy();
+                    delete(this.spliInstance);
+                }
+                var outerHeight = $( 'section.opened' ).outerHeight() + 200;
+                var h = Math.floor( (outerHeight / $( '.main-container' ).height()) * 100 );
+                var h2 = 100 - h;
+                this.spliInstance = Split( ['#outer',
+                    '#plugin-mount-point'], {
+                    sizes: [h,
+                        h2],
+                    direction: 'vertical'
+                } );
+            }
+        },
+        /**
+         *
+         */
+        closeSegmentsContainer: function (  ) {
+            if ( this.spliInstance ) {
+                this.spliInstance.destroy();
+                delete(this.spliInstance);
+            }
+            $('#plugin-mount-point').css('height', '100%');
+            $('#outer').css('height', '0');
+        },
+        /**
+         * When a segment is selected and the preview is in a different window
+         * @param e
+         */
         selectSegmentFromPreview: function (e) {
             if (e.key === UI.localStorageCurrentSegmentId) {
                 this.selectSegment(e.newValue);
             }
         },
+        /**
+         * Inizialize the preview container and split the containers
+         */
         createPreviewContainer: function () {
             let storageKey = 'currentSegmentId-' +config.id_job + config.password;
             let currentId = localStorage.getItem(storageKey);
@@ -225,15 +299,10 @@ var Split = require('split.js');
                     // Event captured by the footer Messages to show the preview
                     SegmentActions.renderPreview(currentId, response.data);
                     if (config.isLQA) {
-                        var outerHeight = $('section.opened').outerHeight() + 200;
-                        var h = Math.floor((outerHeight / $('.main-container').height()) * 100);
-                        var h2 = 100 - h ;
-                        Split(['#outer', '#plugin-mount-point'], {
-                            sizes: [h, h2],
-                            direction: 'vertical'
-                        });
+                        $('#plugin-mount-point').css('height', '100%');
+                        $('#outer').css('height', '0');
                     } else {
-                        Split(['#outer', '#plugin-mount-point'], {
+                        self.spliInstance = Split(['#outer', '#plugin-mount-point'], {
                             sizes: [100, 0],
                             direction: 'vertical'
                         });
@@ -241,7 +310,10 @@ var Split = require('split.js');
                 }
             });
         },
-
+        /**
+         * to get the previews info
+         * @returns {*}
+         */
         getPreviewData: function () {
             return $.ajax({
                 async: true,
@@ -249,7 +321,10 @@ var Split = require('split.js');
                 url : "/plugins/paypal/preview/" + config.id_job + "/" + config.password
             });
         },
-
+        /**
+         * Overwrite matecate function setLastSegmentFromLocalStorage
+         * @param segmentId
+         */
         setLastSegmentFromLocalStorage: function (segmentId) {
             let self = this;
             setTimeout(function () {
@@ -259,12 +334,16 @@ var Split = require('split.js');
             });
             originalSetLastSegmentFromLocalStorage.call(this, segmentId);
         },
-
+        /**
+         * To Close the preview container
+         */
         closePreview: function () {
             $('#plugin-mount-point').css('height', 0);
             $('#outer').css('height', '100%');
         },
-
+        /**
+         * To Open the preview container
+         */
         openPreview: function (sid,preview) {
             $('#plugin-mount-point').css('height', '45%');
             $('#outer').css('height', '55%');
@@ -275,12 +354,16 @@ var Split = require('split.js');
                 UI.scrollSegment(UI.currentSegment);
             }, 100);
         },
-
+        /**
+         * Overwrite matecate function loadCustomization to show the tags always in extended mode
+         */
         loadCustomization: function () {
             originalLoadCustimization.apply(this);
             UI.custom.extended_tagmode = true;
         },
-
+        /**
+         * Overwrite matecate function isMarkedAsCompleteClickable to know if si markable as complete
+         */
         isMarkedAsCompleteClickable: function ( stats ) {
             if (config.isReview) {
                 /**
@@ -305,13 +388,19 @@ var Split = require('split.js');
                     stats.TRANSLATED > 0 ;
             }
         },
-
+        /**
+         * Overwrite matecate function isReadonlySegment to know if segment is read only
+         */
         isReadonlySegment: function( segment ) {
             let result = originalIsReadonlySegment.apply(this, [segment]);
             let isReviewReadOnly = config.isReview && config.job_completion_current_phase !== 'revise' && config.job_marked_complete;
             return result || isReviewReadOnly ;
         },
-
+        /**
+         * Overwrite matecate function messageForClickOnReadonly to change the message on click on read only segment
+         * @param section
+         * @returns {*}
+         */
         messageForClickOnReadonly: function( section ) {
             let isReviewReadOnly = config.isReview && config.job_completion_current_phase !== 'revise' && config.job_marked_complete;
 
@@ -323,7 +412,9 @@ var Split = require('split.js');
                 return original_messageForClickOnReadonly() ;
             }
         },
-
+        /**
+         * To retrieve information about the reference files
+         */
         checkReferenceFiles: function () {
             var path = sprintf(
                 '/plugins/paypal/reference-files/%s/%s/list',
@@ -355,7 +446,11 @@ var Split = require('split.js');
                 }
             });
         },
-
+        /**
+         * To check if a segment is locked
+         * @param segment
+         * @returns {boolean}
+         */
         isUnlockedSegment: function ( segment ) {
             if (config.isReview) {
                 return true;

@@ -7,8 +7,8 @@ body.cattool {
 
 .main-container {
     width: 100%;
-    height: 92%;
-    margin-top: 48px;
+    height: 95%;
+    margin-top: 29px;
     .gutter.gutter-vertical {
         background-image: url(../img/horizontal-resize.png);
         cursor: ns-resize;
@@ -89,7 +89,7 @@ body.cattool {
         width: 100%;
         display: block;
         overflow-y: auto;
-        height: 93%;
+        height: 95%;
 
     }
     .preview-drag-area {
@@ -103,7 +103,7 @@ body.cattool {
 body:not(.filterOpen) #outer {
     overflow-y: scroll;
     position: relative;
-    margin-top: 0px !important;
+    margin-top: 19px !important;
 }
 
 body.filterOpen #outer {

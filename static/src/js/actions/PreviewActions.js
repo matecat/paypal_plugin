@@ -18,12 +18,16 @@ let PreviewActions = {
         });
     },
 
-    selectSegment: function (sid, preview) {
+    selectSegment: function (sid, preview, openSegment) {
         AppDispatcher.dispatch({
             actionType: Constants.SELECT_SEGMENT,
             sid: sid,
             preview: preview
         });
+    },
+
+    openSegment: function (sid) {
+        UI.showSegment();
     },
 
     openWindow: function () {
