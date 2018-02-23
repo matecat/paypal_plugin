@@ -20,6 +20,7 @@ module.exports = function(grunt) {
                     'static/src/js/store/*.js',
                     'static/src/js/components/*.js',
                     'static/src/js/constants.js',
+                    'static/src/js/cat_source/paypalUtils.js'
                 ],
                 dest:  'static/build/paypal-components-build.js'
             },
@@ -61,7 +62,7 @@ module.exports = function(grunt) {
                     }
                 },
                 src: [
-                    'static/src/js/cat_source/paypal-core.js',
+                    'static/src/js/cat_source/paypal-core.js'
                 ],
                 dest:  'static/build/paypal-core-build.js'
             },
