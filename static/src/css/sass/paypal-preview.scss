@@ -82,6 +82,21 @@ body.review-side-panel-opened {
             border-radius: 4px;
             transition: 0.3s ease;
             background: rgba(249, 255, 165, 0.28);
+            .issue-screenshot {
+                position: absolute;
+                font-size: 28px;
+                right: -22px;
+                color: red;
+                top: -5px;
+                background: white;
+                width: 26px;
+                height: 25px;
+                border-radius: 50%;
+                i {
+                    margin-top: -2px;
+                    margin-left: -3px;
+                }
+            }
             &.ice-match-preview {
                 &:before {
                     font-family: FontAwesome;
@@ -105,6 +120,7 @@ body.review-side-panel-opened {
             }
             &.approved-screenshot {
                 border: 4px solid #7cc576;
+                background: none;
             }
         }
         .preview-widget {
