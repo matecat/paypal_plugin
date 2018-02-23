@@ -90,10 +90,8 @@ class PreviewHighlighter extends React.Component {
         ref={(elem)=> this.elem=elem}
         >
             {(thereAreIssues ) ? (
-                <div className="preview-highlighter">
-                    <div className="issue-screenshot">
-                        <i className="icon-error_outline icon"></i>
-                    </div>
+                <div className="issue-screenshot">
+                    <i className="icon-error_outline icon"></i>
                 </div>
             ) : (null)}
         </div>
