@@ -2,7 +2,8 @@ let PreviewContainer = require('../components/PreviewContainer').default;
 let PreviewActions = require('../actions/PreviewActions');
 let Constants = require('../costansts');
 let Store = require('../store/PreviewsStore');
-var Split = require('split.js');
+let Split = require('split.js');
+let Utils = require('./paypalUtils');
 
 
 (function() {
@@ -316,11 +317,7 @@ var Split = require('split.js');
          * @returns {*}
          */
         getPreviewData: function () {
-            return $.ajax({
-                async: true,
-                type: "get",
-                url : "/plugins/paypal/preview/" + config.id_job + "/" + config.password
-            });
+            return Utils.getPreviewData();
         },
         /**
          * Overwrite matecate function setLastSegmentFromLocalStorage
@@ -417,14 +414,7 @@ var Split = require('split.js');
          * To retrieve information about the reference files
          */
         checkReferenceFiles: function () {
-            var path = sprintf(
-                '/plugins/paypal/reference-files/%s/%s/list',
-                config.id_job, config.password
-            );
-            $.ajax({
-                type: "GET",
-                url : path
-            }).done(function (response) {
+            Utils.checkReferenceFiles().done(function (response) {
                 if (response.reference.files && response.reference.files.length > 0 ) {
                     var htmlButton = '<li>' +
                         '<a title="References" alt="References" class="download-references" href="#" >' +

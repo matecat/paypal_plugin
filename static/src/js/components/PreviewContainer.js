@@ -57,8 +57,14 @@ class PreviewContainer extends React.Component {
         } else {
             this.setState({
                 currentSid: sid,
-            })
+            });
         }
+    }
+
+    updateSegments(preview, segmentsInfo){
+        this.setState({
+            segmentsInfo: segmentsInfo,
+        });
     }
 
     getCurrentPreview() {
@@ -98,6 +104,7 @@ class PreviewContainer extends React.Component {
         Store.addListener(Constants.RENDER_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.UPDATE_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
+        Store.addListener(Constants.UPDATE_SEGMENTS_INFO, this.updateSegments.bind(this));
         Store.addListener(Constants.OPEN_SLIDER, this.openSliderPreviews.bind(this));
         window.addEventListener("resize", this.updateDimensions.bind(this));
     }
@@ -106,6 +113,7 @@ class PreviewContainer extends React.Component {
         Store.removeListener(Constants.RENDER_VIEW, this.renderPreview);
         Store.removeListener(Constants.UPDATE_VIEW, this.renderPreview);
         Store.removeListener(Constants.SELECT_SEGMENT, this.selectSegment);
+        Store.removeListener(Constants.UPDATE_SEGMENTS_INFO, this.updateSegments);
         Store.removeListener(Constants.OPEN_SLIDER, this.openSliderPreviews);
 
         window.removeEventListener("resize", this.updateDimensions.bind(this));
