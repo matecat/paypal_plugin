@@ -77,6 +77,7 @@ class Paypal extends BaseFeature {
         route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
         route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
         route( '/job/[:id_job]/[:password]/instructions', 'GET', 'Features\Paypal\Controller\API\JobController', 'getInstructions'  );
+        route( '/job/[:id_job]/[:password]/segments', 'GET', 'Features\Paypal\Controller\API\JobController', 'getSegments'  );
         route( '/reference-files/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolder' );
         route( '/reference-files/[:id_job]/[:password]/list', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolderList' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'POST', 'Features\Paypal\Controller\API\WhitelistController', 'create' );
