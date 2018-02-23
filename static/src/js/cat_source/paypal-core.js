@@ -72,17 +72,18 @@ var Split = require('split.js');
                 e.preventDefault();
                 PreviewActions.previousSegmentPreview();
             }).on('keydown', function ( e ) {
-                e.preventDefault();
-                e.stopPropagation();
+
                 var esc = 27 ;
 
-                var handleEscPressed = function() {
+                var handleEscPressed = function(e) {
                     if ( config.isLQA ) {
+                        e.preventDefault();
+                        e.stopPropagation();
                         UI.closeSegmentsContainer();
                     }
                 }
 
-                if ( e.which == esc ) handleEscPressed() ;
+                if ( e.which == esc ) handleEscPressed(e) ;
             });
 
 
