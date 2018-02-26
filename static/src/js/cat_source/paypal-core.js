@@ -72,8 +72,7 @@ var Split = require('split.js');
                 e.preventDefault();
                 PreviewActions.previousSegmentPreview();
             }).on('keydown', function ( e ) {
-                e.preventDefault();
-                e.stopPropagation();
+
                 var esc = 27 ;
 
                 var handleEscPressed = function() {
