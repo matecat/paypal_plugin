@@ -49,6 +49,14 @@ let PreviewActions = {
         });
     },
 
+    updateSegment: function ( sid, data ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.UPDATE_SEGMENT,
+            sid: sid,
+            data: data
+        });
+    },
+
     openSegment: function (sid) {
         UI.showSegment();
     },

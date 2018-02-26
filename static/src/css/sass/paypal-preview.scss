@@ -184,6 +184,7 @@ body.review-side-panel-opened {
                 .info-icon-picture {
                     display: inline-block;
                     margin: 0 5px;
+                    cursor: pointer;
                     i {
                         &:before {
                             content: "\e95d";
@@ -191,7 +192,6 @@ body.review-side-panel-opened {
                             line-height: 0;
                             position: relative;
                             top: 5px;
-                            color: #a1a1a1;
                         }
                     }
                 }

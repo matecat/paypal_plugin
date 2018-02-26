@@ -6,6 +6,7 @@ module.exports = keyMirror({
     RENDER_VIEW: null,
     SELECT_SEGMENT: null,
     UPDATE_SEGMENTS_INFO: null,
+    UPDATE_SEGMENT: null,
     OPEN_SEGMENT: null,
     OPEN_WINDOW: null,
     CLOSE_PREVIEW: null,

@@ -54,6 +54,19 @@ let Store = assign({}, EventEmitter.prototype, {
         });
     },
 
+    updateSegment: function ( sid, data ) {
+        Store.segments = Store.segments.update(
+            Store.segments.findIndex(function(item) {
+                return item.get('segment') === parseInt(sid);
+            }), function(item) {
+                item = item.set('translation', data.translation);
+                item = item.set('version_number', data.version_number);
+                item = item.set('status', data.status);
+                return item;
+            }
+        );
+    },
+
     emitChange: function(event, args) {
         this.emit.apply(this, arguments);
     }
@@ -93,6 +106,10 @@ AppDispatcher.register(function(action) {
         case Constants.UPDATE_SEGMENTS_INFO:
             Store.updateSegmentsPreview(action.segments);
             Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            break;
+        case Constants.UPDATE_SEGMENT:
+            Store.updateSegment(action.sid, action.data);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
             break;
         default:
             Store.emitChange(action.actionType);
