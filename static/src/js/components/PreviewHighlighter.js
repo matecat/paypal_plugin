@@ -6,6 +6,7 @@ class PreviewHighlighter extends React.Component {
     constructor(props) {
         super(props);
         this.isMac = (navigator.platform == 'MacIntel')? true : false;
+        this.approvedStatus = "APPROVED";
     }
 
     selectSegmentClick(e) {
@@ -75,14 +76,25 @@ class PreviewHighlighter extends React.Component {
     }
 
     render() {
-        let classActive = (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)) ? 'active' : '';
+        let cs = classnames({
+            'preview-highlighter': true,
+            'active' : (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)),
+            'approved-screenshot' : (this.props.segmentInfo.get('status') === this.approvedStatus)
+        });
+        let thereAreIssues = (this.props.segmentInfo && this.props.segmentInfo.get('issues') && this.props.segmentInfo.get('issues').size > 0);
         let highlighterStyle = this.calculateStyle();
         return <div
-        className={"preview-highlighter " + classActive}
+        className={cs}
         style={highlighterStyle}
         onClick={this.selectSegmentClick.bind(this)}
         ref={(elem)=> this.elem=elem}
-    />
+        >
+            {(thereAreIssues ) ? (
+                <div className="issue-screenshot">
+                    <i className="icon-error_outline icon"></i>
+                </div>
+            ) : (null)}
+        </div>
 
     }
 }

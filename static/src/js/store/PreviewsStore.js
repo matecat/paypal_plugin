@@ -42,6 +42,18 @@ let Store = assign({}, EventEmitter.prototype, {
         return undefined;
     },
 
+    updateSegmentsPreview: function ( segments ) {
+        segments.forEach(function ( segment ) {
+            Store.segments = Store.segments.update(
+                Store.segments.findIndex(function(item) {
+                    return item.get('segment') === segment.id_segment;
+                }), function(item) {
+                    return item.merge(Immutable.fromJS(segment));
+                }
+            );
+        });
+    },
+
     emitChange: function(event, args) {
         this.emit.apply(this, arguments);
     }
@@ -77,6 +89,10 @@ AppDispatcher.register(function(action) {
                 Store.currentPreview = action.preview;
                 Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
             }
+            break;
+        case Constants.UPDATE_SEGMENTS_INFO:
+            Store.updateSegmentsPreview(action.segments);
+            Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
             break;
         default:
             Store.emitChange(action.actionType);
