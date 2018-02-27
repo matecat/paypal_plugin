@@ -46,19 +46,20 @@ class PreviewSlider extends React.Component {
     componentWillUnmount() {}
 
     render() {
-        let slideToShow = (this.props.previews.size < 4) ? 2 : 3;
+        let slideToShow = (this.props.previews.size < 4) ? 2 : 4;
         let previews = this.getAllPreviews();
         let settings = {
             dots: true,
             infinite: true,
             speed: 500,
-            slidesToShow: slideToShow,
+        /*    slidesToShow: slideToShow,*/
             slidesToScroll: 1,
             lazyLoad: true,
             centerMode: true,
             swipeToSlide: true,
             nextArrow: <SampleNextArrow className={"slick-next-custom"}/>,
-            prevArrow: <SamplePrevArrow className={"slick-prev-custom"}/>
+            prevArrow: <SamplePrevArrow className={"slick-prev-custom"}/>,
+            variableWidth: true
         };
         return <div className="preview-slider-container">
             <Slider {...settings}>
@@ -73,7 +74,7 @@ function SampleNextArrow(props) {
     const {className, onClick} = props;
     return ( <div
             className={className}
-            style={{display: 'block', background: 'red'}}
+            style={{display: 'block', background: 'white'}}
             onClick={onClick}
         />
     );
@@ -83,7 +84,7 @@ function SamplePrevArrow(props) {
     const {className, style, onClick} = props;
     return ( <div
             className={className}
-            style={{display: 'block', background: 'red'}}
+            style={{display: 'block', background: 'white'}}
             onClick={onClick}
         />
     );

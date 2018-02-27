@@ -142,7 +142,7 @@ body.review-side-panel-opened {
         }
     }
     .preview-actions-container {
-        background: #4d4d4d;
+        background: #ffffff;
         position: relative;
         width: 100%;
         z-index: 1;
@@ -152,23 +152,25 @@ body.review-side-panel-opened {
         justify-content: space-between;
         margin: auto;
         height: 40px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.45);
         .preview-pp {
             display: inline-block;
             button {
-                background: #4d4d4d;
                 font-size: 14px;
                 text-align: center;
                 margin: 0 3px;
                 border-radius: 2px;
-                border: 1px solid #4d4d4d;
+                border: 1px solid #a1a1a1;
                 cursor: pointer;
-                color: #ffffff;
+                color: #a1a1a1;
                 outline: none;
-                position: relative;
+                padding: 4px;
+                width: 32px;
                 i {
                     position: relative;
                     top: 2px;
                     margin: 0;
+                    width: unset;
                 }
                 &:hover {
                     /*box-shadow: 0 1px 2px #ccc;*/
@@ -179,13 +181,19 @@ body.review-side-panel-opened {
                 }
             }
             &.actions-image {
-                flex: 1 0px;
+                flex: 1 0;
                 text-align: left;
                 min-width: 300px;
+                padding-left: 10px;
                 .info-icon-picture {
                     display: inline-block;
                     margin: 0 5px;
+                    width: 30px;
+                    border: 1px solid #a1a1a1;
+                    padding: 3px;
                     i {
+                        margin: 0 0 0 0 !important;
+                        width: 1em !important;
                         &:before {
                             content: "\e95d";
                             font-size: 23px;

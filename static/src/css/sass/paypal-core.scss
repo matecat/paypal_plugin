@@ -10,12 +10,12 @@ body.cattool {
     height: 95%;
     margin-top: 29px;
     .gutter.gutter-vertical {
-        background-image: url(../img/horizontal-resize.png);
+        background-image: url(../src/css/img/horizontal-resize.png);
         cursor: ns-resize;
-        background-color: #4d4d4d;
+        background-color: #ffffff;
         background-repeat: no-repeat;
         margin-top: -5px;
-        border-bottom: 1px solid #000;
+        border-bottom: 1px solid #e6e6e6;
         background-position: center center;
         width: 100%;
     }
@@ -104,6 +104,7 @@ body:not(.filterOpen) #outer {
     overflow-y: scroll;
     position: relative;
     margin-top: 19px !important;
+    display: inline-block;
 }
 
 body.filterOpen #outer {
