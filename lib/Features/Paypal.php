@@ -9,24 +9,22 @@
 namespace Features;
 
 use API\V2\Exceptions\AuthenticationError;
-use Features\Paypal\Utils\Routes;
-use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use API\V2\Json\ProjectUrls;
-use BasicFeatureStruct;
-use Constants_TranslationStatus;
-use Features;
-use CustomPage;
-use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
-use Features\Paypal\Controller\PreviewController;
-use Features\Paypal\Controller\LqaController;
-use Features\Paypal\Utils\CDataHandler;
-use FilesStorage;
-use Klein\Klein;
-use LQA\ChunkReviewDao;
-use viewController;
-use Projects_MetadataDao;
 use API\V2\Json\SegmentComment;
 use API\V2\Json\SegmentTranslationIssue;
+use BasicFeatureStruct;
+use CatUtils;
+use Constants_TranslationStatus;
+use CustomPage;
+use Features;
+use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
+use Features\Paypal\Controller\PreviewController;
+use Features\Paypal\Utils\CDataHandler;
+use Features\Paypal\Utils\Routes;
+use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
+use Klein\Klein;
+use Projects_MetadataDao;
+use viewController;
 
 class Paypal extends BaseFeature {
 
@@ -82,6 +80,9 @@ class Paypal extends BaseFeature {
         route( '/reference-files/[:id_job]/[:password]/list', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolderList' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'POST', 'Features\Paypal\Controller\API\WhitelistController', 'create' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'DELETE', 'Features\Paypal\Controller\API\WhitelistController', 'delete' );
+
+        route( '/oauth/github/response', 'GET', 'Features\Paypal\Controller\OAuth\GithubOAuthController', 'response' );
+
     }
 
     public static function previewRoute($request, $response, $service, $app) {
@@ -537,6 +538,28 @@ class Paypal extends BaseFeature {
                 $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
                 $model->setTranslationCompleted() ;
             }
+        }
+    }
+
+    public function appendDecorators( $controller, $template ) {
+        if ( method_exists( $template, 'append' ) ) {
+            $config = Paypal::getConfig() ;
+
+            if ( !isset( $_SESSION['paypal_github_oauth_state'] ) ) {
+                $state = $_SESSION['paypal_github_oauth_state'] = CatUtils::generate_password( 12 ) ;
+            }
+            else {
+                $state = $_SESSION['paypal_github_oauth_state'] ;
+            }
+
+            $template->append('config_js', [ 'paypal' => [
+                'github_auth_url' => 'https://github.com/login/oauth/authorize?' . http_build_query([
+                                'client_id' => $config['GITHUB_OAUTH_CLIENT_ID'],
+                            'scope' => 'user',
+                            'state' => $state,
+                            'redirect_uri' => Routes::githubOauth()
+                ])
+            ] ] );
         }
     }
 

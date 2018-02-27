@@ -37,4 +37,9 @@ class Routes {
 
     }
 
+    public static function githubOauth() {
+        $host = \Routes::pluginsBase( [] );
+        return "$host/paypal/oauth/github/response" ;
+    }
+
 }
