@@ -19,6 +19,8 @@ let Utils = require('./paypalUtils');
     var original_messageForClickOnReadonly = UI.messageForClickOnReadonly ;
     var original_isUnlockedSegment = UI.isUnlockedSegment ;
     var original_setTranslation_success = UI.setTranslation_success;
+    var original_addIssuesToSegment = UI.addIssuesToSegment;
+    var original_deleteSegmentIssues = UI.deleteSegmentIssues;
 
     $.extend(UI, {
         windowPreview: null,
@@ -210,6 +212,15 @@ let Utils = require('./paypalUtils');
             }
 
             return scrollAnimation.promise() ;
+        },
+        addIssuesToSegment: function ( fileId, segmentId, versions ) {
+            original_addIssuesToSegment.apply(this, [fileId, segmentId, versions]);
+            PreviewActions.addIssuesToSegment(segmentId, versions);
+        },
+
+        deleteSegmentIssues: function ( fileId, segmentId, issue_id ) {
+            original_deleteSegmentIssues.apply(this, [fileId, segmentId, issue_id]);
+            PreviewActions.removeIssuesToSegment(segmentId, issue_id);
         },
         /**
          * To open the preview panel in a new window

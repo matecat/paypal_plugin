@@ -79,7 +79,8 @@ class PreviewHighlighter extends React.Component {
         let cs = classnames({
             'preview-highlighter': true,
             'active' : (this.props.segmentInfo.get('segment') === parseInt(this.props.currentId)),
-            'approved-screenshot' : (this.props.segmentInfo.get('status') === this.approvedStatus)
+            'approved-screenshot' : (this.props.segmentInfo.get('status') === this.approvedStatus),
+            'dashed-screenshot': (this.props.segmentInfo.get('status') !== this.approvedStatus)
         });
         let thereAreIssues = (this.props.segmentInfo && this.props.segmentInfo.get('issues') && this.props.segmentInfo.get('issues').size > 0);
         let highlighterStyle = this.calculateStyle();

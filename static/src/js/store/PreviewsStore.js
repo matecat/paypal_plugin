@@ -7,9 +7,9 @@ let Immutable = require('immutable');
 EventEmitter.prototype.setMaxListeners(0);
 
 let Store = assign({}, EventEmitter.prototype, {
-    segments : [],
+    segments : Immutable.fromJS([]),
 
-    previews : [],
+    previews : Immutable.fromJS([]),
 
     storeData: function (data) {
         this.segments = Immutable.fromJS(data.segments);
@@ -67,6 +67,34 @@ let Store = assign({}, EventEmitter.prototype, {
         );
     },
 
+    addIssuesToSegment: function ( sid, issues ) {
+        if (Store.segments.size) {
+            Store.segments = Store.segments.update(
+                Store.segments.findIndex(function(item) {
+                    return item.get('segment') === parseInt(sid);
+                }), function(item) {
+                    item = item.set('issues', Immutable.fromJS(issues));
+                    return item;
+                }
+            );
+        }
+    },
+
+    removeIssuesSegment: function ( sid, issueId ) {
+        Store.segments = Store.segments.update(
+            Store.segments.findIndex(function(item) {
+                return item.get('segment') === parseInt(sid);
+            }), function(item) {
+                let issues = item.get('issues');
+                issues = issues.delete(issues.findIndex(function ( item ) {
+                    return item.id === parseInt(issueId);
+                }));
+                item = item.set('issues', Immutable.fromJS(issues));
+                return item;
+            }
+        );
+    },
+
     emitChange: function(event, args) {
         this.emit.apply(this, arguments);
     }
@@ -109,6 +137,14 @@ AppDispatcher.register(function(action) {
             break;
         case Constants.UPDATE_SEGMENT:
             Store.updateSegment(action.sid, action.data);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            break;
+        case Constants.ADD_ISSUES:
+            Store.addIssuesToSegment(action.sid, action.issues);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            break;
+        case Constants.REMOVE_ISSUE:
+            Store.removeIssuesSegment(action.sid, action.issue);
             Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
             break;
         default:
