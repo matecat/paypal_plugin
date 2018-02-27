@@ -191,6 +191,7 @@ body.review-side-panel-opened {
                     width: 30px;
                     border: 1px solid #a1a1a1;
                     padding: 3px;
+                    cursor: pointer;
                     i {
                         margin: 0 0 0 0 !important;
                         width: 1em !important;
@@ -200,7 +201,6 @@ body.review-side-panel-opened {
                             line-height: 0;
                             position: relative;
                             top: 5px;
-                            color: #a1a1a1;
                         }
                     }
                 }

@@ -49,6 +49,14 @@ let PreviewActions = {
         });
     },
 
+    updateSegment: function ( sid, data ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.UPDATE_SEGMENT,
+            sid: sid,
+            data: data
+        });
+    },
+
     openSegment: function (sid) {
         UI.showSegment();
     },
@@ -113,6 +121,29 @@ let PreviewActions = {
     openSliderPreviews: function (  ) {
         AppDispatcher.dispatch({
             actionType: Constants.OPEN_SLIDER
+        });
+    },
+    addIssuesToSegment: function ( segmentId, versions ) {
+        let issues = _.reduce(versions, function ( result, value ) {
+            if (value.issues.length > 0) {
+                result = _.concat(result, value.issues);
+            }
+            return result;
+        }, []);
+        if (issues.length > 0) {
+            AppDispatcher.dispatch({
+                actionType: Constants.ADD_ISSUES,
+                sid: segmentId,
+                issues: issues
+            });
+        }
+    },
+
+    removeIssuesToSegment: function ( segmentId, issue_id ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.REMOVE_ISSUE,
+            sid: segmentId,
+            issue: issue_id
         });
     }
 };

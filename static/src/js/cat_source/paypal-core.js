@@ -18,6 +18,9 @@ let Utils = require('./paypalUtils');
     var originalIsReadonlySegment = UI.isReadonlySegment;
     var original_messageForClickOnReadonly = UI.messageForClickOnReadonly ;
     var original_isUnlockedSegment = UI.isUnlockedSegment ;
+    var original_setTranslation_success = UI.setTranslation_success;
+    var original_addIssuesToSegment = UI.addIssuesToSegment;
+    var original_deleteSegmentIssues = UI.deleteSegmentIssues;
 
     $.extend(UI, {
         windowPreview: null,
@@ -163,14 +166,23 @@ let Utils = require('./paypalUtils');
             };
         },
         /**
-         * Overwrite matecate function activateSegment
+         * Overwrite matecat function activateSegment
          * @param segment
          */
         activateSegment: function (segment) {
             originalActivateSegment.apply(this, [segment]);
         },
         /**
-         * Overwrite matecate function animateScroll
+         * Overwrite matecat function setTranslation_success
+         * @param d
+         * @param option
+         */
+        setTranslation_success(d, option) {
+            original_setTranslation_success.apply(this, [d, option]);
+            PreviewActions.updateSegment(option.id_segment, d.translation);
+        },
+        /**
+         * Overwrite matecat function animateScroll
          * @param segment
          * @param speed
          * @returns {*}
@@ -200,6 +212,15 @@ let Utils = require('./paypalUtils');
             }
 
             return scrollAnimation.promise() ;
+        },
+        addIssuesToSegment: function ( fileId, segmentId, versions ) {
+            original_addIssuesToSegment.apply(this, [fileId, segmentId, versions]);
+            PreviewActions.addIssuesToSegment(segmentId, versions);
+        },
+
+        deleteSegmentIssues: function ( fileId, segmentId, issue_id ) {
+            original_deleteSegmentIssues.apply(this, [fileId, segmentId, issue_id]);
+            PreviewActions.removeIssuesToSegment(segmentId, issue_id);
         },
         /**
          * To open the preview panel in a new window
@@ -320,7 +341,7 @@ let Utils = require('./paypalUtils');
             return Utils.getPreviewData();
         },
         /**
-         * Overwrite matecate function setLastSegmentFromLocalStorage
+         * Overwrite matecat function setLastSegmentFromLocalStorage
          * @param segmentId
          */
         setLastSegmentFromLocalStorage: function (segmentId) {
@@ -353,14 +374,14 @@ let Utils = require('./paypalUtils');
             }, 100);
         },
         /**
-         * Overwrite matecate function loadCustomization to show the tags always in extended mode
+         * Overwrite matecat function loadCustomization to show the tags always in extended mode
          */
         loadCustomization: function () {
             originalLoadCustimization.apply(this);
             UI.custom.extended_tagmode = true;
         },
         /**
-         * Overwrite matecate function isMarkedAsCompleteClickable to know if si markable as complete
+         * Overwrite matecat function isMarkedAsCompleteClickable to know if si markable as complete
          */
         isMarkedAsCompleteClickable: function ( stats ) {
             if (config.isReview) {
@@ -387,7 +408,7 @@ let Utils = require('./paypalUtils');
             }
         },
         /**
-         * Overwrite matecate function isReadonlySegment to know if segment is read only
+         * Overwrite matecat function isReadonlySegment to know if segment is read only
          */
         isReadonlySegment: function( segment ) {
             let result = originalIsReadonlySegment.apply(this, [segment]);
@@ -395,7 +416,7 @@ let Utils = require('./paypalUtils');
             return result || isReviewReadOnly ;
         },
         /**
-         * Overwrite matecate function messageForClickOnReadonly to change the message on click on read only segment
+         * Overwrite matecat function messageForClickOnReadonly to change the message on click on read only segment
          * @param section
          * @returns {*}
          */
