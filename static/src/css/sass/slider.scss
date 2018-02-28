@@ -1,39 +1,33 @@
 
 .preview-slider-container {
+    position: relative;
+    z-index: 2;
     width: 100%;
-    background: #e4e6e8;
-    height: 205px;
+    background-color: grey;
+    height: 200px;
+    margin: auto;
     display: inline-block;
-    padding: 10px 0;
     .slick-slider {
         width: 90%;
         margin: 0 auto;
+        margin-top: 15px;
         height: 180px;
-        //background-color: #cccdc9;
         .slick-slide {
-            transition: 0.3s ease;
             cursor: pointer;
-            //border: 1px solid #cccdc9;
+
             img {
                 max-width: 100%;
+                height: auto;
                 vertical-align: middle;
-                height: 150px;
+                max-height: 150px;
                 margin-left: auto;
                 margin-right: auto;
             }
             p {
                 color: #000;
                 line-height: 31px;
-            }
-            &:hover {
-                box-shadow: 0 0 4px rgba(0, 0, 0, 0.45);
-            }
-            &.slick-current {
-                box-shadow: 0 0 4px rgba(0, 0, 0, 0.45);
-                p {
-                    background: royalblue;
-                    color: #ffffff;
-                }
+
+
             }
         }
     }
