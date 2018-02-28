@@ -5,7 +5,7 @@
     function overrideJobMenu(JobMenu) {
         JobMenu.prototype.getMoreLinks = function() {
             let projectType = this.props.project.get('project_type');
-            if (projectType && projectType === 'LQA') {
+            if ( (projectType && projectType === 'LQA') || _.isUndefined(projectType)) {
                 let lqaUrl = "/plugins/paypal/lqa/" + this.props.jobId + "/" + this.props.review_password;
                 return <a className="item" target="_blank" href={lqaUrl}><i className="icon-edit icon"/> LQA</a>;
             }
