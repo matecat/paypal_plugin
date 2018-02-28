@@ -163,6 +163,14 @@ class Paypal extends BaseFeature {
         return true;
     }
 
+    public function filter_manage_single_project( $project ) {
+        $metadata                  = new Projects_MetadataDao;
+        $project_type              = $metadata->setCacheTTL( 60 * 60 * 24 )->get( $project[ 'id' ], "project_type" );
+        $project[ 'project_type' ] = $project_type->value;
+
+        return $project;
+    }
+
     /**
      * Remove unwanted options from the UI and add additional filters
      *
