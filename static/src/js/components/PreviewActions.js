@@ -205,9 +205,9 @@ class PreviewActions extends React.Component {
                         <i className="icon icon-chevron-left" />
                     </button>
                     ) : (null)}
-                    <div className="info-icon-picture" onClick={this.openPreviewSlider.bind(this)}>
+                    <button className="info-icon-picture" onClick={this.openPreviewSlider.bind(this)}>
                         <i className="icon icon-picture" />
-                    </div>
+                    </button>
                     {(!this.props.isLqa) ? (
                     <button onClick={this.nextSegment.bind(this)}
                             title={this.props.shortcuts.nextSegment.label + " (" + this.props.shortcuts.nextSegment.keystrokes[keyShortcuts] + ")"}>
@@ -270,7 +270,11 @@ class PreviewActions extends React.Component {
                                         onClick={this.openPreviewParent.bind(this)} title="Dock to bottom"><i className="icon icon-preview-bottom-window" /> </button>
                             </div>)
                             )
-                    : (null)}
+                    : (
+                        <div>
+                            <button className="ui button approve-all-segments"><i className="icon-checkmark5 icon" />APPROVE ALL</button>
+                        </div>
+                        )}
 
                 </div>
 
@@ -287,9 +291,9 @@ class PreviewActions extends React.Component {
                             <i className="icon icon-chevron-left" />
                         </button>
 
-                        <div className="info-icon-picture">
+                        <button className="info-icon-picture">
                             <i className="icon icon-picture" />
-                        </div>
+                        </button>
 
                         <button onClick={this.nextImage.bind(this)}
                                 title={this.props.shortcuts.nextPreview.label + " (" + this.props.shortcuts.nextPreview.keystrokes[keyShortcuts] + ")"}
