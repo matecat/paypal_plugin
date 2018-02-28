@@ -33,11 +33,13 @@ let PreviewActions = {
     },
 
     updatePreviewSegments: function ( sid, preview ) {
+        let self = this;
         let segments = Store.getPreviewsSegments(sid, preview);
         let segmentsArray = segments.reduce(function ( newList, item ) {
             newList.push(item.get('segment'));
             return newList;
         }, []);
+        // IF il segmento non ha le info
         Utils.getSegmentsPreviewInfo(segmentsArray).done(function ( response ) {
             if (response.data) {
                 AppDispatcher.dispatch({
@@ -46,6 +48,15 @@ let PreviewActions = {
                     segments: response.data
                 });
             }
+            self.updatePreviewStatus(preview);
+        });
+        //Else non fai niente
+    },
+
+    updatePreviewStatus: function (preview ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.UPDATE_PREVIEW_STATUS,
+            preview: preview
         });
     },
 

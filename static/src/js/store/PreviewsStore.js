@@ -11,6 +11,8 @@ let Store = assign({}, EventEmitter.prototype, {
 
     previews : Immutable.fromJS([]),
 
+    segmentsPreviews : Immutable.fromJS({}),
+
     storeData: function (data) {
         this.segments = Immutable.fromJS(data.segments);
         this.previews = Immutable.fromJS(data.previews);
@@ -94,6 +96,17 @@ let Store = assign({}, EventEmitter.prototype, {
             }
         );
     },
+    setCache: function ( preview ) {
+        let status = true;
+        Store.getPreviewsSegments(0, preview).forEach(e =>{
+             if(e.status !== 'APPROVED'){
+                 status = false;
+             }
+        });
+        Store.segmentsPreviews = Store.segmentsPreviews.set(preview,Immutable.fromJS({
+            approved: status}));
+        console.log('*******',Store.segmentsPreviews.toJS());
+    },
 
     emitChange: function(event, args) {
         this.emit.apply(this, arguments);
@@ -146,6 +159,9 @@ AppDispatcher.register(function(action) {
         case Constants.REMOVE_ISSUE:
             Store.removeIssuesSegment(action.sid, action.issue);
             Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            break;
+        case Constants.UPDATE_PREVIEW_STATUS:
+            Store.setCache( action.preview);
             break;
         default:
             Store.emitChange(action.actionType);

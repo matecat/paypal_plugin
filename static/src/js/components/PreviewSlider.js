@@ -41,25 +41,28 @@ class PreviewSlider extends React.Component {
         Actions.selectSegment(sid, preview);
     }
 
+    componentWillMount() {
+
+    }
     componentDidMount() {}
 
     componentWillUnmount() {}
 
     render() {
-        let slideToShow = (this.props.previews.size < 4) ? 2 : 4;
+        let slideToShow = (this.props.previews.size < 4) ? 2 : 3;
         let previews = this.getAllPreviews();
         let settings = {
             dots: true,
-            infinite: true,
+            infinite: false,
             speed: 500,
-        /*    slidesToShow: slideToShow,*/
+            slidesToShow: slideToShow,
             slidesToScroll: 1,
             lazyLoad: true,
-            centerMode: true,
-            swipeToSlide: true,
             nextArrow: <SampleNextArrow className={"slick-next-custom"}/>,
             prevArrow: <SamplePrevArrow className={"slick-prev-custom"}/>,
-            variableWidth: true
+            beforeChange: function(oldI, newI){
+                console.log(oldI,newI);
+            }
         };
         return <div className="preview-slider-container">
             <Slider {...settings}>
