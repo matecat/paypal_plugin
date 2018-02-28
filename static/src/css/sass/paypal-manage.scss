@@ -1,0 +1,20 @@
+.project-type {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  top: -2px;
+  position: relative;
+  text-align: center;
+  line-height: 30px;
+  background: #fff;
+  font-weight: 700;
+  &.tr-type{
+    color: #09beec;
+  }
+  &.lr-type {
+    color: #7eaf3e;
+  }
+  &.lqa-type {
+    background: #8e09ec;
+  }
+}
