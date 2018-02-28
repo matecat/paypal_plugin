@@ -52,7 +52,7 @@ class JobController extends KleinController {
         $segments = \Translations_SegmentTranslationDao::getSegmentsWithIssues($this->job->id, $segments_id);
 
         $json     = new SegmentTranslationIssue();
-        $rendered = $json->renderArray( $segments );
+        $rendered = $json->render( $segments );
 
         $this->response->json( array( 'data' => $rendered ) );
     }
