@@ -11,7 +11,7 @@ let Store = assign({}, EventEmitter.prototype, {
 
     previews : Immutable.fromJS([]),
 
-    segmentsPreviews : Immutable.fromJS({}),
+    previewsStatus : Immutable.fromJS({}),
 
     storeData: function (data) {
         this.segments = Immutable.fromJS(data.segments);
@@ -96,16 +96,36 @@ let Store = assign({}, EventEmitter.prototype, {
             }
         );
     },
-    setCache: function ( preview ) {
+    /**
+     *
+     * @param {String} preview : name preview to set
+     * @param {Boolean} set : if it is set to true it creates the element even if it is not present in previewsStatus Store
+     */
+
+    setCache: function ( preview,set ) {
         let status = true;
-        Store.getPreviewsSegments(0, preview).forEach(e =>{
-             if(e.status !== 'APPROVED'){
-                 status = false;
-             }
-        });
-        Store.segmentsPreviews = Store.segmentsPreviews.set(preview,Immutable.fromJS({
-            approved: status}));
-        console.log('*******',Store.segmentsPreviews.toJS());
+
+        if(set || Store.previewsStatus.get(preview)){
+            Store.getPreviewsSegments(0, preview).forEach(e =>{
+                if(e.toJS().status !== 'APPROVED'){
+                    status = false;
+                }
+            });
+            Store.previewsStatus = Store.previewsStatus.set(preview,Immutable.fromJS({
+                approved: status}));
+        }
+    },
+    setCacheFromSegment: function ( sid ) {
+        let previewsArray = Store.previews.filter(function (item ) {
+            return item.indexOf(parseInt(sid)) >-1;
+        }).reduce((a,item,index)=>{
+            a.push(index);
+            return a;
+        },[]);
+
+        previewsArray.forEach(preview =>{
+            console.log(preview);
+        })
     },
 
     emitChange: function(event, args) {
@@ -150,7 +170,8 @@ AppDispatcher.register(function(action) {
             break;
         case Constants.UPDATE_SEGMENT:
             Store.updateSegment(action.sid, action.data);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.setCacheFromSegment(action.sid);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview),Store.previewsStatus);
             break;
         case Constants.ADD_ISSUES:
             Store.addIssuesToSegment(action.sid, action.issues);
@@ -161,7 +182,8 @@ AppDispatcher.register(function(action) {
             Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
             break;
         case Constants.UPDATE_PREVIEW_STATUS:
-            Store.setCache( action.preview);
+            Store.setCache( action.preview, action.set);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview),Store.previewsStatus);
             break;
         default:
             Store.emitChange(action.actionType);

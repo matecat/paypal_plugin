@@ -39,24 +39,26 @@ let PreviewActions = {
             newList.push(item.get('segment'));
             return newList;
         }, []);
-        // IF il segmento non ha le info
-        Utils.getSegmentsPreviewInfo(segmentsArray).done(function ( response ) {
-            if (response.data) {
-                AppDispatcher.dispatch({
-                    actionType: Constants.UPDATE_SEGMENTS_INFO,
-                    preview: preview,
-                    segments: response.data
-                });
-            }
-            self.updatePreviewStatus(preview);
-        });
-        //Else non fai niente
+        // Use cache
+        if(!Store.segmentsPreviews.get(preview)){
+            Utils.getSegmentsPreviewInfo(segmentsArray).done(function ( response ) {
+                if (response.data) {
+                    AppDispatcher.dispatch({
+                        actionType: Constants.UPDATE_SEGMENTS_INFO,
+                        preview: preview,
+                        segments: response.data
+                    });
+                }
+                self.updatePreviewStatus(preview,true);
+            });
+        }
     },
 
-    updatePreviewStatus: function (preview ) {
+    updatePreviewStatus: function (preview, set) {
         AppDispatcher.dispatch({
             actionType: Constants.UPDATE_PREVIEW_STATUS,
-            preview: preview
+            preview: preview,
+            set: set
         });
     },
 
