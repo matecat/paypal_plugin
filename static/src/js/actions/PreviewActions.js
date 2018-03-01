@@ -33,7 +33,7 @@ let PreviewActions = {
     },
 
     updatePreviewSegments: function ( sid, preview ) {
-        let segments = Store.getPreviewsSegments(sid, preview);
+        let segments = Store.getPreviewsSegments( preview);
         let segmentsArray = segments.reduce(function ( newList, item ) {
             newList.push(item.get('segment'));
             return newList;

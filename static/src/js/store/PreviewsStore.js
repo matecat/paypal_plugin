@@ -22,7 +22,7 @@ let Store = assign({}, EventEmitter.prototype, {
         });
     },
 
-    getPreviewsSegments: function (sid, previewName) {
+    getPreviewsSegments: function (previewName) {
         if (_.isUndefined(previewName) ) {
             return  Immutable.fromJS([]);
         }
@@ -111,7 +111,7 @@ AppDispatcher.register(function(action) {
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
             Store.currentPreview = Store.getPreviewName(segment);
-            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid, Store.currentPreview), Store.previews);
+            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview), Store.previews);
             break;
         case Constants.UPDATE_VIEW:
             if (Store.currentSegmentId === parseInt(action.sid) ){
@@ -120,7 +120,7 @@ AppDispatcher.register(function(action) {
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
             Store.currentPreview = Store.getPreviewName(segment);
-            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
+            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview), Store.previews);
             break;
         case Constants.SELECT_SEGMENT:
             Store.currentSegmentId = action.sid;
@@ -128,24 +128,24 @@ AppDispatcher.register(function(action) {
                 Store.emitChange(action.actionType, action.sid);
             } else {
                 Store.currentPreview = action.preview;
-                Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
+                Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview), Store.previews);
             }
             break;
         case Constants.UPDATE_SEGMENTS_INFO:
             Store.updateSegmentsPreview(action.segments);
-            Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments( Store.currentPreview));
             break;
         case Constants.UPDATE_SEGMENT:
             Store.updateSegment(action.sid, action.data);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview));
             break;
         case Constants.ADD_ISSUES:
             Store.addIssuesToSegment(action.sid, action.issues);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview));
             break;
         case Constants.REMOVE_ISSUE:
             Store.removeIssuesSegment(action.sid, action.issue);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview));
             break;
         default:
             Store.emitChange(action.actionType);
