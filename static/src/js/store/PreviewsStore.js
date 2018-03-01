@@ -24,7 +24,7 @@ let Store = assign({}, EventEmitter.prototype, {
         });
     },
 
-    getPreviewsSegments: function (sid, previewName) {
+    getPreviewsSegments: function (previewName) {
         if (_.isUndefined(previewName) ) {
             return  Immutable.fromJS([]);
         }
@@ -106,7 +106,7 @@ let Store = assign({}, EventEmitter.prototype, {
         let status = true;
 
         if(set || Store.previewsStatus.get(preview)){
-            Store.getPreviewsSegments(0, preview).forEach(e =>{
+            Store.getPreviewsSegments(preview).forEach(e =>{
                 if(e.toJS().status !== 'APPROVED'){
                     status = false;
                 }
@@ -124,7 +124,7 @@ let Store = assign({}, EventEmitter.prototype, {
         },[]);
 
         previewsArray.forEach(preview =>{
-            console.log(preview);
+            this.setCache(preview,false);
         })
     },
 
@@ -144,7 +144,7 @@ AppDispatcher.register(function(action) {
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
             Store.currentPreview = Store.getPreviewName(segment);
-            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid, Store.currentPreview), Store.previews);
+            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview), Store.previews);
             break;
         case Constants.UPDATE_VIEW:
             if (Store.currentSegmentId === parseInt(action.sid) ){
@@ -153,7 +153,7 @@ AppDispatcher.register(function(action) {
             segment = Store.getSegmentInfo(action.sid);
             Store.currentSegmentId = action.sid;
             Store.currentPreview = Store.getPreviewName(segment);
-            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
+            Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview), Store.previews);
             break;
         case Constants.SELECT_SEGMENT:
             Store.currentSegmentId = action.sid;
@@ -161,29 +161,29 @@ AppDispatcher.register(function(action) {
                 Store.emitChange(action.actionType, action.sid);
             } else {
                 Store.currentPreview = action.preview;
-                Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview), Store.previews);
+                Store.emitChange(action.actionType, action.sid, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview), Store.previews);
             }
             break;
         case Constants.UPDATE_SEGMENTS_INFO:
             Store.updateSegmentsPreview(action.segments);
-            Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments( Store.currentPreview));
             break;
         case Constants.UPDATE_SEGMENT:
             Store.updateSegment(action.sid, action.data);
             Store.setCacheFromSegment(action.sid);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview),Store.previewsStatus);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview),Store.previewsStatus);
             break;
         case Constants.ADD_ISSUES:
             Store.addIssuesToSegment(action.sid, action.issues);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview));
             break;
         case Constants.REMOVE_ISSUE:
             Store.removeIssuesSegment(action.sid, action.issue);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview));
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview));
             break;
         case Constants.UPDATE_PREVIEW_STATUS:
             Store.setCache( action.preview, action.set);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(action.sid,  Store.currentPreview),Store.previewsStatus);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(Store.currentPreview),Store.previewsStatus);
             break;
         default:
             Store.emitChange(action.actionType);

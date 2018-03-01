@@ -34,13 +34,13 @@ let PreviewActions = {
 
     updatePreviewSegments: function ( sid, preview ) {
         let self = this;
-        let segments = Store.getPreviewsSegments(sid, preview);
+        let segments = Store.getPreviewsSegments( preview);
         let segmentsArray = segments.reduce(function ( newList, item ) {
             newList.push(item.get('segment'));
             return newList;
         }, []);
         // Use cache
-        if(!Store.segmentsPreviews.get(preview)){
+        if(!Store.previewsStatus.get(preview)){
             Utils.getSegmentsPreviewInfo(segmentsArray).done(function ( response ) {
                 if (response.data) {
                     AppDispatcher.dispatch({
