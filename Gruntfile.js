@@ -66,6 +66,20 @@ module.exports = function(grunt) {
                 ],
                 dest:  'static/build/paypal-manage-build.js'
             },
+            analyze: {
+                options: {
+                    transform: [
+                        [ 'babelify', { presets: [ es2015Preset, reactPreset ] } ]
+                    ],
+                    browserifyOptions: {
+                        paths: [ __dirname + '/node_modules' ]
+                    }
+                },
+                src: [
+                    'static/src/js/cat_source/paypal-analyze.js',
+                ],
+                dest:  'static/build/paypal-analyze-build.js'
+            },
             core: {
                 options: {
                     transform: [
@@ -143,6 +157,7 @@ module.exports = function(grunt) {
         'browserify:preview',
         'browserify:lqa',
         'browserify:manage',
+        'browserify:analyze',
         'browserify:core',
         'sass',
         'replace'
