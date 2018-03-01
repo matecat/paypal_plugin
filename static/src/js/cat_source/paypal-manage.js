@@ -26,15 +26,21 @@
     }
 
     function overrideJobContainer(JobContainer) {
+        let originalGetTranslateUrl = JobContainer.prototype.getTranslateUrl;
         JobContainer.prototype.getTranslateUrl = function() {
             let projectType = this.props.project.get('project_type');
-            let use_prefix = ( this.props.jobsLenght > 1 );
-            let chunk_id = this.props.job.get('id') + ( ( use_prefix ) ? '-' + this.props.index : '' ) ;
-            let possibly_different_review_password = ( this.props.job.has('review_password') ?
-                    this.props.job.get('review_password') :
-                    this.props.job.get('password')
-            );
-            return "/plugins/paypal/lqa/" + chunk_id + "/" + possibly_different_review_password;
+            if ( projectType && projectType === 'LQA' ) {
+                let use_prefix = ( this.props.jobsLenght > 1 );
+                let chunk_id = this.props.job.get('id') + ( ( use_prefix ) ? '-' + this.props.index : '' ) ;
+                let possibly_different_review_password = ( this.props.job.has('review_password') ?
+                        this.props.job.get('review_password') :
+                        this.props.job.get('password')
+                );
+                return "/plugins/paypal/lqa/" + chunk_id + "/" + possibly_different_review_password;
+            } else {
+                return originalGetTranslateUrl.apply(this);
+            }
+
         };
 
         return ProjectContainer;
