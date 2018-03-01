@@ -188,14 +188,8 @@ body.review-side-panel-opened {
                 .info-icon-picture {
                     display: inline-block;
                     margin: 0 5px;
-                    width: 30px;
-                    border: 1px solid #a1a1a1;
-                    padding: 3px;
-                    cursor: pointer;
                     i {
-                        margin: 0 0 0 0 !important;
-                        width: 1em !important;
-                        color: #a1a1a1;
+                        top: 1px;
                         &:before {
                             content: "\e95d";
                             font-size: 23px;
@@ -203,6 +197,9 @@ body.review-side-panel-opened {
                             position: relative;
                             top: 5px;
                         }
+                    }
+                    &:hover {
+
                     }
                 }
             }
@@ -234,10 +231,11 @@ body.review-side-panel-opened {
            &.change-window {
                text-align: right;
                flex: 1 0px;
+               padding-right: 10px;
                button {
                    background: transparent;
                    border: none;
-                   color: #ffffff;
+                   color: #A1A1A1;
                    i {
                        font-size: 15px;
                        line-height: 0;
@@ -247,6 +245,35 @@ body.review-side-panel-opened {
                        i {
                            color: #e2e2e2;
                        }
+                   }
+               }
+               .approve-all-segments {
+                   margin-right: 0;
+                   height: 30px;
+                   line-height: 18px;
+                   background: transparent;
+                   font-weight: 100;
+                   padding: 6px 10px;
+                   border-radius: 2px;
+                   border: 1px solid #7cc576;
+                   color: #7cc576;
+                   transition: 0.3s ease;
+                   width: auto;
+                   i {
+                       font-size: 21px;
+                       vertical-align: bottom;
+                       position: relative;
+                       top: 8px;
+                   }
+                   &:hover {
+                       box-shadow: 0 0 0 #e0e0e0, 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24) !important;
+                       i {
+                           color: #7cc576;
+                       }
+                   }
+                   &:active {
+                       box-shadow: none !important;
+                       background-color: #f2f2f2 !important;
                    }
                }
             }

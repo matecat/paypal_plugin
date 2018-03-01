@@ -18,6 +18,7 @@ body.cattool {
         border-bottom: 1px solid #e6e6e6;
         background-position: center center;
         width: 100%;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.45);
     }
 }
 
@@ -109,5 +110,11 @@ body:not(.filterOpen) #outer {
 
 body.filterOpen #outer {
     margin-top: 80px !important;
+}
+
+footer .wrapper {
+    .project-instructions a {
+        margin-left: 15px;
+    }
 }
 

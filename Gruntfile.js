@@ -48,9 +48,37 @@ module.exports = function(grunt) {
                     }
                 },
                 src: [
-                    'static/src/js/paypal-lqa.js',
+                    'static/src/js/cat_source/paypal-lqa.js',
                 ],
                 dest:  'static/build/paypal-lqa-build.js'
+            },
+            manage: {
+                options: {
+                    transform: [
+                        [ 'babelify', { presets: [ es2015Preset, reactPreset ] } ]
+                    ],
+                    browserifyOptions: {
+                        paths: [ __dirname + '/node_modules' ]
+                    }
+                },
+                src: [
+                    'static/src/js/cat_source/paypal-manage.js',
+                ],
+                dest:  'static/build/paypal-manage-build.js'
+            },
+            analyze: {
+                options: {
+                    transform: [
+                        [ 'babelify', { presets: [ es2015Preset, reactPreset ] } ]
+                    ],
+                    browserifyOptions: {
+                        paths: [ __dirname + '/node_modules' ]
+                    }
+                },
+                src: [
+                    'static/src/js/cat_source/paypal-analyze.js',
+                ],
+                dest:  'static/build/paypal-analyze-build.js'
             },
             core: {
                 options: {
@@ -77,6 +105,16 @@ module.exports = function(grunt) {
                     'static/src/css/sass/paypal.scss'
                 ],
                 dest: 'static/build/paypal-build.css'
+            },
+            distManage: {
+                options: {
+                    sourceMap: false,
+                    includePaths: ['static/src/css/sass/']
+                },
+                src: [
+                    'static/src/css/sass/paypal-manage.scss'
+                ],
+                dest: 'static/build/paypal-manage-build.css'
             },
             distCore: {
                 options: {
@@ -118,6 +156,8 @@ module.exports = function(grunt) {
         'browserify:components',
         'browserify:preview',
         'browserify:lqa',
+        'browserify:manage',
+        'browserify:analyze',
         'browserify:core',
         'sass',
         'replace'

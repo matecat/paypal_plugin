@@ -26,6 +26,13 @@ let paypalUtils = {
             type: "get",
             url : "/plugins/paypal/job/"+ config.id_job + "/"+ config.password + "/segments"
         });
+    },
+    getJobInstructions: function (  ) {
+        return $.ajax({
+            async: true,
+            type: "get",
+            url : "/plugins/paypal/job/"+ config.id_job + "/"+ config.password + "/instructions"
+        });
     }
 };
 
