@@ -33,7 +33,7 @@ let PreviewActions = {
     },
 
     updatePreviewSegments: function ( sid, preview ) {
-        let segments = Store.getPreviewsSegments(sid, preview);
+        let segments = Store.getPreviewsSegments( preview);
         let segmentsArray = segments.reduce(function ( newList, item ) {
             newList.push(item.get('segment'));
             return newList;
@@ -145,7 +145,19 @@ let PreviewActions = {
             sid: segmentId,
             issue: issue_id
         });
-    }
+    },
+
+    showSegmentContainer: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SHOW_SEGMENT_CONTAINER
+        });
+    },
+
+    closeSegmentContainer: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.CLOSE_SEGMENT_CONTAINER
+        });
+    },
 };
 
 module.exports = PreviewActions;

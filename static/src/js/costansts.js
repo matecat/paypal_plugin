@@ -20,5 +20,7 @@ module.exports = keyMirror({
     PREV_SEGMENT_PREVIEW: null,
     OPEN_SLIDER: null,
     ADD_ISSUES: null,
-    REMOVE_ISSUE: null
+    REMOVE_ISSUE: null,
+    SHOW_SEGMENT_CONTAINER: null,
+    CLOSE_SEGMENT_CONTAINER: null
 });

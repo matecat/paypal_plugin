@@ -32,6 +32,7 @@ let Utils = require('./paypalUtils');
         start: function () {
             originalStart.apply(this);
             this.checkReferenceFiles();
+            this.checkIstructions();
         },
         /**
          * Overwrite the matecat fn to add events and listeners
@@ -88,6 +89,9 @@ let Utils = require('./paypalUtils');
                 }
 
                 if ( e.which == esc ) handleEscPressed(e) ;
+            }).on('click', '.project-instructions', function ( e ) {
+                e.preventDefault();
+                UI.openInstructionsModal();
             });
 
 
@@ -275,6 +279,7 @@ let Utils = require('./paypalUtils');
                         h2],
                     direction: 'vertical'
                 } );
+                PreviewActions.showSegmentContainer();
             }
         },
         /**
@@ -287,6 +292,7 @@ let Utils = require('./paypalUtils');
             }
             $('#plugin-mount-point').css('height', '100%');
             $('#outer').css('height', '0');
+            PreviewActions.closeSegmentContainer();
         },
         /**
          * When a segment is selected and the preview is in a different window
@@ -457,6 +463,29 @@ let Utils = require('./paypalUtils');
                     });
                 }
             });
+        },
+        checkIstructions: function ( ) {
+            let self = this;
+            Utils.getJobInstructions().done(function (response) {
+                if (response.data && !response.errors ) {
+                    self.instructions = response.data;
+                    self.openInstructionsModal();
+                    //add link to the footer
+                    var html = '<div class="project-instructions"><span><a>Job Instructions</a></span></div>';
+                    $('footer .wrapper').append(html);
+
+                }
+            });
+        },
+        openInstructionsModal: function (  ) {
+            var props = {
+                text: this.instructions,
+                successText: "Ok",
+                successCallback: function() {
+                    APP.ModalWindow.onCloseModal();
+                }
+            };
+            APP.ModalWindow.showModalComponent(ConfirmMessageModal, props, "Job Instructions");
         },
         /**
          * To check if a segment is locked
