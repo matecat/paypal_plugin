@@ -206,7 +206,7 @@ body.review-side-panel-opened {
             &.actions-segment {
                 text-align: left;
                 min-width: 330px;
-                button {
+               /* button {
                     background: transparent;
                     border: none;
                     color: white;
@@ -220,11 +220,12 @@ body.review-side-panel-opened {
                             color: #e2e2e2;
                         }
                     }
-                }
+                }*/
                 .preview-button, .n-segments-available, .text-n-segments-available {
                     display: inline-block;
-                    font-size: 14px;
-                    font-weight: 100;
+                }
+                .n-segments-available, .text-n-segments-available {
+                    color: #000;
                 }
             }
 
