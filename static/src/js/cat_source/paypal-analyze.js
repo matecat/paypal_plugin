@@ -32,10 +32,10 @@
 
         };
 
+        let originalOpenJob = OpenJobBox.prototype.openJob;
         OpenJobBox.prototype.openJob = function() {
-            let originalOpenJob = OpenJobBox.prototype.openJob;
             let projectType = this.props.project.get('project_type');
-            let url = originalGetUrl.apply(this);
+            let url = originalOpenJob.apply(this);
             if (projectType && projectType === 'LQA') {
                 url = "/plugins/paypal/lqa/" + this.props.outsourceJobId + "/" + this.props.job.get('review_password');
             } else if (projectType && projectType === 'LR') {
