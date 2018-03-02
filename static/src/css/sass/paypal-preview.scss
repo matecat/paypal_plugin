@@ -166,6 +166,7 @@ body.review-side-panel-opened {
                 outline: none;
                 padding: 4px;
                 width: 32px;
+                background: #FFFFFF;
                 i {
                     position: relative;
                     top: 2px;
@@ -206,23 +207,9 @@ body.review-side-panel-opened {
             &.actions-segment {
                 text-align: left;
                 min-width: 330px;
-               /* button {
-                    background: transparent;
-                    border: none;
-                    color: white;
-                    i {
-                        font-size: 14px;
-                        line-height: 0;
-                    }
-                    &:hover {
-                        box-shadow: none;
-                        i {
-                            color: #e2e2e2;
-                        }
-                    }
-                }*/
                 .preview-button, .n-segments-available, .text-n-segments-available {
                     display: inline-block;
+                    border: none;
                 }
                 .n-segments-available, .text-n-segments-available {
                     color: #000;
