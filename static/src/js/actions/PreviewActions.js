@@ -145,7 +145,19 @@ let PreviewActions = {
             sid: segmentId,
             issue: issue_id
         });
-    }
+    },
+
+    showSegmentContainer: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SHOW_SEGMENT_CONTAINER
+        });
+    },
+
+    closeSegmentContainer: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.CLOSE_SEGMENT_CONTAINER
+        });
+    },
 };
 
 module.exports = PreviewActions;

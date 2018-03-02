@@ -7,7 +7,8 @@ class PreviewActions extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 1
+            index: 1,
+            showSegment: false
         };
         this.nextImage = this.nextImage.bind(this);
         this.previousImage = this.previousImage.bind(this);
@@ -17,6 +18,8 @@ class PreviewActions extends React.Component {
         this.firstSegment = this.firstSegment.bind(this);
         this.goToNextSegmentImage = this.goToNextSegmentImage.bind(this);
         this.goToPreviousSegmentImage = this.goToPreviousSegmentImage.bind(this);
+        this.showSegmentContainer = this.showSegmentContainer.bind(this);
+        this.closeSegmentContainer = this.closeSegmentContainer.bind(this);
     }
 
 
@@ -152,6 +155,22 @@ class PreviewActions extends React.Component {
     openPreviewSlider() {
         Actions.openSliderPreviews();
     }
+    showSegmentContainer() {
+        this.setState({
+            showSegment: true
+        });
+    }
+    closeSegmentContainer() {
+        this.setState({
+            showSegment: false
+        });
+    }
+    closeSegmentContainerClick() {
+        UI.closeSegmentsContainer();
+        this.setState({
+            showSegment: false
+        });
+    }
     componentDidMount() {
         Store.addListener(Constants.NEXT_PREVIEW, this.nextImage);
         Store.addListener(Constants.PREV_PREVIEW, this.previousImage);
@@ -161,6 +180,8 @@ class PreviewActions extends React.Component {
         Store.addListener(Constants.FIRST_SEGMENT, this.firstSegment);
         Store.addListener(Constants.NEXT_SEGMENT_PREVIEW, this.goToNextSegmentImage);
         Store.addListener(Constants.PREV_SEGMENT_PREVIEW, this.goToPreviousSegmentImage);
+        Store.addListener(Constants.SHOW_SEGMENT_CONTAINER, this.showSegmentContainer);
+        Store.addListener(Constants.CLOSE_SEGMENT_CONTAINER, this.closeSegmentContainer);
     }
 
     componentWillUnmount() {
@@ -172,6 +193,8 @@ class PreviewActions extends React.Component {
         Store.removeListener(Constants.FIRST_SEGMENT, this.firstSegment);
         Store.removeListener(Constants.NEXT_SEGMENT_PREVIEW, this.goToNextSegmentImage);
         Store.removeListener(Constants.PREV_SEGMENT_PREVIEW, this.goToPreviousSegmentImage);
+        Store.removeListener(Constants.SHOW_SEGMENT_CONTAINER, this.showSegmentContainer);
+        Store.removeListener(Constants.CLOSE_SEGMENT_CONTAINER, this.closeSegmentContainer);
     }
 
     componentDidUpdate() {}
@@ -249,10 +272,16 @@ class PreviewActions extends React.Component {
                         </div>
 
                     ) : (null) }
+
+
                 </div>
 
 
-
+                { this.props.isLqa && this.state.showSegment ? (
+                    <div style={{color: "black"}} onClick={this.closeSegmentContainerClick.bind(this)}>
+                        Close
+                    </div>
+                ): (null)}
 
 
                 <div className="preview-pp change-window">

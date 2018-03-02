@@ -279,6 +279,7 @@ let Utils = require('./paypalUtils');
                         h2],
                     direction: 'vertical'
                 } );
+                PreviewActions.showSegmentContainer();
             }
         },
         /**
@@ -291,6 +292,7 @@ let Utils = require('./paypalUtils');
             }
             $('#plugin-mount-point').css('height', '100%');
             $('#outer').css('height', '0');
+            PreviewActions.closeSegmentContainer();
         },
         /**
          * When a segment is selected and the preview is in a different window
