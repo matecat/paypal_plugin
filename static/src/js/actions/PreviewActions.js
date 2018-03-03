@@ -10,7 +10,23 @@ let PreviewActions = {
             sid: sid,
             data: data
         });
-        this.updatePreviewSegments(sid, Store.currentPreview);
+        let max = Store.previews.size;
+        console.log(Store.previews);
+        console.log(Store.previews.toJS());
+        if(Store.previews.size > 4) max = 3;
+
+        let previewsArray = Store.previews.reduce((a,item,index)=>{
+            a.push(index);
+            return a;
+        },[]);
+
+        let start = Math.max(previewsArray.indexOf(Store.currentPreview)-3,0);
+        let end = Math.min(previewsArray.indexOf(Store.currentPreview)+3,previewsArray.length-1);
+
+        for(start; start <= end; start++){
+            this.updatePreviewSegments(previewsArray[start]);
+        }
+
     },
 
     updatePreview: function (sid) {
@@ -28,11 +44,11 @@ let PreviewActions = {
             preview: preview
         });
         if (currentPreview !== preview) {
-            this.updatePreviewSegments(sid, preview)
+            this.updatePreviewSegments(preview)
         }
     },
 
-    updatePreviewSegments: function ( sid, preview ) {
+    updatePreviewSegments: function ( preview ) {
         let self = this;
         let segments = Store.getPreviewsSegments( preview);
         let segmentsArray = segments.reduce(function ( newList, item ) {
@@ -40,6 +56,7 @@ let PreviewActions = {
             return newList;
         }, []);
         // Use cache
+        console.log('require preview',preview,!!Store.previewsStatus.get(preview));
         if(!Store.previewsStatus.get(preview)){
             Utils.getSegmentsPreviewInfo(segmentsArray).done(function ( response ) {
                 if (response.data) {

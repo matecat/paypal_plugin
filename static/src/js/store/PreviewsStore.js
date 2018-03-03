@@ -166,7 +166,11 @@ AppDispatcher.register(function(action) {
             break;
         case Constants.UPDATE_SEGMENTS_INFO:
             Store.updateSegmentsPreview(action.segments);
-            Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments( Store.currentPreview));
+            Store.emitChange(action.actionType, action.preview, Store.getPreviewsSegments( Store.currentPreview),Store.previewsStatus);
+            break;
+        case Constants.UPDATE_PREVIEW_STATUS:
+            Store.setCache( action.preview, action.set);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(Store.currentPreview),Store.previewsStatus);
             break;
         case Constants.UPDATE_SEGMENT:
             Store.updateSegment(action.sid, action.data);
@@ -175,15 +179,11 @@ AppDispatcher.register(function(action) {
             break;
         case Constants.ADD_ISSUES:
             Store.addIssuesToSegment(action.sid, action.issues);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview));
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview),Store.previewsStatus);
             break;
         case Constants.REMOVE_ISSUE:
             Store.removeIssuesSegment(action.sid, action.issue);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview));
-            break;
-        case Constants.UPDATE_PREVIEW_STATUS:
-            Store.setCache( action.preview, action.set);
-            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments(Store.currentPreview),Store.previewsStatus);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview),Store.previewsStatus);
             break;
         default:
             Store.emitChange(action.actionType);
