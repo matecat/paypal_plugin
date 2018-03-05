@@ -81,12 +81,12 @@ let Utils = require('./paypalUtils');
                 var esc = 27 ;
 
                 var handleEscPressed = function(e) {
-                    if ( config.isLQA ) {
+                    if ( config.isLQA && !UI.body.hasClass('side-tools-opened') ) {
                         e.preventDefault();
                         e.stopPropagation();
                         UI.closeSegmentsContainer();
                     }
-                }
+                };
 
                 if ( e.which == esc ) handleEscPressed(e) ;
             }).on('click', '.project-instructions', function ( e ) {

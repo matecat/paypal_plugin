@@ -202,6 +202,7 @@ class PreviewActions extends React.Component {
     render() {
         let keyShortcuts = (this.props.isMac) ? "mac" : "standard";
         if (this.props.currentPreview) {
+            let currentIndexPreview = (this.props.previews.keySeq().findIndex(k => k === this.props.currentPreview)) +1;
             return <div className="preview-actions-container">
 
 
@@ -253,7 +254,9 @@ class PreviewActions extends React.Component {
 
                 </div>
 
-
+                <div className="preview-index-label">
+                    Screenshot: {currentIndexPreview}/{this.props.previews.size}
+                </div>
                 <div className="preview-pp actions-segment">
                     { !this.props.isLqa && this.props.segmentPreviews.size > 1 ? (
                         <div>

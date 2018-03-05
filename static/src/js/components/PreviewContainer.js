@@ -3,7 +3,6 @@ let Constants = require('../costansts');
 let PreviewHighlighter = require('./PreviewHighlighter').default;
 let PreviewInfo = require('./PreviewInfo').default;
 let PreviewActions = require('./PreviewActions').default;
-let PreviewWidget = require('./PreviewWidget').default;
 let PreviewSlider = require('./PreviewSlider').default;
 let Actions = require('../actions/PreviewActions');
 let Immutable = require('immutable');

@@ -30,15 +30,21 @@ class PreviewSlider extends React.Component {
     getAllPreviews() {
         let previews = [];
         let previewsInfo = this.props.previews.toJS();
+        let self = this;
         for ( let key in previewsInfo) {
             let status = '';
-            if(this.props.previewsStatus.get(key) && this.props.previewsStatus.get(key).get('approved')){
-                status = 'preview-approved';
-            }
-            previews.push (<div key={key} onClick={this.openPreview.bind(this, key)}>
-                <img src={this.path + key}/>
+            let csIcon = classnames({
+                'icon': true,
+                'icon-checkmark4': true,
+                'preview-approved': this.props.previewsStatus.get(key) && this.props.previewsStatus.get(key).get('approved')
+            });
+            let csDiv = classnames({
+                'slide-current': (key === self.props.currentPreview )
+            });
+            previews.push (<div key={key} onClick={this.openPreview.bind(this, key)} className={csDiv}>
+                <img src={this.path + key} />
                 <div className="preview-slider-item-bottom">
-                    <i className={"icon icon-checkmark4 " + status}/>
+                    <i className={csIcon}/>
                     <p>{key}</p>
                 </div>
 
