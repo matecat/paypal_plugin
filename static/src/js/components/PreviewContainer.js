@@ -6,6 +6,7 @@ let PreviewActions = require('./PreviewActions').default;
 let PreviewWidget = require('./PreviewWidget').default;
 let PreviewSlider = require('./PreviewSlider').default;
 let Actions = require('../actions/PreviewActions');
+let Immutable = require('immutable');
 
 class PreviewContainer extends React.Component {
 
@@ -16,6 +17,7 @@ class PreviewContainer extends React.Component {
             segmentsInfo: null,
             dimension: null,
             previews: null,
+            previewsStatus: Immutable.fromJS({}),
             showSlider: false
         };
 
@@ -61,9 +63,12 @@ class PreviewContainer extends React.Component {
         }
     }
 
-    updateSegments(preview, segmentsInfo){
+    updateSegments(preview, segmentsInfo,previewsStatus){
+        /*console.log(previewsStatus);
+        if(previewsStatus) console.log(previewsStatus.toJS());*/
         this.setState({
             segmentsInfo: segmentsInfo,
+            previewsStatus: previewsStatus
         });
     }
 
@@ -123,7 +128,8 @@ class PreviewContainer extends React.Component {
         return (!nextState.currentSid ||
             nextState.currentSid !== this.state.currentSid ||
             !nextState.segmentsInfo.equals(this.state.segmentsInfo) ||
-            nextState.showSlider !== this.state.showSlider
+            nextState.showSlider !== this.state.showSlider ||
+            !nextState.previewsStatus.equals(this.state.previewsStatus)
         )
     }
 
@@ -160,6 +166,7 @@ class PreviewContainer extends React.Component {
                         previews={this.state.previews}
                         currentPreview={this.state.currentPreview}
                         segmentsInfo={this.state.segmentsInfo}
+                        previewsStatus={this.state.previewsStatus}
                     />
                 ) : (null)}
 
