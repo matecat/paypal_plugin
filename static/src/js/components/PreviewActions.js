@@ -153,7 +153,9 @@ class PreviewActions extends React.Component {
         window.close();
     }
     openPreviewSlider() {
-        Actions.openSliderPreviews();
+        if (this.props.isLqa) {
+            Actions.openSliderPreviews();
+        }
     }
     showSegmentContainer() {
         this.setState({
