@@ -31,14 +31,17 @@ class PreviewSlider extends React.Component {
         let previews = [];
         let previewsInfo = this.props.previews.toJS();
         for ( let key in previewsInfo) {
-            let status = 'no';
+            let status = '';
             if(this.props.previewsStatus.get(key) && this.props.previewsStatus.get(key).get('approved')){
-                status = 'approved';
+                status = 'preview-approved';
             }
             previews.push (<div key={key} onClick={this.openPreview.bind(this, key)}>
                 <img src={this.path + key}/>
-                <p>{key}</p>
-                <p>status: {status} </p>
+                <div className="preview-slider-item-bottom">
+                    <i className={"icon icon-checkmark4 " + status}/>
+                    <p>{key}</p>
+                </div>
+
             </div>)
         }
         return previews;
@@ -50,26 +53,34 @@ class PreviewSlider extends React.Component {
         Actions.selectSegment(sid, preview);
     }
 
-    componentWillMount() {
-
-    }
-    componentDidMount() {}
-
-    componentWillUnmount() {}
-
-    getPreviewOnSliderChange(oldIndex,newIndex){
-        /*let start = (Math.min(oldIndex,newIndex)-3) < 0 ? 0 : Math.min(oldIndex,newIndex)-3,
-            end = (Math.max(oldIndex,newIndex)+3) > this.props.previews.size ? this.props.previews.size : Math.max(oldIndex,newIndex)+3;*/
+    getPreviewOnSliderChange(newIndex){
+        let self = this;
         let start = Math.max(0,newIndex-3),
             end = Math.min(this.props.previews.size ,newIndex+3);
 
         for(start;start <= end; start++){
-            Actions.updatePreviewSegments(this.state.previewsArray[start]);
+            Actions.updatePreviewSegments(self.state.previewsArray[start]);
+        }
+    }
+
+    componentDidMount() {
+        let max = this.props.previews.size;
+        if(this.props.previews.size > 4) max = 3;
+
+        let previewsArray = this.props.previews.reduce((a,item,index)=>{
+            a.push(index);
+            return a;
+        },[]);
+
+        let start = Math.max(previewsArray.indexOf(Store.currentPreview)-3,0);
+        let end = Math.min(previewsArray.indexOf(Store.currentPreview)+3,previewsArray.length-1);
+
+        for(start; start <= end; start++){
+            Actions.updatePreviewSegments(previewsArray[start]);
         }
     }
 
     render() {
-        console.log('*************',this.props.previewsStatus);
         let slideToShow = (this.props.previews.size < 4) ? 2 : 3;
         let previews = this.getAllPreviews();
         let settings = {
@@ -82,7 +93,7 @@ class PreviewSlider extends React.Component {
             lazyLoad: true,
             nextArrow: <SampleNextArrow className={"slick-next-custom"}/>,
             prevArrow: <SamplePrevArrow className={"slick-prev-custom"}/>,
-            beforeChange: this.getPreviewOnSliderChange.bind(this)
+            afterChange: this.getPreviewOnSliderChange.bind(this)
         };
         return <div className="preview-slider-container">
             <Slider {...settings}>

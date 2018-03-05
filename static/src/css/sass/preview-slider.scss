@@ -31,6 +31,25 @@
             }
         }
     }
+    .preview-slider-item-bottom {
+        display: inline-block;
+        position: relative;
+        p {
+            float: left;
+        }
+        i.icon.icon-checkmark4.preview-approved {
+            color: green;
+        }
+        i.icon.icon-checkmark4 {
+            float: left;
+            margin-top: 6px;
+            font-size: 20px;
+        }
+    }
+
+
+
+
 }
 
 
