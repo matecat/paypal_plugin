@@ -1,6 +1,7 @@
 let AppDispatcher = require('../dispatcher/AppDispatcher');
 let Constants = require('./../costansts');
-
+let Utils = require('../cat_source/paypalUtils');
+let Store = require('../store/PreviewsStore');
 let PreviewActions = {
 
     renderPreview: function (sid, data) {
@@ -19,11 +20,57 @@ let PreviewActions = {
     },
 
     selectSegment: function (sid, preview) {
+        let currentPreview = Store.currentPreview;
         AppDispatcher.dispatch({
             actionType: Constants.SELECT_SEGMENT,
             sid: sid,
             preview: preview
         });
+        if (currentPreview !== preview) {
+            this.updatePreviewSegments(preview)
+        }
+    },
+
+    updatePreviewSegments: function ( preview ) {
+        let self = this;
+        let segments = Store.getPreviewsSegments( preview);
+        let segmentsArray = segments.reduce(function ( newList, item ) {
+            newList.push(item.get('segment'));
+            return newList;
+        }, []);
+        // Use cache
+        if(!Store.previewsStatus.get(preview)){
+            Utils.getSegmentsPreviewInfo(segmentsArray).done(function ( response ) {
+                if (response.data) {
+                    AppDispatcher.dispatch({
+                        actionType: Constants.UPDATE_SEGMENTS_INFO,
+                        preview: preview,
+                        segments: response.data
+                    });
+                }
+                self.updatePreviewStatus(preview,true);
+            });
+        }
+    },
+
+    updatePreviewStatus: function (preview, set) {
+        AppDispatcher.dispatch({
+            actionType: Constants.UPDATE_PREVIEW_STATUS,
+            preview: preview,
+            set: set
+        });
+    },
+
+    updateSegment: function ( sid, data ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.UPDATE_SEGMENT,
+            sid: sid,
+            data: data
+        });
+    },
+
+    openSegment: function (sid) {
+        UI.showSegment();
     },
 
     openWindow: function () {
@@ -82,8 +129,47 @@ let PreviewActions = {
         AppDispatcher.dispatch({
             actionType: Constants.PREV_SEGMENT_PREVIEW
         });
-    }
+    },
+    openSliderPreviews: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.OPEN_SLIDER
+        });
+    },
+    addIssuesToSegment: function ( segmentId, versions ) {
+        let issues = _.reduce(versions, function ( result, value ) {
+            if (value.issues.length > 0) {
+                result = _.concat(result, value.issues);
+            }
+            return result;
+        }, []);
+        if (issues.length > 0) {
+            AppDispatcher.dispatch({
+                actionType: Constants.ADD_ISSUES,
+                sid: segmentId,
+                issues: issues
+            });
+        }
+    },
 
+    removeIssuesToSegment: function ( segmentId, issue_id ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.REMOVE_ISSUE,
+            sid: segmentId,
+            issue: issue_id
+        });
+    },
+
+    showSegmentContainer: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SHOW_SEGMENT_CONTAINER
+        });
+    },
+
+    closeSegmentContainer: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.CLOSE_SEGMENT_CONTAINER
+        });
+    },
 };
 
 module.exports = PreviewActions;
