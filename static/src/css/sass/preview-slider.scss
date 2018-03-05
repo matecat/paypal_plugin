@@ -1,9 +1,9 @@
 
 .preview-slider-container {
     position: relative;
-    z-index: 2;
+    z-index: 0;
     width: 100%;
-    background-color: grey;
+    background-color: #f2f4f7;
     height: 200px;
     margin: auto;
     display: inline-block;
@@ -22,6 +22,12 @@
                 max-height: 150px;
                 margin-left: auto;
                 margin-right: auto;
+                margin-top: 5px;
+                box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.24);
+                transition: 0.3s ease;
+                &:hover {
+                    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+                }
             }
             p {
                 color: #000;
@@ -29,6 +35,12 @@
 
 
             }
+        }
+
+        .slick-prev, .slick-next {
+            height: 30px;
+            width: 30px;
+            line-height: 40px;
         }
     }
     .preview-slider-item-bottom {
@@ -51,6 +63,15 @@
 
 
 }
+.slick-prev:before, .slick-next:before {
+    font-size: 20px;
+    color: #000 !important;
+}
 
+
+.slick-prev.slick-disabled:before, .slick-next.slick-disabled:before {
+    font-size: 20px;
+    color: #020202 !important;
+}
 
 
