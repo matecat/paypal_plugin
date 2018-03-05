@@ -10,6 +10,9 @@ let PreviewActions = {
             sid: sid,
             data: data
         });
+        if (Store.currentPreview) {
+            this.updatePreviewSegments(Store.currentPreview)
+        }
     },
 
     updatePreview: function (sid) {
