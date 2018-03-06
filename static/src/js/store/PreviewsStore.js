@@ -45,28 +45,32 @@ let Store = assign({}, EventEmitter.prototype, {
     },
 
     updateSegmentsPreview: function ( segments ) {
-        segments.forEach(function ( segment ) {
-            Store.segments = Store.segments.update(
-                Store.segments.findIndex(function(item) {
-                    return item.get('segment') === segment.id_segment;
-                }), function(item) {
-                    return item.merge(Immutable.fromJS(segment));
-                }
-            );
-        });
+        if (Store.segments.size ) {
+            segments.forEach(function ( segment ) {
+                Store.segments = Store.segments.update(
+                    Store.segments.findIndex(function(item) {
+                        return item.get('segment') === segment.id_segment;
+                    }), function(item) {
+                        return item.merge(Immutable.fromJS(segment));
+                    }
+                );
+            });
+        }
     },
 
     updateSegment: function ( sid, data ) {
-        Store.segments = Store.segments.update(
-            Store.segments.findIndex(function(item) {
-                return item.get('segment') === parseInt(sid);
-            }), function(item) {
-                item = item.set('translation', data.translation);
-                item = item.set('version_number', data.version_number);
-                item = item.set('status', data.status);
-                return item;
-            }
-        );
+        if (Store.segments.size ) {
+            Store.segments = Store.segments.update(
+                Store.segments.findIndex(function(item) {
+                    return item.get('segment') === parseInt(sid);
+                }), function(item) {
+                    item = item.set('translation', data.translation);
+                    item = item.set('version_number', data.version_number);
+                    item = item.set('status', data.status);
+                    return item;
+                }
+            );
+        }
     },
 
     addIssuesToSegment: function ( sid, issues ) {
@@ -83,18 +87,20 @@ let Store = assign({}, EventEmitter.prototype, {
     },
 
     removeIssuesSegment: function ( sid, issueId ) {
-        Store.segments = Store.segments.update(
-            Store.segments.findIndex(function(item) {
-                return item.get('segment') === parseInt(sid);
-            }), function(item) {
-                let issues = item.get('issues');
-                issues = issues.delete(issues.findIndex(function ( item ) {
-                    return item.id === parseInt(issueId);
-                }));
-                item = item.set('issues', Immutable.fromJS(issues));
-                return item;
-            }
-        );
+        if (Store.segments.size ) {
+            Store.segments = Store.segments.update(
+                Store.segments.findIndex(function(item) {
+                    return item.get('segment') === parseInt(sid);
+                }), function(item) {
+                    let issues = item.get('issues');
+                    issues = issues.delete(issues.findIndex(function ( item ) {
+                        return item.id === parseInt(issueId);
+                    }));
+                    item = item.set('issues', Immutable.fromJS(issues));
+                    return item;
+                }
+            );
+        }
     },
     /**
      *

@@ -279,6 +279,7 @@ let Utils = require('./paypalUtils');
                         h2],
                     direction: 'vertical'
                 } );
+                $('#plugin-mount-point').addClass('show-segment');
                 PreviewActions.showSegmentContainer();
             }
         },
@@ -292,6 +293,7 @@ let Utils = require('./paypalUtils');
             }
             $('#plugin-mount-point').css('height', '100%');
             $('#outer').css('height', '0');
+            $('#plugin-mount-point').removeClass('show-segment');
             PreviewActions.closeSegmentContainer();
         },
         /**
@@ -376,7 +378,7 @@ let Utils = require('./paypalUtils');
                 PreviewActions.selectSegment(sid,preview)
             }
             setTimeout(function () {
-                UI.scrollSegment(UI.currentSegment);
+                UI.scrollSegment(UI.currentSegment, sid);
             }, 100);
         },
         /**
