@@ -90,7 +90,8 @@ module.exports = function(grunt) {
                     }
                 },
                 src: [
-                    'static/src/js/cat_source/paypal-core.js'
+                    'static/src/js/cat_source/paypal-core.js',
+                    'static/src/js/cat_source/paypal-core.*.js'
                 ],
                 dest:  'static/build/paypal-core-build.js'
             },
