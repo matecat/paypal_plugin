@@ -252,11 +252,11 @@ class PreviewActions extends React.Component {
                         <i className="icon icon-chevron-right" />
                     </button>
 
+                    <div className="preview-index-label">
+                        Screenshot: {currentIndexPreview}/{this.props.previews.size}
+                    </div>
                 </div>
 
-                <div className="preview-index-label">
-                    Screenshot: {currentIndexPreview}/{this.props.previews.size}
-                </div>
                 <div className="preview-pp actions-segment">
                     { !this.props.isLqa && this.props.segmentPreviews.size > 1 ? (
                         <div>
