@@ -376,7 +376,7 @@ let Utils = require('./paypalUtils');
                 PreviewActions.selectSegment(sid,preview)
             }
             setTimeout(function () {
-                UI.scrollSegment(UI.currentSegment);
+                UI.scrollSegment(UI.currentSegment, sid);
             }, 100);
         },
         /**
