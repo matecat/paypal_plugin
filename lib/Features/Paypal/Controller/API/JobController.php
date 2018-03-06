@@ -57,21 +57,25 @@ class JobController extends KleinController {
         $this->response->json( array( 'data' => $rendered ) );
     }
 
-    public function approve() {
+    public function changeSegmentsStatus() {
 
         $segments_id = filter_var( $this->request->segments_id, FILTER_VALIDATE_INT, FILTER_FORCE_ARRAY );
-
-        $not_approvables = \Translations_SegmentTranslationDao::getNotApprovables( $segments_id );
-        if ( !empty( $not_approvables ) ) {
-            $this->response->code( 400 );
-            $this->response->json( [ 'error' => "There are some segments not approvables", 'segments' => $not_approvables ] );
-
-            return;
+        if ( $this->request->status == 1 ) {
+            $status = \Constants_TranslationStatus::STATUS_TRANSLATED;
+        }
+        if ( $this->request->status == 2 ) {
+            $status = \Constants_TranslationStatus::STATUS_APPROVED;
         }
 
-        \Translations_SegmentTranslationDao::setApprovedBySegmentsIds( $this->job, $segments_id );
+        $unchangeble_segments = \Translations_SegmentTranslationDao::getUnchangebleStatus( $segments_id, $status );
 
-        $this->response->json( [ 'data' => true ] );
+        $segments_id = array_diff( $segments_id, $unchangeble_segments );
+
+        if ( !empty( $segments_id ) ) {
+            \Translations_SegmentTranslationDao::changeStatusBySegmentsIds( $this->job, $segments_id, $status );
+        }
+
+        $this->response->json( [ 'data' => true, 'unchangeble_segments' => $unchangeble_segments ] );
     }
 
 }
