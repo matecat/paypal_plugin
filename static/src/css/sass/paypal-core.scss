@@ -98,9 +98,9 @@ body.cattool {
         position: relative;
         margin: 0 auto;
         width: 100%;
-        display: block;
         overflow-y: auto;
-        height: 100%;
+        height: 96%;
+        padding-bottom: 100px;
 
     }
     .preview-drag-area {
@@ -127,4 +127,3 @@ footer .wrapper {
         margin-left: 15px;
     }
 }
-
