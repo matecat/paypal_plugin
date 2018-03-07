@@ -7,5 +7,12 @@ body.lqa-page {
     }
     section.editor {
         display: block;
+        position: fixed;
+        height: 10%;
+        width: 87%;
     }
+}
+
+body.cattool .editor .text:hover {
+    background: white;
 }
