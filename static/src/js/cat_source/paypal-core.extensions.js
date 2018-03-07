@@ -12,13 +12,13 @@ let Store = require('../store/PreviewsStore');
     var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
-    var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
     var originalIsReadonlySegment = UI.isReadonlySegment;
     var original_messageForClickOnReadonly = UI.messageForClickOnReadonly ;
     var original_isUnlockedSegment = UI.isUnlockedSegment ;
     var original_setTranslation_success = UI.setTranslation_success;
     var original_addIssuesToSegment = UI.addIssuesToSegment;
     var original_deleteSegmentIssues = UI.deleteSegmentIssues;
+    var originalGotoNextSegment = UI.gotoNextSegment;
 
     $.extend(UI, {
 
@@ -245,33 +245,6 @@ let Store = require('../store/PreviewsStore');
             UI.custom.extended_tagmode = true;
         },
         /**
-         * Overwrite matecat function isMarkedAsCompleteClickable to know if si markable as complete
-         */
-        isMarkedAsCompleteClickable: function ( stats ) {
-            if (config.isReview) {
-                /**
-                 * Review step
-                 *
-                 * In this case the job is markable as complete when 'DRAFT' count is 0
-                 * and 'TRANSLATED' is < 0 and 'APPROVED' + 'REJECTED' > 0.
-                 */
-
-                return config.job_completion_current_phase == 'revise' &&
-                    stats.APPROVED > 0 ;
-            }
-            else {
-                /**
-                 * Translation step
-                 *
-                 * This condition covers the case in which the project is pretranslated.
-                 * When a project is pretranslated, the 'translated' count can be 0 or
-                 * less.
-                 */
-                return config.job_completion_current_phase == 'translate' &&
-                    stats.TRANSLATED > 0 ;
-            }
-        },
-        /**
          * Overwrite matecat function isReadonlySegment to know if segment is read only
          */
         isReadonlySegment: function( segment ) {
@@ -306,6 +279,14 @@ let Store = require('../store/PreviewsStore');
             } else {
                 original_isUnlockedSegment.apply(this, [segment]);
             }
+        },
+
+        gotoNextSegment: function ( sid ) {
+            this.setDisabledOfButtonApproved(sid, true);
+            if (!config.isLQA) {
+                originalGotoNextSegment.apply(this);
+            }
+            return false;
         }
 
     });
