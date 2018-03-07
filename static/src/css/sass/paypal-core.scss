@@ -83,14 +83,22 @@ body.cattool {
     }
 }
 
+.show-segment .preview-core-container {
+    z-index: 1;
+    position: relative;
+}
+
 .preview-core-container {
+    z-index: 2;
+    position: relative;
+    height: 100%;
     .preview-image-container {
         position: relative;
         margin: 0 auto;
         width: 100%;
         display: block;
         overflow-y: auto;
-        height: 95%;
+        height: 100%;
 
     }
     .preview-drag-area {

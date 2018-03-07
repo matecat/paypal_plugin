@@ -4,13 +4,14 @@
     z-index: 0;
     width: 100%;
     background-color: #f2f4f7;
-    height: 200px;
+    height: 211px;
     margin: auto;
     display: inline-block;
     .slick-slider {
         width: 90%;
         margin: 0 auto;
         margin-top: 15px;
+        margin-bottom: 15px;
         height: 180px;
         .slick-slide {
             cursor: pointer;
@@ -43,7 +44,8 @@
             line-height: 40px;
         }
         .slide-current img{
-          border: 1px solid yellow;
+            border: 1px solid #09beec;
+            box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
         }
     }
     .preview-slider-item-bottom {
@@ -53,12 +55,13 @@
             float: left;
         }
         i.icon.icon-checkmark4.preview-approved {
-            color: green;
+            color: #7cc576;
         }
         i.icon.icon-checkmark4 {
             float: left;
             margin-top: 6px;
             font-size: 20px;
+            color: #cccccc;
         }
     }
 
@@ -77,4 +80,7 @@
     color: #020202 !important;
 }
 
+.slick-dots {
+    display: none !important;
+}
 

@@ -1,20 +1,54 @@
+//Manage Page
 .project-type {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  top: -2px;
-  position: relative;
-  text-align: center;
-  line-height: 30px;
-  background: #fff;
-  font-weight: 700;
-  &.tr-type{
-    color: #09beec;
-  }
-  &.lr-type {
-    color: #14cc82;
-  }
-  &.lqa-type {
-    color: #8e09ec;
-  }
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    top: -2px;
+    position: relative;
+    text-align: center;
+    line-height: 30px;
+    background: #fff;
+    font-weight: 700;
+    &.tr-type{
+      color: #09beec;
+    }
+    &.lr-type {
+      color: #14cc82;
+    }
+    &.lqa-type {
+      color: #8e09ec;
+    }
+}
+
+.outsource-job {
+   .translated-outsourced {
+       float: right;
+       margin-right: 5px;
+       .job-to-translator {
+           a {
+               text-decoration: none !important;
+               &:hover {
+                   color: #4183C4;
+               }
+           }
+       }
+   }
+}
+
+
+//Outsource
+.outsource-container {
+    overflow: inherit !important;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.25) !important;
+    .outsource-header {
+        border-bottom: 1px solid #dedede !important;
+        box-shadow: none !important;
+    }
+    .assign-job-translator {
+        background-color: #f3f3f3 !important;
+    }
+}
+
+.open-job-box {
+    background-color: #f3f3f3 !important;
 }
