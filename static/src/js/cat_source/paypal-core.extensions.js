@@ -248,7 +248,7 @@ let Store = require('../store/PreviewsStore');
          * Overwrite matecat function isMarkedAsCompleteClickable to know if si markable as complete
          */
         isMarkedAsCompleteClickable: function ( stats ) {
-            if (config.isReview) {
+            if (config.isLQA) {
                 /**
                  * Review step
                  *
@@ -256,19 +256,11 @@ let Store = require('../store/PreviewsStore');
                  * and 'TRANSLATED' is < 0 and 'APPROVED' + 'REJECTED' > 0.
                  */
 
-                return config.job_completion_current_phase == 'revise' &&
+                return config.job_completion_current_phase == 'lqa' &&
                     stats.APPROVED > 0 ;
             }
             else {
-                /**
-                 * Translation step
-                 *
-                 * This condition covers the case in which the project is pretranslated.
-                 * When a project is pretranslated, the 'translated' count can be 0 or
-                 * less.
-                 */
-                return config.job_completion_current_phase == 'translate' &&
-                    stats.TRANSLATED > 0 ;
+                return originalisMarkedAsCompleteClickable.apply(this, [stats])
             }
         },
         /**
