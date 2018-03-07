@@ -83,13 +83,15 @@ body.cattool {
     }
 }
 
-.show-segment .preview-core-container {
-    z-index: 1;
-    position: relative;
+#outer.show-segment {
+    display: inline-table !important;
+    article {
+        margin-bottom: 50px !important;
+    }
 }
 
 .preview-core-container {
-    z-index: 2;
+    z-index: 1;
     position: relative;
     height: 100%;
     .preview-image-container {
