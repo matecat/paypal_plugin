@@ -19,6 +19,7 @@ let Store = require('../store/PreviewsStore');
     var original_setTranslation_success = UI.setTranslation_success;
     var original_addIssuesToSegment = UI.addIssuesToSegment;
     var original_deleteSegmentIssues = UI.deleteSegmentIssues;
+    var originalGotoNextSegment = UI.gotoNextSegment;
 
     $.extend(UI, {
 
