@@ -88,7 +88,7 @@ class LqaDecorator extends AbstractDecorator {
         $this->template->tagLockCustomizable    = ( INIT::$UNLOCKABLE_TAGS == true ) ? true : false;
         $this->template->basepath               = INIT::$BASEURL ;
         $this->template->build_number           = INIT::$BUILD_NUMBER;
-        $this->template->review_type            = "extended";
+        $this->template->review_type            = "extended-footer";
 
         $this->template->splitSegmentEnabled    = var_export(true, true);
         $this->template->chunk_completion_undoable = true ;
