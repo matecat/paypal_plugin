@@ -94,7 +94,7 @@ class Paypal extends BaseFeature {
     }
 
     public static function projectUrls( ProjectUrls $formatted ) {
-        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted );
+        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted->getData());
 
         return $projectUrlsDecorator;
     }
