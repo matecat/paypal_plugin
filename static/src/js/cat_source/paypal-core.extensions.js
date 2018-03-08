@@ -19,7 +19,7 @@ let Store = require('../store/PreviewsStore');
     var original_addIssuesToSegment = UI.addIssuesToSegment;
     var original_deleteSegmentIssues = UI.deleteSegmentIssues;
     var originalGotoNextSegment = UI.gotoNextSegment;
-
+    var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
     $.extend(UI, {
 
         scrollSelector: "#outer",
