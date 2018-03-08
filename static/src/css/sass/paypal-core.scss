@@ -83,14 +83,24 @@ body.cattool {
     }
 }
 
+#outer.show-segment {
+    display: inline-table !important;
+    article {
+        margin-bottom: 50px !important;
+    }
+}
+
 .preview-core-container {
+    z-index: 1;
+    position: relative;
+    height: 100%;
     .preview-image-container {
         position: relative;
         margin: 0 auto;
         width: 100%;
-        display: block;
         overflow-y: auto;
-        height: 95%;
+        height: 96%;
+        padding-bottom: 100px;
 
     }
     .preview-drag-area {
@@ -117,4 +127,3 @@ footer .wrapper {
         margin-left: 15px;
     }
 }
-

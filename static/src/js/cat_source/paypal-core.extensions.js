@@ -12,7 +12,6 @@ let Store = require('../store/PreviewsStore');
     var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
-    var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
     var originalIsReadonlySegment = UI.isReadonlySegment;
     var original_messageForClickOnReadonly = UI.messageForClickOnReadonly ;
     var original_isUnlockedSegment = UI.isUnlockedSegment ;
@@ -299,6 +298,14 @@ let Store = require('../store/PreviewsStore');
             } else {
                 original_isUnlockedSegment.apply(this, [segment]);
             }
+        },
+
+        gotoNextSegment: function ( sid ) {
+            this.setDisabledOfButtonApproved(sid, true);
+            if (!config.isLQA) {
+                originalGotoNextSegment.apply(this);
+            }
+            return false;
         }
 
     });

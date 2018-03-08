@@ -3,15 +3,15 @@
 (function() {
 
     function overrideJobMenu(JobMenu) {
-        // JobMenu.prototype.getMoreLinks = function() {
-        //     let projectType = this.props.project.get('project_type');
-        //     if ( (projectType && projectType === 'LQA') || _.isUndefined(projectType) || _.isEmpty(projectType)) {
-        //         let lqaUrl = "/plugins/paypal/lqa/" + this.props.jobId + "/" + this.props.review_password;
-        //         return <a className="item" target="_blank" href={lqaUrl}><i className="icon-edit icon"/> LQA</a>;
-        //     }
-        //     return "";
-        //
-        // };
+        JobMenu.prototype.getMoreLinks = function() {
+            let projectType = this.props.project.get('project_type');
+            if ( (projectType && projectType === 'LQA') || _.isUndefined(projectType) || _.isEmpty(projectType)) {
+                let lqaUrl = "/plugins/paypal/lqa/" + this.props.jobId + "/" + this.props.review_password;
+                return <a className="item" target="_blank" href={lqaUrl}><i className="icon-edit icon"/> LQA</a>;
+            }
+            return "";
+
+        };
         let orig_reviseMenuLink = JobMenu.prototype.getReviseMenuLink;
         JobMenu.prototype.getReviseMenuLink = function() {
             let projectType = this.props.project.get('project_type');

@@ -62,7 +62,7 @@ let Utils = require('./paypalUtils');
                         h2],
                     direction: 'vertical'
                 } );
-                $('#plugin-mount-point').addClass('show-segment');
+                $('#outer').addClass('show-segment');
                 PreviewActions.showSegmentContainer();
             }
         },
@@ -76,7 +76,7 @@ let Utils = require('./paypalUtils');
             }
             $('#plugin-mount-point').css('height', '100%');
             $('#outer').css('height', '0');
-            $('#plugin-mount-point').removeClass('show-segment');
+            $('#outer').removeClass('show-segment');
             PreviewActions.closeSegmentContainer();
         },
         /**

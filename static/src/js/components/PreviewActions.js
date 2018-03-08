@@ -282,13 +282,6 @@ class PreviewActions extends React.Component {
                 </div>
 
 
-                { this.props.isLqa && this.state.showSegment ? (
-                    <div style={{color: "black"}} onClick={this.closeSegmentContainerClick.bind(this)}>
-                        Close
-                    </div>
-                ): (null)}
-
-
                 <div className="preview-pp change-window">
                     {(!this.props.isLqa) ? (
                         this.props.showFullScreenButton ? (
@@ -307,6 +300,9 @@ class PreviewActions extends React.Component {
                     : (
                         <div>
                             <button className="ui button approve-all-segments"><i className="icon-checkmark5 icon" />APPROVE ALL</button>
+                            {(this.state.showSegment) ? (
+                                <button onClick={this.closeSegmentContainerClick.bind(this)} className="show-hide-segment-lqa" ><i className="icon icon-chevron-right"/></button>
+                            ): (null)}
                         </div>
                         )}
 
