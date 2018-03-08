@@ -173,6 +173,15 @@ class PreviewActions extends React.Component {
             showSegment: false
         });
     }
+    approvePreviewSegments() {
+        Actions.approvePreviewSegments(this.props.currentPreview)
+    }
+    isPreviewApprovable() {
+        let filteredTranslated = this.props.segmentsInfo.filter(function ( item ) {
+            return (!_.isUndefined(item.get('status')) && item.get('status').toLowerCase() === "translated")
+        });
+        return filteredTranslated.size > 0;
+    }
     componentDidMount() {
         Store.addListener(Constants.NEXT_PREVIEW, this.nextImage);
         Store.addListener(Constants.PREV_PREVIEW, this.previousImage);
@@ -204,6 +213,7 @@ class PreviewActions extends React.Component {
     render() {
         let keyShortcuts = (this.props.isMac) ? "mac" : "standard";
         if (this.props.currentPreview) {
+            let approveAllClass = (this.props.isLqa && this.isPreviewApprovable()) ? "" : "disabled";
             let currentIndexPreview = (this.props.previews.keySeq().findIndex(k => k === this.props.currentPreview)) +1;
             return <div className="preview-actions-container">
 
@@ -299,7 +309,7 @@ class PreviewActions extends React.Component {
                             )
                     : (
                         <div>
-                            <button className="ui button approve-all-segments"><i className="icon-checkmark5 icon" />APPROVE ALL</button>
+                            <button className={"ui button approve-all-segments " +  approveAllClass} onClick={this.approvePreviewSegments.bind(this)}><i className="icon-checkmark5 icon" />APPROVE ALL</button>
                             {(this.state.showSegment) ? (
                                 <button onClick={this.closeSegmentContainerClick.bind(this)} className="show-hide-segment-lqa" ><i className="icon icon-chevron-right"/></button>
                             ): (null)}

@@ -56,6 +56,33 @@ let PreviewActions = {
         }
     },
 
+    approvePreviewSegments: function ( preview ) {
+        let self = this;
+        let segments = Store.getPreviewsSegments( preview);
+        let segmentsArray = segments.reduce(function ( newList, item ) {
+            newList.push(item.get('segment'));
+            return newList;
+        }, []);
+        // if the preview is not in the cache or is not approved
+        if(!Store.previewsStatus.get(preview) || !Store.previewsStatus.get(preview).get('approved')){
+            Utils.approveSegments(segmentsArray).done(function ( response ) {
+                if (response.data && response.unchangeble_segments.length === 0) {
+                    AppDispatcher.dispatch({
+                        actionType: Constants.APPROVE_SEGMENTS,
+                        segments: segmentsArray
+                    });
+                    self.updatePreviewStatus(preview,true);
+                    segmentsArray.forEach(function ( item ) {
+                        let fileId = UI.getSegmentFileId(UI.getSegmentById(item));
+                        SegmentActions.setStatus(item, fileId, "APPROVED");
+                    })
+                } else {
+                    //Todo
+                }
+            });
+        }
+    },
+
     updatePreviewStatus: function (preview, set) {
         AppDispatcher.dispatch({
             actionType: Constants.UPDATE_PREVIEW_STATUS,

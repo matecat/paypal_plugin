@@ -73,6 +73,20 @@ let Store = assign({}, EventEmitter.prototype, {
         }
     },
 
+    approveSegments: function ( segments ) {
+        if (Store.segments.size ) {
+            segments.forEach(function ( segment ) {
+                Store.segments = Store.segments.update(
+                    Store.segments.findIndex(function(item) {
+                        return item.get('segment') === segment;
+                    }), function(item) {
+                        return item.set('status', 'APPROVED');
+                    }
+                );
+            });
+        }
+    },
+
     addIssuesToSegment: function ( sid, issues ) {
         if (Store.segments.size) {
             Store.segments = Store.segments.update(
@@ -189,6 +203,10 @@ AppDispatcher.register(function(action) {
             break;
         case Constants.REMOVE_ISSUE:
             Store.removeIssuesSegment(action.sid, action.issue);
+            Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview),Store.previewsStatus);
+            break;
+        case Constants.APPROVE_SEGMENTS:
+            Store.approveSegments(action.segments);
             Store.emitChange(Constants.UPDATE_SEGMENTS_INFO, Store.currentPreview, Store.getPreviewsSegments( Store.currentPreview),Store.previewsStatus);
             break;
         default:
