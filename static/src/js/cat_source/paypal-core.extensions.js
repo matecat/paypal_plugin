@@ -245,6 +245,25 @@ let Store = require('../store/PreviewsStore');
             UI.custom.extended_tagmode = true;
         },
         /**
+         * Overwrite matecat function isMarkedAsCompleteClickable to know if si markable as complete
+         */
+        isMarkedAsCompleteClickable: function ( stats ) {
+            if (config.isLQA) {
+                /**
+                 * Review step
+                 *
+                 * In this case the job is markable as complete when 'DRAFT' count is 0
+                 * and 'TRANSLATED' is < 0 and 'APPROVED' + 'REJECTED' > 0.
+                 */
+
+                return config.job_completion_current_phase == 'lqa' &&
+                    stats.APPROVED > 0 ;
+            }
+            else {
+                return originalisMarkedAsCompleteClickable.apply(this, [stats])
+            }
+        },
+        /**
          * Overwrite matecat function isReadonlySegment to know if segment is read only
          */
         isReadonlySegment: function( segment ) {
