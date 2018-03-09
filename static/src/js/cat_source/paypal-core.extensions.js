@@ -296,7 +296,7 @@ let Store = require('../store/PreviewsStore');
             if (config.isReview) {
                 return true;
             } else {
-                original_isUnlockedSegment.apply(this, [segment]);
+                return original_isUnlockedSegment.apply(this, [segment]);
             }
         },
 

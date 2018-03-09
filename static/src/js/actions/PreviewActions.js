@@ -76,8 +76,17 @@ let PreviewActions = {
                         let fileId = UI.getSegmentFileId(UI.getSegmentById(item));
                         SegmentActions.setStatus(item, fileId, "APPROVED");
                     })
-                } else {
-                    //Todo
+                } else if (response.unchangeble_segments.length > 0) {
+                    let array = _.difference(segmentsArray, response.unchangeble_segments);
+                    AppDispatcher.dispatch({
+                        actionType: Constants.APPROVE_SEGMENTS,
+                        segments: array
+                    });
+                    array.forEach(function ( item ) {
+                        let fileId = UI.getSegmentFileId(UI.getSegmentById(item));
+                        SegmentActions.setStatus(item, fileId, "APPROVED");
+                    })
+                    UI.showApproveAllModalWarnirng();
                 }
             });
         }
