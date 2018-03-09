@@ -301,9 +301,6 @@ let Store = require('../store/PreviewsStore');
         },
 
         gotoNextSegment: function ( sid ) {
-            if (config.isReview && sid) {
-                this.setDisabledOfButtonApproved(sid, true);
-            }
             if (!config.isLQA) {
                 originalGotoNextSegment.apply(this);
             }
