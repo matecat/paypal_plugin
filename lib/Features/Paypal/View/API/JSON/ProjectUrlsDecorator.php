@@ -9,41 +9,23 @@
 namespace Features\Paypal\View\API\JSON;
 
 
-use API\V2\Json\ProjectUrls;
+use \Features\ReviewExtended\View\API\JSON\ProjectUrlsDecorator as UrlDecorator;
 use Features\Paypal\Utils\Routes;
 
 
-class ProjectUrlsDecorator {
+class ProjectUrlsDecorator extends UrlDecorator {
 
-    public function __construct( ProjectUrls $projectUrls ) {
-        $this->projectUrls = $projectUrls;
-    }
+    protected function generateChunkUrls( $record){
 
-    public function render() {
-
-        $jobs_lqa_urls  = [];
-        $jobs_passwords = [];
-
-        $render = $this->projectUrls->render();
-        $data   = $this->projectUrls->getData();
-
-        foreach ( $data as $key => $record ) {
-            $jobs_lqa_urls[ $record[ 'jid' ] ]  = $this->lqaUrl( $record );
-            $jobs_passwords[ $record[ 'jid' ] ] = $record[ 'jpassword' ];
-
+        if ( !array_key_exists( $record['jpassword'], $this->chunks ) ) {
+            $this->chunks[ $record['jpassword'] ] = 1 ;
+            $this->jobs[ $record['jid'] ][ 'chunks' ][] = array(
+                    'password'      => $record['jpassword'],
+                    'translate_url' => $this->translateUrl( $record ),
+                    'revise_url'    => $this->reviseUrl( $record ),
+                    'lqa_url'       => $this->lqaUrl( $record )
+            );
         }
-
-        foreach ( $render[ 'urls' ][ 'jobs' ] as &$job ) {
-            if ( in_array( $job[ 'id' ], array_keys( $jobs_lqa_urls ) ) ) {
-                foreach ( $job[ 'chunks' ] as &$chunk ) {
-                    if ( $chunk[ 'password' ] == $jobs_passwords[ $job[ 'id' ] ] ) {
-                        $chunk[ 'lqa_url' ] = $jobs_lqa_urls[ $job[ 'id' ] ];
-                    }
-                }
-            }
-        }
-
-        return $render;
 
     }
 

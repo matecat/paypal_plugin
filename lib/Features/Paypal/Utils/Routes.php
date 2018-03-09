@@ -30,7 +30,7 @@ class Routes {
         return [ 'path' => $host . "/paypal/preview/{$projectStructure[ 'id_project' ]}/{$projectStructure[ 'ppassword' ]}/", 'file_index' => $fileName ];
     }
 
-    public function lqa( $project_name, $id_job, $password, $source, $target, $options = [] ) {
+    public static function lqa( $project_name, $id_job, $password, $source, $target, $options = [] ) {
         $host = \Routes::httpHost( $options );
 
         return "$host/lqa/$project_name/$source-$target/$id_job-$password";

@@ -15,7 +15,9 @@ use API\V2\Json\SegmentTranslationIssue;
 use BasicFeatureStruct;
 use CatUtils;
 use Constants_TranslationStatus;
+use Contribution\ContributionStruct;
 use CustomPage;
+use Exception;
 use Features;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
@@ -24,6 +26,7 @@ use Features\Paypal\Utils\Routes;
 use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use Klein\Klein;
 use Projects_MetadataDao;
+use Projects_ProjectStruct;
 use viewController;
 
 class Paypal extends BaseFeature {
@@ -94,7 +97,7 @@ class Paypal extends BaseFeature {
     }
 
     public static function projectUrls( ProjectUrls $formatted ) {
-        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted );
+        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted->getData());
 
         return $projectUrlsDecorator;
     }
@@ -107,6 +110,22 @@ class Paypal extends BaseFeature {
 //        $controller->performValidations();
 //        $controller->respond();
 //    }
+
+
+    public function filterContributionStructOnSetTranslation( ContributionStruct $contributionStruct, Projects_ProjectStruct $project ) {
+
+        try {
+            $userInfoList = $contributionStruct->getUserInfo();
+            $userInfo = array_pop( $userInfoList );
+            $contributionStruct->props[ 'user' ] = $userInfo->email;
+//            $contributionStruct->props[ 'SID' ]  = 'SID';
+        } catch ( Exception $e ){
+
+        }
+
+        return $contributionStruct ;
+    }
+
     /**
      * Ignore all glossaries. Temporary hack to avoid something unknown on MyMemory side.
      * We simply change the array_files key to avoid any glossary to be sent to MyMemory.
