@@ -176,15 +176,14 @@
         <script src="${lexiqaServer | null}/js/lxqlicense.js"></script>
     </tal:block>
 
-    <tal:block tal:condition="true:use_compiled_assets" >
-        <script src="${basepath}public/js/build/app.min.js?build=${build_number}"></script>
-    </tal:block>
-
     <tal:block tal:condition="not:use_compiled_assets" >
         <script src="${basepath}public/js/build/react.js?build=${build_number}"></script>
         <script src="${basepath}public/js/build/cat-react.js?build=${build_number}"></script>
         <script src="${basepath}public/js/build/common.js?build=${build_number}"></script>
         <script src="${basepath}public/js/build/app.js?build=${build_number}"></script>
+
+
+        <script type="text/javascript" src="${basepath}plugins/paypal/static/build/paypal-lqa-build.js?build=${build_number}"></script>
     </tal:block>
 
 </head>

@@ -178,9 +178,18 @@ class PreviewActions extends React.Component {
     }
     isPreviewApprovable() {
         let filteredTranslated = this.props.segmentsInfo.filter(function ( item ) {
-            return (!_.isUndefined(item.get('status')) && item.get('status').toLowerCase() === "translated")
+            return (!_.isUndefined(item.get('status')) && item.get('status').toLowerCase() !== "approved")
         });
         return filteredTranslated.size > 0;
+    }
+    isPreviewApproved() {
+        let filteredTranslated = this.props.segmentsInfo.filter(function ( item ) {
+            return (!_.isUndefined(item.get('status')) && item.get('status').toLowerCase() === "approved")
+        });
+        return filteredTranslated.size === this.props.segmentsInfo.size;
+    }
+    goToNextNotApproved() {
+        UI.openNextTranslated(this.props.currentSid);
     }
     componentDidMount() {
         Store.addListener(Constants.NEXT_PREVIEW, this.nextImage);
@@ -263,10 +272,14 @@ class PreviewActions extends React.Component {
                         <i className="icon icon-chevron-right" />
                         <i className="icon icon-chevron-right" />
                     </button>
-
+                    {(this.props.isLqa) ? (
                     <div className="preview-index-label">
                         Screenshot: {currentIndexPreview}/{this.props.previews.size}
                     </div>
+                    ) : (null)}
+                    {(this.props.isLqa && this.isPreviewApproved()) ? (
+                        <div className="preview-go-next-unapproved" onClick={this.goToNextNotApproved.bind(this)}>Go to next segment to be approved</div>
+                    ) : (null)}
                 </div>
 
                 <div className="preview-pp actions-segment">

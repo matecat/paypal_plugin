@@ -305,3 +305,17 @@ body.review-side-panel-opened {
         }
     }
 }
+
+.lqa-page {
+    .preview-container, .preview-core-container {
+        .preview-actions-container .preview-pp.actions-image {
+            min-width: 460px;
+        }
+        .preview-go-next-unapproved {
+            color: #000;
+            display: inline-block;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+    }
+}
