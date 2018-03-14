@@ -196,12 +196,9 @@ let Store = require('../store/PreviewsStore');
             var segmentOpen = $('section.editor');
 
             if (!config.isLQA) {
-                // XXX: this condition is necessary **only** because in case of first segment of a file,
-                // the previous element (<ul>) has display:none style. Such elements are ignored by the
-                // the .offset() function.
                 var searchH = ($('.searchbox:visible').length) ? $('.searchbox:visible').height() : 0;
-                var commonOffset = $('.header-menu').height() + searchH - 20 ;
-                pos = segment.offset().top  - segment.offsetParent('#outer').offset().top + commonOffset;
+                var commonOffset =  searchH ;
+                pos = segment.offset().top  - segment.offsetParent('#outer').offset().top - commonOffset;
 
                 if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
                     pos = pos - segmentOpen.find('.footer').height();
