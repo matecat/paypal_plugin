@@ -196,9 +196,7 @@ let Store = require('../store/PreviewsStore');
             var segmentOpen = $('section.editor');
 
             if (!config.isLQA) {
-                var searchH = ($('.searchbox:visible').length) ? $('.searchbox:visible').height() : 0;
-                var commonOffset =  searchH ;
-                pos = segment.offset().top  - segment.offsetParent('#outer').offset().top - commonOffset;
+                pos = segment.offset().top  - segment.offsetParent('#outer').offset().top;
 
                 if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
                     pos = pos - segmentOpen.find('.footer').height();
