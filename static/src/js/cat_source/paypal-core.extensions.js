@@ -3,7 +3,7 @@ let Constants = require('../costansts');
 let Store = require('../store/PreviewsStore');
 
 
-(function() {
+(function(SF) {
 
     var originalStart = UI.start;
     var originalSetEvents = UI.setEvents;
@@ -296,7 +296,7 @@ let Store = require('../store/PreviewsStore');
         },
 
         gotoNextSegment: function ( sid ) {
-            if (!config.isLQA) {
+            if (!config.isLQA || ( typeof SF !== "undefined" && SF.filtering()) ) {
                 originalGotoNextSegment.apply(this);
             }
             return false;
@@ -304,4 +304,4 @@ let Store = require('../store/PreviewsStore');
 
     });
 
-})() ;
+})(SegmentFilter) ;

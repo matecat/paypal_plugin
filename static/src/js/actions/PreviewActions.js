@@ -65,28 +65,22 @@ let PreviewActions = {
         }, []);
         // if the preview is not in the cache or is not approved
         if(!Store.previewsStatus.get(preview) || !Store.previewsStatus.get(preview).get('approved')){
-            Utils.approveSegments(segmentsArray).done(function ( response ) {
+            UI.approveFilteredSegments(segmentsArray).done(function ( response ) {
                 if (response.data && response.unchangeble_segments.length === 0) {
                     AppDispatcher.dispatch({
                         actionType: Constants.APPROVE_SEGMENTS,
                         segments: segmentsArray
                     });
                     self.updatePreviewStatus(preview,true);
-                    segmentsArray.forEach(function ( item ) {
-                        let fileId = UI.getSegmentFileId(UI.getSegmentById(item));
-                        SegmentActions.setStatus(item, fileId, "APPROVED");
-                    })
                 } else if (response.unchangeble_segments.length > 0) {
-                    let array = _.difference(segmentsArray, response.unchangeble_segments);
+                    let arrayMapped = _.map(segmentsArray, function ( item ) {
+                        return parseInt(item);
+                    });
+                    let array = _.difference(arrayMapped, response.unchangeble_segments);
                     AppDispatcher.dispatch({
                         actionType: Constants.APPROVE_SEGMENTS,
                         segments: array
                     });
-                    array.forEach(function ( item ) {
-                        let fileId = UI.getSegmentFileId(UI.getSegmentById(item));
-                        SegmentActions.setStatus(item, fileId, "APPROVED");
-                    })
-                    UI.showApproveAllModalWarnirng();
                 }
             });
         }

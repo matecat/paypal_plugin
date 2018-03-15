@@ -202,16 +202,6 @@ let Utils = require('./paypalUtils');
                 }
             };
             APP.ModalWindow.showModalComponent(ConfirmMessageModal, props, "Job Instructions");
-        },
-        showApproveAllModalWarnirng: function (  ) {
-            var props = {
-                text: "It was not possible to approve all segments. There are some segments that have not been translated.",
-                successText: "Ok",
-                successCallback: function() {
-                    APP.ModalWindow.onCloseModal();
-                }
-            };
-            APP.ModalWindow.showModalComponent(ConfirmMessageModal, props, "Warning");
         }
     });
 
