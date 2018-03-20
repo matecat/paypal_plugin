@@ -283,6 +283,16 @@ let Store = require('../store/PreviewsStore');
             }
         },
         /**
+         * Overwrite matecat function translateAndReadonly to know if a job is in ReadOnly mode
+         * @param section
+         * @returns {*}
+         */
+        translateAndReadonly: function (  ) {
+            return !config.isReview && ( config.job_completion_current_phase === 'revise' ||
+                    (config.job_completion_current_phase === 'translate' && config.job_marked_complete)
+                );
+        },
+        /**
          * To check if a segment is locked
          * @param segment
          * @returns {boolean}
