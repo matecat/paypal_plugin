@@ -284,13 +284,36 @@ let Store = require('../store/PreviewsStore');
         },
         /**
          * Overwrite matecat function translateAndReadonly to know if a job is in ReadOnly mode
-         * @param section
          * @returns {*}
          */
         translateAndReadonly: function (  ) {
             return !config.isReview && ( config.job_completion_current_phase === 'revise' ||
                     (config.job_completion_current_phase === 'translate' && config.job_marked_complete)
                 );
+        },
+        /**
+         * Overwrite matecat function clickMarkAsCompleteForTranslate to kshow message after 'mark as complete' clicked in TR
+         * @returns {*}
+         */
+        clickMarkAsCompleteForTranslate: function (  ) {
+            APP.confirm({
+                callback: 'markAsCompleteSubmit',
+                msg: 'By marking the job as complete, ' +
+                'this page will be made available in read-only mode. ' +
+                'Are you sure you want to mark this job as complete? '
+            });
+        },
+        /**
+         * Overwrite matecat function clickMarkAsCompleteForTranslate to kshow message after 'mark as complete' clicked in LR
+         * @returns {*}
+         */
+        clickMarkAsCompleteForReview: function (  ) {
+            APP.confirm({
+                callback: 'markAsCompleteSubmit',
+                msg: 'By marking the job as complete, ' +
+                'this page will be made available in read-only mode. ' +
+                'Are you sure you want to mark this job as complete? '
+            });
         },
         /**
          * To check if a segment is locked
