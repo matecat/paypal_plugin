@@ -30,7 +30,7 @@ let Store = require('../store/PreviewsStore');
         start: function () {
             originalStart.apply(this);
             this.checkReferenceFiles();
-            this.checkIstructions();
+            this.checkInstructions();
         },
         /**
          * Overwrite the matecat fn to add events and listeners
