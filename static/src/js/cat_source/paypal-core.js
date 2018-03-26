@@ -53,7 +53,7 @@ let Utils = require('./paypalUtils');
                     this.spliInstance.destroy();
                     delete(this.spliInstance);
                 }
-                var outerHeight = $( 'section.opened' ).outerHeight() + 200;
+                var outerHeight = $( 'section.opened' ).outerHeight() + 100;
                 var h = Math.floor( (outerHeight / $( '.main-container' ).height()) * 100 );
                 var h2 = 100 - h;
                 this.spliInstance = Split( ['#outer',
