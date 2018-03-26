@@ -20,6 +20,7 @@ class PreviewActions extends React.Component {
         this.goToPreviousSegmentImage = this.goToPreviousSegmentImage.bind(this);
         this.showSegmentContainer = this.showSegmentContainer.bind(this);
         this.closeSegmentContainer = this.closeSegmentContainer.bind(this);
+        this.getCurrentFlowIndex = this.getCurrentFlowIndex.bind(this);
     }
 
 
@@ -191,6 +192,16 @@ class PreviewActions extends React.Component {
     goToNextNotApproved() {
         UI.openNextTranslated(this.props.currentSid);
     }
+
+    getCurrentFlowIndex(){
+
+        const self = this;
+        if(this.props.segmentPreviews){
+            return this.props.segmentPreviews.findIndex(function (item) {
+                return item.get('file_index') === self.props.currentPreview;
+            }) + 1;
+        }
+    }
     componentDidMount() {
         Store.addListener(Constants.NEXT_PREVIEW, this.nextImage);
         Store.addListener(Constants.PREV_PREVIEW, this.previousImage);
@@ -290,7 +301,7 @@ class PreviewActions extends React.Component {
                                     title={this.props.shortcuts.previousSegmentPreview.label + " (" + this.props.shortcuts.previousSegmentPreview.keystrokes[keyShortcuts] + ")"}
                                 >
                                 <i className="icon icon-chevron-left" /> </button>
-                            <div className="n-segments-available">{this.state.index}/{this.props.segmentPreviews.size}</div>
+                            <div className="n-segments-available">{this.getCurrentFlowIndex()}/{this.props.segmentPreviews.size}</div>
                             <button className="preview-button next"
                                     onClick={this.goToNextSegmentImage.bind(this)}
                                     title={this.props.shortcuts.nextSegmentPreview.label + " (" + this.props.shortcuts.nextSegmentPreview.keystrokes[keyShortcuts] + ")"}
