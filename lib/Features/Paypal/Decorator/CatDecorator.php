@@ -4,6 +4,8 @@ namespace Features\Paypal\Decorator;
 
 
 use AbstractDecorator;
+use catController;
+use Chunks_ChunkCompletionEventDao;
 use Features\Paypal\Utils\Routes;
 
 class CatDecorator extends AbstractDecorator {
@@ -68,14 +70,21 @@ class CatDecorator extends AbstractDecorator {
 
     private function completable() {
 
-        if ( $this->controller->isRevision() ) {
-            $completable = $this->current_phase == \Chunks_ChunkCompletionEventDao::REVISE &&
-                    $this->stats[ 'APPROVED' ] > 0;
-        } else {
-            $completable = $this->current_phase == \Chunks_ChunkCompletionEventDao::TRANSLATE &&
-                    $this->stats[ 'TRANSLATED' ] > 0;
+        if ($this->controller->isRevision()) {
+            $completable = $this->current_phase == Chunks_ChunkCompletionEventDao::REVISE &&
+                    $this->stats['DRAFT'] == 0 &&  $this->stats['TRANSLATED'] == 0 ;
+        }
+        else {
+            $completable = $this->current_phase == Chunks_ChunkCompletionEventDao::TRANSLATE &&
+                    $this->stats['DRAFT'] == 0 ;
         }
 
-        return $completable;
+        $completable = $this->controller->getChunk()->getProject()->getFeatures()->filter('filterJobCompletable', $completable,
+                $this->controller->getChunk(),
+                $this->controller->getUser(),
+                catController::isRevision()
+        );
+
+        return $completable ;
     }
 }

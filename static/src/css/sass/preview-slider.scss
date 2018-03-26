@@ -1,0 +1,89 @@
+
+.preview-slider-container {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    background-color: #f2f4f7;
+    height: 211px;
+    margin: auto;
+    display: inline-block;
+    .slick-slider {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        height: 180px;
+        .slick-slide {
+            cursor: pointer;
+            background-image: url(../img/loading.gif);
+            background-size: 30px 30px;
+            background-repeat: no-repeat;
+            background-position: 50% 40%;
+            img {
+                max-width: 100%;
+                min-width: 100px;
+                vertical-align: middle;
+                height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 5px;
+                box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.24);
+                transition: 0.3s ease;
+                &:hover {
+                    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+                }
+            }
+            p {
+                color: #000;
+                line-height: 31px;
+
+
+            }
+        }
+
+        .slick-prev, .slick-next {
+            height: 30px;
+            width: 30px;
+            line-height: 40px;
+        }
+        .slide-current img{
+            border: 1px solid #09beec;
+            box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+        }
+    }
+    .preview-slider-item-bottom {
+        display: inline-block;
+        position: relative;
+        p {
+            float: left;
+        }
+        i.icon.icon-checkmark4.preview-approved {
+            color: #7cc576;
+        }
+        i.icon.icon-checkmark4 {
+            float: left;
+            margin-top: 6px;
+            font-size: 20px;
+            color: #cccccc;
+        }
+    }
+
+
+
+
+}
+.slick-prev:before, .slick-next:before {
+    font-size: 20px;
+    color: #000 !important;
+}
+
+
+.slick-prev.slick-disabled:before, .slick-next.slick-disabled:before {
+    font-size: 20px;
+    color: #020202 !important;
+}
+
+.slick-dots {
+    display: none !important;
+}
+
