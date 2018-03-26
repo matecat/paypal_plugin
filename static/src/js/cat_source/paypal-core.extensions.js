@@ -22,8 +22,6 @@ let Store = require('../store/PreviewsStore');
     var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
     $.extend(UI, {
 
-        scrollSelector: "#outer",
-
         /**
          * Overwrite the start of matecat to che reference files
          */
