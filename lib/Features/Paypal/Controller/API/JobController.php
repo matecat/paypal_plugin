@@ -14,7 +14,6 @@ use API\V2\Exceptions\NotFoundException;
 use Features\Paypal\View\API\JSON\SegmentTranslationIssue;
 use API\V2\Exceptions\ValidationError;
 
-
 class JobController extends KleinController {
 
     /**
@@ -55,27 +54,6 @@ class JobController extends KleinController {
         $rendered = $json->render( $segments );
 
         $this->response->json( array( 'data' => $rendered ) );
-    }
-
-    public function changeSegmentsStatus() {
-
-        $segments_id = filter_var( $this->request->segments_id, FILTER_VALIDATE_INT, FILTER_FORCE_ARRAY );
-        if ( $this->request->status == 1 ) {
-            $status = \Constants_TranslationStatus::STATUS_TRANSLATED;
-        }
-        if ( $this->request->status == 2 ) {
-            $status = \Constants_TranslationStatus::STATUS_APPROVED;
-        }
-
-        $unchangeble_segments = \Translations_SegmentTranslationDao::getUnchangebleStatus( $segments_id, $status );
-
-        $segments_id = array_diff( $segments_id, $unchangeble_segments );
-
-        if ( !empty( $segments_id ) ) {
-            \Translations_SegmentTranslationDao::changeStatusBySegmentsIds( $this->job, $segments_id, $status );
-        }
-
-        $this->response->json( [ 'data' => true, 'unchangeble_segments' => $unchangeble_segments ] );
     }
 
 }
