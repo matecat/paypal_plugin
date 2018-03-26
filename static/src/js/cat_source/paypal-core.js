@@ -180,7 +180,7 @@ let Utils = require('./paypalUtils');
                 }
             });
         },
-        checkIstructions: function ( ) {
+        checkInstructions: function ( ) {
             let self = this;
             Utils.getJobInstructions().done(function (response) {
                 if (response.data && !response.errors ) {

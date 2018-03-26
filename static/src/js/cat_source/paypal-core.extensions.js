@@ -30,7 +30,7 @@ let Store = require('../store/PreviewsStore');
         start: function () {
             originalStart.apply(this);
             this.checkReferenceFiles();
-            this.checkIstructions();
+            this.checkInstructions();
         },
         /**
          * Overwrite the matecat fn to add events and listeners
@@ -194,10 +194,16 @@ let Store = require('../store/PreviewsStore');
             var pos = 0;
             var prev = segment.prev('section') ;
             var segmentOpen = $('section.editor');
+            var article = segment.closest('article');
 
             if (!config.isLQA) {
-                pos = segment.offset().top  - segment.offsetParent('#outer').offset().top;
+                pos = segment.offset().top - segment.offsetParent('#outer').offset().top;
 
+                if (article.prevAll('article').length > 0) {
+                    _.forEach(article.prevAll('article'), function ( item ) {
+                        pos = pos + $(item).outerHeight() + 140;
+                    });
+                }
                 if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
                     pos = pos - segmentOpen.find('.footer').height();
                 }
