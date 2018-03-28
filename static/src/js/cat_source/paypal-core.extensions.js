@@ -41,7 +41,11 @@ let Store = require('../store/PreviewsStore');
             originalSetEvents.apply(this);
 
             // To make tab Footer messages opened by default
-            SegmentActions.registerTab('messages', true, true);
+            if (config.isReview) {
+                SegmentActions.registerTab('messages', true, true);
+            } else {
+                SegmentActions.registerTab('messages', true, false);
+            }
 
 
 
