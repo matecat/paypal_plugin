@@ -29,6 +29,8 @@ let Store = require('../store/PreviewsStore');
             originalStart.apply(this);
             this.checkReferenceFiles();
             this.checkInstructions();
+            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
+            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
         },
         /**
          * Overwrite the matecat fn to add events and listeners

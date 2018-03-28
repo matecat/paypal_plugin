@@ -21,19 +21,7 @@ let Utils = require('./paypalUtils');
                 this.windowPreview = window.open(url, "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=500,left=500,width=1024,height=600");
             }
             this.closePreview();
-        },
-        /**
-         *
-         */
-        setHideMatches: function () {
-            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
-            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
-            UI.body.removeClass('hideMatches');
-            if(UI.currentSegment){
-                UI.currentSegment.find('.footer').removeClass('showMatches');
-            }
-
-        },
+        },q
         /**
          * Function called after the click on a segment in the preview panel
          * @param sid
