@@ -346,5 +346,41 @@ let Store = require('../store/PreviewsStore');
         }
 
     });
+    function overrideMatchesSource( SegmentTabMatches ) {
+        let original_getMatchInfo = SegmentTabMatches.prototype.getMatchInfo;
+        SegmentTabMatches.prototype.getMatchInfo = function ( match ) {
+            let tmProperties = match.tm_properties;
+            if (tmProperties && !_.isUndefined(tmProperties) ) {
+                let userEmail = tmProperties.find(function ( item ) {
+                    return item.type === "x-user";
+                })
+                if (!_.isUndefined(userEmail)) {
+                    return <ul className="graysmall-details">
+                            <li className={'percent ' + match.percentClass}>
+                                {match.percentText}
+                            </li>
+                            <li>
+                                {match.suggestion_info}
+                            </li>
+                            <li className="graydesc">
+                                Source:
+                                <span className="bold">
+                                    {userEmail.value}
+                                </span>
+                            </li>
+                            {/*<li className="graydesc">*/}
+                                {/*Project Type:*/}
+                                {/*<span className="bold">*/}
+                                    {/*LR*/}
+                                {/*</span>*/}
+                            {/*</li>*/}
+                        </ul>;
+                }
+            }
+            return original_getMatchInfo.apply(this, [match]);
+
+        }
+    }
+    overrideMatchesSource(SegmentTabMatches);
 
 })(SegmentFilter) ;
