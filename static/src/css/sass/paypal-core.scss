@@ -30,11 +30,6 @@ body.cattool {
 #plugin-mount-point {
     height: 0;
 }
-//#review-side-panel {
-//    height: 46px;
-//    overflow-y: scroll;
-//}
-
 
 #outer {
     overflow-y: scroll;
@@ -114,4 +109,17 @@ footer .wrapper {
     .project-instructions a {
         margin-left: 15px;
     }
+}
+
+section .footer {
+    .note-tm-match {
+        cursor: pointer;
+        .icon-info {
+            font-size: 18px;
+        }
+    }
+}
+
+.tm-match-note-tooltip-content p{
+    font-size: 15px !important;
 }

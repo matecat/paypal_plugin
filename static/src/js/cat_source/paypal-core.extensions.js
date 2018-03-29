@@ -1,7 +1,7 @@
 let PreviewActions = require('../actions/PreviewActions');
 let Constants = require('../costansts');
 let Store = require('../store/PreviewsStore');
-
+let showdown = require( "showdown" );
 
 (function(SF) {
 
@@ -353,32 +353,69 @@ let Store = require('../store/PreviewsStore');
             if (tmProperties && !_.isUndefined(tmProperties) ) {
                 let userEmail = tmProperties.find(function ( item ) {
                     return item.type === "x-user";
-                })
+                });
+                let projectType = tmProperties.find(function ( item ) {
+                    return item.type === "x-project-type";
+                });
+                let note = tmProperties.find(function ( item ) {
+                    return item.type === "x-note";
+                });
+                let userMailHtml = <li className="graydesc">
+                                        Source:
+                                        <span className="bold">
+                                        {match.cb}
+                                    </span>
+                                    </li>;
+                let projectTypeHtml, noteHtml = "";
                 if (!_.isUndefined(userEmail)) {
-                    return <ul className="graysmall-details">
-                            <li className={'percent ' + match.percentClass}>
-                                {match.percentText}
-                            </li>
-                            <li>
-                                {match.suggestion_info}
-                            </li>
-                            <li className="graydesc">
-                                Source:
-                                <span className="bold">
-                                    {userEmail.value}
-                                </span>
-                            </li>
-                            {/*<li className="graydesc">*/}
-                                {/*Project Type:*/}
-                                {/*<span className="bold">*/}
-                                    {/*LR*/}
-                                {/*</span>*/}
-                            {/*</li>*/}
-                        </ul>;
+                    userMailHtml = <li className="graydesc">
+                                        Source:
+                                        <span className="bold">
+                                                {userEmail.value}
+                                            </span>
+                                    </li>
                 }
+                if (!_.isUndefined(projectType)) {
+                    projectTypeHtml = <li className="graydesc">
+                                            Project Type:
+                                            <span className="bold">
+                                                {projectType.value}
+                                            </span>
+                                        </li>;
+                }
+                if (!_.isUndefined(note)) {
+                    let converter = new showdown.Converter();
+                    let text = converter.makeHtml( note.value );
+                    let noteText = '<div class="tm-match-note-tooltip-content">'  + text + '</div>';
+                    noteHtml = <li className="graydesc note-tm-match">
+                                            <span className="bold tm-match-note-tooltip" data-html={noteText} data-variation="tiny"
+                                                  ref={(tooltip) => this.noteTooltip = tooltip}>
+                                                    Note
+                                                <i className="icon-info icon"/>
+                                            </span>
+                                        </li>;
+                }
+
+                return <ul className="graysmall-details">
+                        <li className={'percent ' + match.percentClass}>
+                            {match.percentText}
+                        </li>
+                        <li>
+                            {match.suggestion_info}
+                        </li>
+                        {userMailHtml}
+                        {projectTypeHtml}
+                        {noteHtml}
+                    </ul>;
+
             }
             return original_getMatchInfo.apply(this, [match]);
 
+        }
+        let original_componentDidMount = SegmentTabMatches.prototype.componentDidMount;
+        SegmentTabMatches.prototype.componentDidMount = function (  ) {
+            original_componentDidMount.apply(this, arguments);
+            $('.tm-match-note-tooltip').popup({hoverable: true});
         }
     }
     overrideMatchesSource(SegmentTabMatches);
