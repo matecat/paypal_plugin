@@ -23,18 +23,6 @@ let Utils = require('./paypalUtils');
             this.closePreview();
         },
         /**
-         *
-         */
-        setHideMatches: function () {
-            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
-            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
-            UI.body.removeClass('hideMatches');
-            if(UI.currentSegment){
-                UI.currentSegment.find('.footer').removeClass('showMatches');
-            }
-
-        },
-        /**
          * Function called after the click on a segment in the preview panel
          * @param sid
          */

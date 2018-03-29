@@ -1,7 +1,7 @@
 let PreviewActions = require('../actions/PreviewActions');
 let Constants = require('../costansts');
 let Store = require('../store/PreviewsStore');
-
+let showdown = require( "showdown" );
 
 (function(SF) {
 
@@ -29,6 +29,8 @@ let Store = require('../store/PreviewsStore');
             originalStart.apply(this);
             this.checkReferenceFiles();
             this.checkInstructions();
+            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
+            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
         },
         /**
          * Overwrite the matecat fn to add events and listeners
@@ -39,7 +41,11 @@ let Store = require('../store/PreviewsStore');
             originalSetEvents.apply(this);
 
             // To make tab Footer messages opened by default
-            SegmentActions.registerTab('messages', true, true);
+            if (config.isReview) {
+                SegmentActions.registerTab('messages', true, true);
+            } else {
+                SegmentActions.registerTab('messages', true, false);
+            }
 
 
 
@@ -340,5 +346,78 @@ let Store = require('../store/PreviewsStore');
         }
 
     });
+    function overrideMatchesSource( SegmentTabMatches ) {
+        let original_getMatchInfo = SegmentTabMatches.prototype.getMatchInfo;
+        SegmentTabMatches.prototype.getMatchInfo = function ( match ) {
+            let tmProperties = match.tm_properties;
+            if (tmProperties && !_.isUndefined(tmProperties) ) {
+                let userEmail = tmProperties.find(function ( item ) {
+                    return item.type === "x-user";
+                });
+                let projectType = tmProperties.find(function ( item ) {
+                    return item.type === "x-project_type";
+                });
+                let note = tmProperties.find(function ( item ) {
+                    return item.type === "x-note";
+                });
+                let userMailHtml = <li className="graydesc">
+                                        Source:
+                                        <span className="bold">
+                                        {match.cb}
+                                    </span>
+                                    </li>;
+                let projectTypeHtml, noteHtml = "";
+                if (!_.isUndefined(userEmail)) {
+                    userMailHtml = <li className="graydesc">
+                                        Source:
+                                        <span className="bold">
+                                                {userEmail.value}
+                                            </span>
+                                    </li>
+                }
+                if (!_.isUndefined(projectType)) {
+                    projectTypeHtml = <li className="graydesc">
+                                            Project Type:
+                                            <span className="bold">
+                                                {projectType.value}
+                                            </span>
+                                        </li>;
+                }
+                if (!_.isUndefined(note)) {
+                    let converter = new showdown.Converter();
+                    let text = converter.makeHtml( note.value );
+                    let noteText = '<div class="tm-match-note-tooltip-content">'  + text + '</div>';
+                    noteHtml = <li className="graydesc note-tm-match">
+                                            <span className="bold tm-match-note-tooltip" data-html={noteText} data-variation="tiny"
+                                                  ref={(tooltip) => this.noteTooltip = tooltip}>
+                                                    Note
+                                                <i className="icon-info icon"/>
+                                            </span>
+                                        </li>;
+                }
+
+                return <ul className="graysmall-details">
+                        <li className={'percent ' + match.percentClass}>
+                            {match.percentText}
+                        </li>
+                        <li>
+                            {match.suggestion_info}
+                        </li>
+                        {userMailHtml}
+                        {projectTypeHtml}
+                        {noteHtml}
+                    </ul>;
+
+            }
+            return original_getMatchInfo.apply(this, [match]);
+
+        }
+        let original_componentDidMount = SegmentTabMatches.prototype.componentDidMount;
+        SegmentTabMatches.prototype.componentDidMount = function (  ) {
+            original_componentDidMount.apply(this, arguments);
+            $('.tm-match-note-tooltip').popup({hoverable: true});
+        }
+    }
+    overrideMatchesSource(SegmentTabMatches);
 
 })(SegmentFilter) ;

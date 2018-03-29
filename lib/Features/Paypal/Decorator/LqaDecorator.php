@@ -184,8 +184,6 @@ class LqaDecorator extends AbstractDecorator {
         $this->template->source_rtl = ( $lang_handler->isRTL( $this->chunk->source ) ) ? ' rtl-source' : '';
         $this->template->target_rtl = ( $lang_handler->isRTL( $this->chunk->target ) ) ? ' rtl-target' : '';
 
-        $this->template->hideMatchesClass = ( true ? '' : ' hideMatches' );
-
         $this->template->header_quality_report_item_class = '';
         $this->template->header_main_button_enabled = true;
         $this->template->header_main_button_label   = $this->getHeaderMainButtonLabel();
