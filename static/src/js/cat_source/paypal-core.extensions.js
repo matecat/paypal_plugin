@@ -355,7 +355,7 @@ let showdown = require( "showdown" );
                     return item.type === "x-user";
                 });
                 let projectType = tmProperties.find(function ( item ) {
-                    return item.type === "x-project-type";
+                    return item.type === "x-project_type";
                 });
                 let note = tmProperties.find(function ( item ) {
                     return item.type === "x-note";
