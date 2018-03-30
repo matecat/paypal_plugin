@@ -73,8 +73,10 @@ class GithubOAuthModel {
 
     /**
      * @param ConnectedServiceStruct $service
+     *
+     * @throws \Exceptions\ValidationError
      */
-    private function __updateService(ConnectedServiceStruct $service ) {
+    private function __updateService( ConnectedServiceStruct $service ) {
         $dao = new ConnectedServiceDao() ;
         $dao->updateOauthToken( $this->token, $service ) ;
 

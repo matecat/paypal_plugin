@@ -27,6 +27,7 @@ use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use Klein\Klein;
 use Projects_MetadataDao;
 use Projects_ProjectStruct;
+use Users_UserStruct;
 use viewController;
 
 class Paypal extends BaseFeature {
@@ -38,6 +39,8 @@ class Paypal extends BaseFeature {
      * @var CDataHandler
      */
     protected $jsonHandler;
+
+    const PROJECT_TYPE_METADATA_KEY = "project_type";
 
     const PROJECT_TYPE_LR = 'LR' ;
 
@@ -114,15 +117,49 @@ class Paypal extends BaseFeature {
     public function filterContributionStructOnSetTranslation( ContributionStruct $contributionStruct, Projects_ProjectStruct $project ) {
 
         try {
+
+            $metadataValue = $project->getMetadataValue( Paypal::PROJECT_TYPE_METADATA_KEY );
+            if( !empty( $metadataValue ) ){
+                $contributionStruct->props[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $metadataValue;
+            }
+
+            //get Notes
+            $segmentNotes = $contributionStruct->getSegmentNotes();
+            $jsonNote = json_decode( $segmentNotes[0]->json );
+            $contributionStruct->props[ 'note' ]  = $jsonNote->note;
+
             $userInfoList = $contributionStruct->getUserInfo();
             $userInfo = array_pop( $userInfoList );
             $contributionStruct->props[ 'user' ] = $userInfo->email;
-//            $contributionStruct->props[ 'SID' ]  = 'SID';
+
         } catch ( Exception $e ){
 
         }
 
         return $contributionStruct ;
+    }
+
+    /**
+     *
+     * @param                  $propArray
+     * @param Users_UserStruct $userStruct
+     *
+     * @return mixed
+     */
+    public function filterGlossaryOnSetTranslation( $propArray, Users_UserStruct $userStruct ) {
+
+        if( empty( $userStruct->email ) ){
+            return $propArray;
+        }
+
+        try {
+            $propArray[ 'user' ] = $userStruct->email;
+//            $contributionStruct->props[ 'SID' ]  = 'SID';
+        } catch ( Exception $e ){
+
+        }
+
+        return $propArray;
     }
 
     /**
@@ -242,7 +279,7 @@ class Paypal extends BaseFeature {
      * @return mixed
      */
     public function filterProjectMetadata( $metadata, $__postInput ){
-        $metadata[ 'project_type' ] = $__postInput[ 'project_type' ];
+        $metadata[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ];
         return $metadata;
     }
 
@@ -297,7 +334,7 @@ class Paypal extends BaseFeature {
         if ( $controller instanceof \catController ) {
             $project      = $controller->project;
             $metadata     = new Projects_MetadataDao;
-            $project_type = $metadata->get( $project->id, "project_type" );
+            $project_type = $metadata->get( $project->id, Paypal::PROJECT_TYPE_METADATA_KEY );
             if ( !empty( $project_type ) ) {
                 if ( $controller->isRevision() ) {
                     $page = "revision";
@@ -381,10 +418,10 @@ class Paypal extends BaseFeature {
                  */
 
                 $metadata     = new Projects_MetadataDao;
-                $project_type = $metadata->get( $project->id, "project_type" );
+                $project_type = $metadata->get( $project->id, Paypal::PROJECT_TYPE_METADATA_KEY );
                 $csv_array    = [];
                 $csv_array[] = [ 'project_id', $project->id ];
-                $csv_array[] = [ 'project_type', ( !empty( $project_type ) )?$project_type->value:"General" ];
+                $csv_array[] = [ Paypal::PROJECT_TYPE_METADATA_KEY, ( !empty( $project_type ) )?$project_type->value:"General" ];
                 $csv_array[] = [ 'job_id', $job->id ];
                 $csv_array[] = [ 'translate_password', $job->password ];
 
@@ -541,7 +578,7 @@ class Paypal extends BaseFeature {
         // find all chunks
         // for each chunk create a Translation
         $project = \Projects_ProjectDao::findById( $projectStructure[ 'id_project' ] ) ;
-        if ( $project->getMetadataValue('project_type') == self::PROJECT_TYPE_LR  ) {
+        if ( $project->getMetadataValue(Paypal::PROJECT_TYPE_METADATA_KEY) == self::PROJECT_TYPE_LR  ) {
             foreach( $project->getChunks() as $chunk ) {
                 $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
                 $model->setTranslationCompleted([ 'ip_address' => $projectStructure['user_ip'] ] ) ;
@@ -552,7 +589,7 @@ class Paypal extends BaseFeature {
     public function postJobSplitted( $projectStructure ) {
         $chunk = \Chunks_ChunkDao::getByIdAndPassword( $projectStructure['job_to_split'], $projectStructure['job_to_split_pass'] ) ;
         $project = $chunk->getProject();
-        if ( $project->getMetadataValue('project_type') == self::PROJECT_TYPE_LR ) {
+        if ( $project->getMetadataValue(Paypal::PROJECT_TYPE_METADATA_KEY) == self::PROJECT_TYPE_LR ) {
             foreach( $project->getChunks() as $chunk ) {
                 $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
                 $model->setTranslationCompleted() ;
@@ -574,7 +611,7 @@ class Paypal extends BaseFeature {
             $template->append('config_js', [ 'paypal' => [
                 'github_auth_url' => 'https://github.com/login/oauth/authorize?' . http_build_query([
                                 'client_id' => $config['GITHUB_OAUTH_CLIENT_ID'],
-                            'scope' => 'user',
+                            'scope' => 'user:email',
                             'state' => $state,
                             'redirect_uri' => Routes::githubOauth()
                 ])

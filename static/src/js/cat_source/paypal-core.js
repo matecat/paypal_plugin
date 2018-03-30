@@ -23,18 +23,6 @@ let Utils = require('./paypalUtils');
             this.closePreview();
         },
         /**
-         *
-         */
-        setHideMatches: function () {
-            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
-            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
-            UI.body.removeClass('hideMatches');
-            if(UI.currentSegment){
-                UI.currentSegment.find('.footer').removeClass('showMatches');
-            }
-
-        },
-        /**
          * Function called after the click on a segment in the preview panel
          * @param sid
          */
@@ -53,7 +41,7 @@ let Utils = require('./paypalUtils');
                     this.spliInstance.destroy();
                     delete(this.spliInstance);
                 }
-                var outerHeight = $( 'section.opened' ).outerHeight() + 200;
+                var outerHeight = $( 'section.opened' ).outerHeight() + 100;
                 var h = Math.floor( (outerHeight / $( '.main-container' ).height()) * 100 );
                 var h2 = 100 - h;
                 this.spliInstance = Split( ['#outer',
@@ -180,7 +168,7 @@ let Utils = require('./paypalUtils');
                 }
             });
         },
-        checkIstructions: function ( ) {
+        checkInstructions: function ( ) {
             let self = this;
             Utils.getJobInstructions().done(function (response) {
                 if (response.data && !response.errors ) {
@@ -202,16 +190,6 @@ let Utils = require('./paypalUtils');
                 }
             };
             APP.ModalWindow.showModalComponent(ConfirmMessageModal, props, "Job Instructions");
-        },
-        showApproveAllModalWarnirng: function (  ) {
-            var props = {
-                text: "It was not possible to approve all segments. There are some segments that have not been translated.",
-                successText: "Ok",
-                successCallback: function() {
-                    APP.ModalWindow.onCloseModal();
-                }
-            };
-            APP.ModalWindow.showModalComponent(ConfirmMessageModal, props, "Warning");
         }
     });
 

@@ -29,18 +29,6 @@ let paypalUtils = {
             type: "get",
             url : "/plugins/paypal/job/"+ config.id_job + "/"+ config.password + "/instructions"
         });
-    },
-    approveSegments: function ( segments ) {
-        var data = {
-            segments_id: segments,
-            status: 'approved'
-        };
-        return $.ajax({
-            async: true,
-            data: data,
-            type: "post",
-            url : "/plugins/paypal/job/"+ config.id_job + "/"+ config.password + "/segments/status"
-        });
     }
 };
 

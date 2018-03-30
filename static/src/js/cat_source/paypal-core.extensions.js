@@ -1,15 +1,15 @@
 let PreviewActions = require('../actions/PreviewActions');
 let Constants = require('../costansts');
 let Store = require('../store/PreviewsStore');
+let showdown = require( "showdown" );
 
-
-(function() {
+(function(SF) {
 
     var originalStart = UI.start;
     var originalSetEvents = UI.setEvents;
     var originalSetLastSegmentFromLocalStorage = UI.setLastSegmentFromLocalStorage;
     var originalActivateSegment = UI.activateSegment;
-    var originalAnimateScroll = UI.animateScroll;
+    // var originalAnimateScroll = UI.animateScroll;
     var originalSetShortcuts = UI.setShortcuts;
     var originalLoadCustimization = UI.loadCustomization;
     var originalIsReadonlySegment = UI.isReadonlySegment;
@@ -22,15 +22,15 @@ let Store = require('../store/PreviewsStore');
     var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
     $.extend(UI, {
 
-        scrollSelector: "#outer",
-
         /**
          * Overwrite the start of matecat to che reference files
          */
         start: function () {
             originalStart.apply(this);
             this.checkReferenceFiles();
-            this.checkIstructions();
+            this.checkInstructions();
+            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
+            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
         },
         /**
          * Overwrite the matecat fn to add events and listeners
@@ -41,7 +41,11 @@ let Store = require('../store/PreviewsStore');
             originalSetEvents.apply(this);
 
             // To make tab Footer messages opened by default
-            SegmentActions.registerTab('messages', true, true);
+            if (config.isReview) {
+                SegmentActions.registerTab('messages', true, true);
+            } else {
+                SegmentActions.registerTab('messages', true, false);
+            }
 
 
 
@@ -194,10 +198,16 @@ let Store = require('../store/PreviewsStore');
             var pos = 0;
             var prev = segment.prev('section') ;
             var segmentOpen = $('section.editor');
+            var article = segment.closest('article');
 
             if (!config.isLQA) {
-                pos = segment.offset().top  - segment.offsetParent('#outer').offset().top;
+                pos = segment.offset().top - segment.offsetParent('#outer').offset().top;
 
+                if (article.prevAll('article').length > 0) {
+                    _.forEach(article.prevAll('article'), function ( item ) {
+                        pos = pos + $(item).outerHeight() + 140;
+                    });
+                }
                 if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
                     pos = pos - segmentOpen.find('.footer').height();
                 }
@@ -329,12 +339,94 @@ let Store = require('../store/PreviewsStore');
         },
 
         gotoNextSegment: function ( sid ) {
-            if (!config.isLQA) {
+            if (!config.isLQA || ( typeof SF !== "undefined" && SF.filtering()) ) {
                 originalGotoNextSegment.apply(this);
             }
             return false;
         }
 
     });
+    function overrideMatchesSource( SegmentTabMatches ) {
+        let original_getMatchInfo = SegmentTabMatches.prototype.getMatchInfo;
+        SegmentTabMatches.prototype.getMatchInfo = function ( match ) {
+            let tmProperties = match.tm_properties;
+            if (tmProperties && !_.isUndefined(tmProperties) ) {
+                let userEmail = tmProperties.find(function ( item ) {
+                    return item.type === "x-user";
+                });
+                let projectType = tmProperties.find(function ( item ) {
+                    return item.type === "x-project_type";
+                });
+                let note = tmProperties.find(function ( item ) {
+                    return item.type === "x-note";
+                });
+                let userMailHtml = <li className="graydesc">
+                                        Source:
+                                        <span className="bold">
+                                        {match.cb}
+                                    </span>
+                                    </li>;
+                let projectTypeHtml, noteHtml = "";
+                if (!_.isUndefined(userEmail)) {
+                    userMailHtml = <li className="graydesc">
+                                        Source:
+                                        <span className="bold">
+                                                {userEmail.value}
+                                            </span>
+                                    </li>
+                }
+                if (!_.isUndefined(projectType)) {
+                    projectTypeHtml = <li className="graydesc">
+                                            Project Type:
+                                            <span className="bold">
+                                                {projectType.value}
+                                            </span>
+                                        </li>;
+                }
+                if (!_.isUndefined(note) && note.value) {
+                    let converter = new showdown.Converter();
+                    let text = converter.makeHtml( note.value );
+                    let noteText = '<div class="tm-match-note-tooltip-content">'  + text + '</div>';
+                    noteHtml = <li className="graydesc note-tm-match">
+                                            <span className="bold tm-match-note-tooltip" data-html={noteText} data-variation="tiny"
+                                                  ref={(tooltip) => this.noteTooltip = tooltip}>
+                                                    Notes
+                                                <i className="icon-info icon"/>
+                                            </span>
+                                        </li>;
+                }
 
-})() ;
+                return <ul className="graysmall-details">
+                        <li className={'percent ' + match.percentClass}>
+                            {match.percentText}
+                        </li>
+                        <li>
+                            {match.suggestion_info}
+                        </li>
+                        {userMailHtml}
+                        {projectTypeHtml}
+                        {noteHtml}
+                    </ul>;
+
+            }
+            return original_getMatchInfo.apply(this, [match]);
+
+        }
+        let original_componentDidMount = SegmentTabMatches.prototype.componentDidMount;
+        SegmentTabMatches.prototype.componentDidMount = function (  ) {
+            original_componentDidMount.apply(this, arguments);
+            setTimeout(function (  ) {
+                $('.tm-match-note-tooltip').popup({hoverable: true});
+            }, 1000);
+        };
+        let original_componentDidUpdate = SegmentTabMatches.prototype.componentDidUpdate;
+        SegmentTabMatches.prototype.componentDidUpdate = function (  ) {
+            original_componentDidUpdate.apply(this, arguments);
+            setTimeout(function (  ) {
+                $('.tm-match-note-tooltip').popup({hoverable: true});
+            }, 1000);
+        }
+    }
+    overrideMatchesSource(SegmentTabMatches);
+
+})(SegmentFilter) ;
