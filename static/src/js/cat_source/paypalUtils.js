@@ -17,14 +17,10 @@ let paypalUtils = {
         });
     },
     getSegmentsPreviewInfo: function ( segments ) {
-        var data = {
-            segments_id: segments
-        };
         return $.ajax({
             async: true,
-            data: data,
             type: "get",
-            url : "/plugins/paypal/job/"+ config.id_job + "/"+ config.password + "/segments"
+            url : "/plugins/paypal/job/"+ config.id_job + "/"+ config.password + "/segments/" + segments.join()
         });
     },
     getJobInstructions: function (  ) {

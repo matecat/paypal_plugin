@@ -46,7 +46,8 @@ class JobController extends KleinController {
 
     public function getSegments() {
 
-        $segments_id = filter_var( $this->request->segments_id, FILTER_VALIDATE_INT,FILTER_FORCE_ARRAY );
+        $segments_id = explode(",", $this->request->segments_ids);
+        $segments_id = filter_var( $segments_id, FILTER_VALIDATE_INT,FILTER_FORCE_ARRAY );
 
         $segments = \Translations_SegmentTranslationDao::getSegmentsWithIssues($this->job->id, $segments_id);
 
