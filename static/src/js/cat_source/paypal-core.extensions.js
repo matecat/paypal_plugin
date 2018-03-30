@@ -383,14 +383,14 @@ let showdown = require( "showdown" );
                                             </span>
                                         </li>;
                 }
-                if (!_.isUndefined(note)) {
+                if (!_.isUndefined(note) && note.value) {
                     let converter = new showdown.Converter();
                     let text = converter.makeHtml( note.value );
                     let noteText = '<div class="tm-match-note-tooltip-content">'  + text + '</div>';
                     noteHtml = <li className="graydesc note-tm-match">
                                             <span className="bold tm-match-note-tooltip" data-html={noteText} data-variation="tiny"
                                                   ref={(tooltip) => this.noteTooltip = tooltip}>
-                                                    Note
+                                                    Notes
                                                 <i className="icon-info icon"/>
                                             </span>
                                         </li>;
@@ -415,7 +415,16 @@ let showdown = require( "showdown" );
         let original_componentDidMount = SegmentTabMatches.prototype.componentDidMount;
         SegmentTabMatches.prototype.componentDidMount = function (  ) {
             original_componentDidMount.apply(this, arguments);
-            $('.tm-match-note-tooltip').popup({hoverable: true});
+            setTimeout(function (  ) {
+                $('.tm-match-note-tooltip').popup({hoverable: true});
+            }, 1000);
+        };
+        let original_componentDidUpdate = SegmentTabMatches.prototype.componentDidUpdate;
+        SegmentTabMatches.prototype.componentDidUpdate = function (  ) {
+            original_componentDidUpdate.apply(this, arguments);
+            setTimeout(function (  ) {
+                $('.tm-match-note-tooltip').popup({hoverable: true});
+            }, 1000);
         }
     }
     overrideMatchesSource(SegmentTabMatches);
