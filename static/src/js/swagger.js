@@ -156,6 +156,7 @@ $(function () {
         "type": "string",
         "description": "Project type must to be one of this values: TR, LR or LQA",
         "in": "formData",
+        "enum": ['TR', 'LR', 'LQA'],
     } );
 
     window.swaggerUi.api.spec.paths["/api/v1/new"].post.parameters.push( {
@@ -170,6 +171,7 @@ $(function () {
         "type": "string",
         "description": "Project type must to be one of this values: TR, LR or LQA",
         "in": "formData",
+        "enum": ['TR', 'LR', 'LQA'],
     } );
 
 
