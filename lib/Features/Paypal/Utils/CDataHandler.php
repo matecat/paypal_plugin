@@ -28,22 +28,27 @@ class CDataHandler {
 
                     $decodedJson = json_decode( $json );
                     $decodedJson->segment = $id_segment;
-                    foreach( $decodedJson->previews as $preview ){
-                        $fileName = \FilesStorage::pathinfo_fix( $preview->path, PATHINFO_BASENAME );
-                        $preview->previousPreview = \FilesStorage::pathinfo_fix( $preview->previousPreview, PATHINFO_BASENAME );
-                        $preview->nextPreview = \FilesStorage::pathinfo_fix( $preview->nextPreview, PATHINFO_BASENAME );
+                    if( !empty( $decodedJson->previews ) ){
 
-                        list( $preview->path, $preview->file_index ) = array_values( Routes::projectImageReferences( $projectStructure, $fileName ) );
+                        foreach( $decodedJson->previews as $preview ){
+                            $fileName = \FilesStorage::pathinfo_fix( $preview->path, PATHINFO_BASENAME );
+                            $preview->previousPreview = \FilesStorage::pathinfo_fix( $preview->previousPreview, PATHINFO_BASENAME );
+                            $preview->nextPreview = \FilesStorage::pathinfo_fix( $preview->nextPreview, PATHINFO_BASENAME );
 
-                        /*
-                         * Prepare for Schwartzian transform
-                         *
-                         * When the user navigate between the flows, the segment focus must be placed to the first segment in the preview,
-                         * so MateCat must order the segment list in the reverse lookup from top [x,y] position to lower ( y top -> y down ).
-                         */
-                        $orderingVector[ $fileName ][ $id_segment ] = ( 10000 + $preview->y ) . "-" . ( 10000 - $preview->x );
+                            list( $preview->path, $preview->file_index ) = array_values( Routes::projectImageReferences( $projectStructure, $fileName ) );
+
+                            /*
+                             * Prepare for Schwartzian transform
+                             *
+                             * When the user navigate between the flows, the segment focus must be placed to the first segment in the preview,
+                             * so MateCat must order the segment list in the reverse lookup from top [x,y] position to lower ( y top -> y down ).
+                             */
+                            $orderingVector[ $fileName ][ $id_segment ] = ( 10000 + $preview->y ) . "-" . ( 10000 - $preview->x );
+
+                        }
 
                     }
+
                     $projectStructure[ 'notes' ][ $internal_id ][ 'json' ][ $jsonPos ] = json_encode( $decodedJson );
 
                 }
@@ -52,10 +57,12 @@ class CDataHandler {
 
         }
 
-        //Schwartzian transform
-        foreach( $orderingVector as $fileName => $segmentVector ){
-            asort( $segmentVector );
-            $projectStructure[ 'json_previews' ][ $fileName ] = array_keys( $segmentVector );
+        if( !empty( $orderingVector ) ){
+            //Schwartzian transform
+            foreach( $orderingVector as $fileName => $segmentVector ){
+                asort( $segmentVector );
+                $projectStructure[ 'json_previews' ][ $fileName ] = array_keys( $segmentVector );
+            }
         }
 
     }
