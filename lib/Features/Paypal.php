@@ -25,6 +25,7 @@ use Features\Paypal\Utils\CDataHandler;
 use Features\Paypal\Utils\Routes;
 use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use Klein\Klein;
+use LQA\ChunkReviewDao;
 use Projects_MetadataDao;
 use Projects_ProjectStruct;
 use Users_UserStruct;
@@ -34,6 +35,10 @@ class Paypal extends BaseFeature {
 
     const FEATURE_CODE = 'paypal';
 
+    /**
+     * @var bool
+     */
+    protected $autoActivateOnProject = false;
 
     /**
      * @var CDataHandler
@@ -42,7 +47,7 @@ class Paypal extends BaseFeature {
 
     const PROJECT_TYPE_METADATA_KEY = "project_type";
 
-    const PROJECT_TYPE_LR = 'LR' ;
+    const PROJECT_TYPE_LR = 'LR';
 
     protected $project_types = [ 'TR', 'LR', 'LQA' ];
 
@@ -50,7 +55,7 @@ class Paypal extends BaseFeature {
             Features::PROJECT_COMPLETION,
             Features::TRANSLATION_VERSIONS,
             Features::REVIEW_EXTENDED
-    ] ;
+    ];
 
     public function __construct( BasicFeatureStruct $feature ) {
         parent::__construct( $feature );
@@ -64,8 +69,9 @@ class Paypal extends BaseFeature {
      *
      * @return array
      */
-    public static function overloadAPIDocs( array $jsIncludes ){
+    public static function overloadAPIDocs( array $jsIncludes ) {
         $jsIncludes[] = '<script src="' . Routes::staticSrc( 'src/js/swagger.js' ) . '" type="text/javascript" ></script>';
+
         return $jsIncludes;
     }
 
@@ -76,12 +82,12 @@ class Paypal extends BaseFeature {
 
         //TODO Refactor
         //$klein->respond( 'GET', '/lqa/[:id_job]/[:password]', [__CLASS__, 'lqaRoute'] );
-        $klein->respond( 'GET', '/preview/template/[:id_job]/[:password]',              [__CLASS__, 'previewRoute'] );
+        $klein->respond( 'GET', '/preview/template/[:id_job]/[:password]', [ __CLASS__, 'previewRoute' ] );
 
         route( '/preview/[:id_project]/[:password]/[:file_name_in_zip]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'flushStream' );
-        route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct'  );
-        route( '/job/[:id_job]/[:password]/instructions', 'GET', 'Features\Paypal\Controller\API\JobController', 'getInstructions'  );
-        route( '/job/[:id_job]/[:password]/segments/[:segments_ids]', 'GET', 'Features\Paypal\Controller\API\JobController', 'getSegments'  );
+        route( '/preview/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\PreviewsStruct', 'getPreviewsStruct' );
+        route( '/job/[:id_job]/[:password]/instructions', 'GET', 'Features\Paypal\Controller\API\JobController', 'getInstructions' );
+        route( '/job/[:id_job]/[:password]/segments/[:segments_ids]', 'GET', 'Features\Paypal\Controller\API\JobController', 'getSegments' );
         route( '/reference-files/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolder' );
         route( '/reference-files/[:id_job]/[:password]/list', 'GET', 'Features\Paypal\Controller\API\ReferenceFilesController', 'getReferenceFolderList' );
         route( '/projects/[:id_project]/[:password]/whitelist', 'POST', 'Features\Paypal\Controller\API\WhitelistController', 'create' );
@@ -91,52 +97,60 @@ class Paypal extends BaseFeature {
         route( '/oauth/github/response', 'GET', 'Features\Paypal\Controller\OAuth\GithubOAuthController', 'response' );
     }
 
-    public static function previewRoute($request, $response, $service, $app) {
-        $controller    = new PreviewController( $request, $response, $service, $app);
+    public static function previewRoute( $request, $response, $service, $app ) {
+        $controller    = new PreviewController( $request, $response, $service, $app );
         $template_path = dirname( __FILE__ ) . '/Paypal/View/Html/preview.html';
         $controller->setView( $template_path );
         $controller->respond( 'composeView' );
     }
 
     public static function projectUrls( ProjectUrls $formatted ) {
-        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted->getData());
+        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted->getData() );
 
         return $projectUrlsDecorator;
     }
 
-    //TODO Refactory
-//    public static function lqaRoute($request, $response, $service, $app) {
-//        $controller    = new LqaController( $request, $response, $service, $app);
-//        $template_path = dirname( __FILE__ ) . '/Paypal/View/Html/lqa.html';
-//        $controller->setView( $template_path );
-//        $controller->performValidations();
-//        $controller->respond();
-//    }
+    /**
+     * As Autoload Plugin PayPal set itself as project feature when an user is logged
+     *
+     * @param $projectFeatures
+     * @param $__postInput
+     *
+     * @return array
+     */
+    public function filterCreateProjectFeatures( $projectFeatures, $__postInput, $userIsLogged ) {
 
+        if( $userIsLogged ){
+            $projectFeatures[ self::FEATURE_CODE ] = new BasicFeatureStruct( [ 'feature_code' => self::FEATURE_CODE ] );
+        }
+
+        return $projectFeatures;
+
+    }
 
     public function filterContributionStructOnSetTranslation( ContributionStruct $contributionStruct, Projects_ProjectStruct $project ) {
 
         try {
 
             $metadataValue = $project->getMetadataValue( Paypal::PROJECT_TYPE_METADATA_KEY );
-            if( !empty( $metadataValue ) ){
+            if ( !empty( $metadataValue ) ) {
                 $contributionStruct->props[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $metadataValue;
             }
 
             //get Notes
-            $segmentNotes = $contributionStruct->getSegmentNotes();
-            $jsonNote = json_decode( $segmentNotes[0]->json );
-            $contributionStruct->props[ 'note' ]  = $jsonNote->note;
+            $segmentNotes                        = $contributionStruct->getSegmentNotes();
+            $jsonNote                            = json_decode( $segmentNotes[ 0 ]->json );
+            $contributionStruct->props[ 'note' ] = $jsonNote->note;
 
-            $userInfoList = $contributionStruct->getUserInfo();
-            $userInfo = array_pop( $userInfoList );
+            $userInfoList                        = $contributionStruct->getUserInfo();
+            $userInfo                            = array_pop( $userInfoList );
             $contributionStruct->props[ 'user' ] = $userInfo->email;
 
-        } catch ( Exception $e ){
+        } catch ( Exception $e ) {
 
         }
 
-        return $contributionStruct ;
+        return $contributionStruct;
     }
 
     /**
@@ -148,14 +162,14 @@ class Paypal extends BaseFeature {
      */
     public function filterGlossaryOnSetTranslation( $propArray, Users_UserStruct $userStruct ) {
 
-        if( empty( $userStruct->email ) ){
+        if ( empty( $userStruct->email ) ) {
             return $propArray;
         }
 
         try {
             $propArray[ 'user' ] = $userStruct->email;
 //            $contributionStruct->props[ 'SID' ]  = 'SID';
-        } catch ( Exception $e ){
+        } catch ( Exception $e ) {
 
         }
 
@@ -170,16 +184,17 @@ class Paypal extends BaseFeature {
      *
      */
     public function filter_project_manager_array_files( $files, $projectStructure ) {
-        $new_files = array() ;
+        $new_files = [];
         foreach ( $files as $file ) {
             if ( \FilesStorage::pathinfo_fix( $file, PATHINFO_EXTENSION ) != 'g' ) {
-                $new_files[] = $file ;
+                $new_files[] = $file;
             }
         }
-        return $new_files   ;
+
+        return $new_files;
     }
 
-    public function handleJsonNotes( $projectStructure ){
+    public function handleJsonNotes( $projectStructure ) {
         $this->jsonHandler->formatJson( $projectStructure );
     }
 
@@ -187,7 +202,7 @@ class Paypal extends BaseFeature {
      * Tell to the controller to extract also json content of segment_notes table
      * @return bool
      */
-    public function prepareAllNotes(){
+    public function prepareAllNotes() {
         return true;
     }
 
@@ -196,11 +211,11 @@ class Paypal extends BaseFeature {
      *
      * @return mixed
      */
-    public function processExtractedJsonNotes( $jsonStringNotes ){
+    public function processExtractedJsonNotes( $jsonStringNotes ) {
         return $this->jsonHandler->parseJsonNotes( $jsonStringNotes );
     }
 
-    public function processJobsCreated( $projectStructure ){
+    public function processJobsCreated( $projectStructure ) {
         $this->jsonHandler->storePreviewsMetadata( $projectStructure );
     }
 
@@ -211,11 +226,14 @@ class Paypal extends BaseFeature {
      *
      * @return bool
      */
-    public function forceXLIFFConversion( $forceXliff ){
+    public function forceXLIFFConversion( $forceXliff, $_userIsLogged ) {
+        if( !$_userIsLogged ) {
+            return $forceXliff;
+        }
         return false;
     }
 
-    public function skipTagLessFeature( $boolean ){
+    public function skipTagLessFeature( $boolean ) {
         return true;
     }
 
@@ -237,13 +255,13 @@ class Paypal extends BaseFeature {
     public function filterNewProjectInputFilters( $filter_args ) {
         unset( $filter_args[ 'tag_projection' ] );  //disable Guess Tag Position Feature
         $filter_args[ 'project_type' ] = [ 'filter' => FILTER_CALLBACK, 'options' => [ __CLASS__, 'sanitizeProjectTypeValue' ] ];
-        $filter_args[ 'instructions' ]  = [ 'filter' => FILTER_SANITIZE_STRING  ];
+        $filter_args[ 'instructions' ] = [ 'filter' => FILTER_SANITIZE_STRING ];
 
         return $filter_args;
     }
 
     public function addNewProjectStructureAttributes( $projectStructure, $post_input ) {
-        $projectStructure['instructions'] = $post_input['instructions'];
+        $projectStructure[ 'instructions' ] = $post_input[ 'instructions' ];
 
         return $projectStructure;
     }
@@ -278,8 +296,9 @@ class Paypal extends BaseFeature {
      *
      * @return mixed
      */
-    public function filterProjectMetadata( $metadata, $__postInput ){
+    public function filterProjectMetadata( $metadata, $__postInput ) {
         $metadata[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ];
+
         return $metadata;
     }
 
@@ -295,21 +314,21 @@ class Paypal extends BaseFeature {
      */
     public function beginDoAction( viewController $controller, $params ) {
 
-        if( method_exists( $controller, 'setLoginRequired' ) ){
+        if ( method_exists( $controller, 'setLoginRequired' ) ) {
             /**
              * @var $controller viewController
              */
-            $controller->setLoginRequired( true ) ;
+            $controller->setLoginRequired( true );
             $controller->checkLoginRequiredAndRedirect();
         }
 
         try {
             //to use a validator whitelist here
             ( new TranslatorsWhitelistAccessValidator( $controller ) )->validate();
-        } catch( AuthenticationError $e ){
+        } catch ( AuthenticationError $e ) {
 
             $controllerInstance = new CustomPage();
-            $template = new \PHPTALWithAppend( dirname( __FILE__ ) . '/Paypal/View/Html/NotAllowed.html' );
+            $template           = new \PHPTALWithAppend( dirname( __FILE__ ) . '/Paypal/View/Html/NotAllowed.html' );
             $controllerInstance->setTemplate( $template );
             $controllerInstance->setCode( 401 );
             $controllerInstance->doAction();
@@ -355,7 +374,7 @@ class Paypal extends BaseFeature {
                  */
                 if ( $project_type->value == "LR" && $page == "translation" ) {
                     $chunk = $controller->getChunk();
-                    $job   = \LQA\ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
+                    $job   = ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
                     header( 'Location: ' . \Routes::revise( $project->name, $chunk->id, $job->review_password, $chunk->source, $chunk->target ) );
                     die;
                 }
@@ -370,9 +389,10 @@ class Paypal extends BaseFeature {
      * @param $controller
      * @param $output_content
      *
+     * @throws \Exceptions\NotFoundError
      */
 
-    public function processZIPDownloadPreview($controller, $output_content){
+    public function processZIPDownloadPreview( $controller, $output_content ) {
         $project = $controller->getProject();
 
         if ( $this->isPaypalProject( $project ) ) {
@@ -387,7 +407,7 @@ class Paypal extends BaseFeature {
                  */
 
                 $editlog_model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
-                $filePath    = $editlog_model->genCSVTmpFile();
+                $filePath      = $editlog_model->genCSVTmpFile();
                 $zip->addFile( $filePath, "__meta/Edit-log-export-" . $controller->id_job . ".csv" );
 
                 /**
@@ -420,12 +440,12 @@ class Paypal extends BaseFeature {
                 $metadata     = new Projects_MetadataDao;
                 $project_type = $metadata->get( $project->id, Paypal::PROJECT_TYPE_METADATA_KEY );
                 $csv_array    = [];
-                $csv_array[] = [ 'project_id', $project->id ];
-                $csv_array[] = [ Paypal::PROJECT_TYPE_METADATA_KEY, ( !empty( $project_type ) )?$project_type->value:"General" ];
-                $csv_array[] = [ 'job_id', $job->id ];
-                $csv_array[] = [ 'translate_password', $job->password ];
+                $csv_array[]  = [ 'project_id', $project->id ];
+                $csv_array[]  = [ Paypal::PROJECT_TYPE_METADATA_KEY, ( !empty( $project_type ) ) ? $project_type->value : "General" ];
+                $csv_array[]  = [ 'job_id', $job->id ];
+                $csv_array[]  = [ 'translate_password', $job->password ];
 
-                $revise_chunk   = \LQA\ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
+                $revise_chunk = ChunkReviewDao::findOneChunkReviewByIdJobAndPassword( $chunk->id, $chunk->password );
 
                 $csv_array[] = [ 'revise_password', $revise_chunk->review_password ];
                 $csv_array[] = [ 'create_date', \Utils::api_timestamp( $job->create_date ) ];
@@ -433,8 +453,8 @@ class Paypal extends BaseFeature {
                 $translation = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => false ] );
                 $revise      = \Chunks_ChunkCompletionEventDao::lastCompletionRecord( $chunk, [ 'is_review' => true ] );
 
-                $csv_array[] = [ 'end_translation_date', ($translation)?\Utils::api_timestamp( $translation[ 'create_date' ] ):"N/A" ];
-                $csv_array[] = [ 'end_revision_date', ($revise)?\Utils::api_timestamp( $revise[ 'create_date' ] ):"N/A" ];
+                $csv_array[] = [ 'end_translation_date', ( $translation ) ? \Utils::api_timestamp( $translation[ 'create_date' ] ) : "N/A" ];
+                $csv_array[] = [ 'end_revision_date', ( $revise ) ? \Utils::api_timestamp( $revise[ 'create_date' ] ) : "N/A" ];
                 $csv_array[] = [ 'project_password', $project->password ];
 
                 $filePath = $this->genCSVKeyValueFile( $csv_array );
@@ -458,26 +478,35 @@ class Paypal extends BaseFeature {
         $metadata     = new Projects_MetadataDao;
         $project_type = $metadata->get( $project->id, "features" );
 
-        if ( !empty( $project_type ) && in_array( self::FEATURE_CODE, explode(",", $project_type->value) ) ) {
+        if ( !empty( $project_type ) && in_array( self::FEATURE_CODE, explode( ",", $project_type->value ) ) ) {
             return true;
         }
 
         return false;
     }
 
-    private function genCSVKeyValueFile($array){
+    /**
+     * @param $array
+     *
+     * @return bool|string
+     */
+    private function genCSVKeyValueFile( $array ) {
         $filePath   = tempnam( "/tmp", "KeyValueCSV_" );
         $csvHandler = new \SplFileObject( $filePath, "w" );
         $csvHandler->setCsvControl( ';' );
 
-        foreach($array as $row)
-        {
+        foreach ( $array as $row ) {
             $csvHandler->fputcsv( $row );
         }
 
         return $filePath;
     }
 
+    /**
+     * @param \Jobs_JobStruct $chunk
+     * @param                 $eventStruct
+     * @param                 $chunkCompletionEventId
+     */
     public function project_completion_event_saved( \Jobs_JobStruct $chunk, $eventStruct, $chunkCompletionEventId ) {
         $translations_segments_dao = new \Translations_SegmentTranslationDao;
         if ( $eventStruct->is_review ) {
@@ -497,9 +526,10 @@ class Paypal extends BaseFeature {
      *
      * @return mixed
      */
-    public function checkIceLocked( $tm_data, $queueElementParams ){
+    public function checkIceLocked( $tm_data, $queueElementParams ) {
         $tm_data[ 'status' ] = Constants_TranslationStatus::STATUS_NEW;
         $tm_data[ 'locked' ] = false;
+
         return $tm_data;
     }
 
@@ -510,10 +540,11 @@ class Paypal extends BaseFeature {
      *
      * @return mixed
      */
-    public function iceMatchRewriteForContribution( $match ){
-        if( $match[ 'match' ] == '101%' ){
+    public function iceMatchRewriteForContribution( $match ) {
+        if ( $match[ 'match' ] == '101%' ) {
             $match[ 'match' ] = '100%';
         }
+
         return $match;
     }
 
@@ -532,12 +563,13 @@ class Paypal extends BaseFeature {
      *
      * @return array $iceLockArray
      */
-    public function setICESLockFromXliffValues( $iceLockArray ){
+    public function setICESLockFromXliffValues( $iceLockArray ) {
 
-        if( $iceLockArray[ 'approved' ] ){
+        if ( $iceLockArray[ 'approved' ] ) {
             $iceLockArray[ 'locked' ] = 1;
             $iceLockArray[ 'status' ] = Constants_TranslationStatus::STATUS_APPROVED;
         }
+
         return $iceLockArray;
 
     }
@@ -553,17 +585,21 @@ class Paypal extends BaseFeature {
      */
     public function filterIdenticalSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
 
-        if( isset( $xliff_trans_unit[ 'attr' ][ 'approved'] ) && $xliff_trans_unit[ 'attr' ][ 'approved'] ){
-            return $xliff_trans_unit[ 'attr' ][ 'approved'];
+        if ( isset( $xliff_trans_unit[ 'attr' ][ 'approved' ] ) && $xliff_trans_unit[ 'attr' ][ 'approved' ] ) {
+            return $xliff_trans_unit[ 'attr' ][ 'approved' ];
         }
 
         return $originalValue;
 
     }
 
+    /**
+     * @param $projectStructure
+     * @param $zipDir
+     */
     public function addInstructionsToZipProject( $projectStructure, $zipDir ) {
         if ( !empty( $projectStructure[ 'instructions' ] ) ) {
-            $datePath = date_create( $this->projectStructure[ 'create_date' ] )->format( 'Ymd' );
+            $datePath = date_create( $projectStructure[ 'create_date' ] )->format( 'Ymd' );
 
             $newZipDir = $zipDir . DIRECTORY_SEPARATOR . $datePath . DIRECTORY_SEPARATOR . $projectStructure[ 'id_project' ];
 
@@ -577,45 +613,57 @@ class Paypal extends BaseFeature {
     public function postProjectCommit( $projectStructure ) {
         // find all chunks
         // for each chunk create a Translation
-        $project = \Projects_ProjectDao::findById( $projectStructure[ 'id_project' ] ) ;
-        if ( $project->getMetadataValue(Paypal::PROJECT_TYPE_METADATA_KEY) == self::PROJECT_TYPE_LR  ) {
-            foreach( $project->getChunks() as $chunk ) {
-                $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
-                $model->setTranslationCompleted([ 'ip_address' => $projectStructure['user_ip'] ] ) ;
+        $project = \Projects_ProjectDao::findById( $projectStructure[ 'id_project' ] );
+        if ( $project->getMetadataValue( Paypal::PROJECT_TYPE_METADATA_KEY ) == self::PROJECT_TYPE_LR ) {
+            foreach ( $project->getChunks() as $chunk ) {
+                $model = new Features\Paypal\Model\ChunkCompletionEventModel( $chunk );
+                $model->setTranslationCompleted( [ 'ip_address' => $projectStructure[ 'user_ip' ] ] );
             }
         }
     }
 
+    /**
+     * @param $projectStructure
+     *
+     * @throws \Exceptions\NotFoundError
+     */
     public function postJobSplitted( $projectStructure ) {
-        $chunk = \Chunks_ChunkDao::getByIdAndPassword( $projectStructure['job_to_split'], $projectStructure['job_to_split_pass'] ) ;
+        $chunk   = \Chunks_ChunkDao::getByIdAndPassword( $projectStructure[ 'job_to_split' ], $projectStructure[ 'job_to_split_pass' ] );
         $project = $chunk->getProject();
-        if ( $project->getMetadataValue(Paypal::PROJECT_TYPE_METADATA_KEY) == self::PROJECT_TYPE_LR ) {
-            foreach( $project->getChunks() as $chunk ) {
-                $model = new Features\Paypal\Model\ChunkCompletionEventModel($chunk) ;
-                $model->setTranslationCompleted() ;
+        if ( $project->getMetadataValue( Paypal::PROJECT_TYPE_METADATA_KEY ) == self::PROJECT_TYPE_LR ) {
+            foreach ( $project->getChunks() as $chunk ) {
+                $model = new Features\Paypal\Model\ChunkCompletionEventModel( $chunk );
+                $model->setTranslationCompleted();
             }
         }
     }
 
+    /**
+     * @param $controller
+     * @param $template
+     *
+     * @throws Exception
+     */
     public function appendDecorators( $controller, $template ) {
         if ( method_exists( $template, 'append' ) ) {
-            $config = Paypal::getConfig() ;
+            $config = Paypal::getConfig();
 
-            if ( !isset( $_SESSION['paypal_github_oauth_state'] ) ) {
-                $state = $_SESSION['paypal_github_oauth_state'] = CatUtils::generate_password( 12 ) ;
-            }
-            else {
-                $state = $_SESSION['paypal_github_oauth_state'] ;
+            if ( !isset( $_SESSION[ 'paypal_github_oauth_state' ] ) ) {
+                $state = $_SESSION[ 'paypal_github_oauth_state' ] = CatUtils::generate_password( 12 );
+            } else {
+                $state = $_SESSION[ 'paypal_github_oauth_state' ];
             }
 
-            $template->append('config_js', [ 'paypal' => [
-                'github_auth_url' => 'https://github.com/login/oauth/authorize?' . http_build_query([
-                                'client_id' => $config['GITHUB_OAUTH_CLIENT_ID'],
-                            'scope' => 'user:email',
-                            'state' => $state,
-                            'redirect_uri' => Routes::githubOauth()
-                ])
-            ] ] );
+            $template->append( 'config_js', [
+                    'paypal' => [
+                            'github_auth_url' => 'https://github.com/login/oauth/authorize?' . http_build_query( [
+                                            'client_id'    => $config[ 'GITHUB_OAUTH_CLIENT_ID' ],
+                                            'scope'        => 'user:email',
+                                            'state'        => $state,
+                                            'redirect_uri' => Routes::githubOauth()
+                                    ] )
+                    ]
+            ] );
         }
     }
 
