@@ -21,7 +21,7 @@ class ManageDecorator extends AbstractDecorator {
         $this->template->append( 'footer_js', Routes::staticSrc( 'build/paypal-manage-build.js' ) );
         $this->template->append( 'css_resources', Routes::staticSrc( 'build/paypal-manage-build.css' ) );
 
-        $this->template->split_enabled    = false;
+        $this->template->split_enabled    = true;
         $this->template->enable_outsource = false;
     }
 

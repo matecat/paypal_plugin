@@ -209,7 +209,7 @@ let showdown = require( "showdown" );
                     });
                 }
                 if ( segmentOpen.length && UI.getSegmentId(segment) !== UI.getSegmentId(segmentOpen)) {
-                    pos = pos - segmentOpen.find('.footer').height();
+                    pos = pos - segmentOpen.find('.footer').height() - 100;
                 }
 
 
