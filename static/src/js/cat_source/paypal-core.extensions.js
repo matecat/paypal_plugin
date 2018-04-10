@@ -54,28 +54,28 @@ let showdown = require( "showdown" );
             Store.addListener(Constants.CLOSE_WINDOW, this.closePreview.bind(this));
 
 
-            $("body").on('keydown.shortcuts', null, UI.shortcuts.nextPreview.keystrokes.standard, function(e) {
+            $("body").on('keydown.shortcuts', null, UI.shortcuts.paypal.events.nextPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.nextPreview();
-            }).on('keydown.shortcuts', null, UI.shortcuts.previousPreview.keystrokes.standard, function(e) {
+            }).on('keydown.shortcuts', null, UI.shortcuts.paypal.events.previousPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.prevPreview();
-            }).on('keydown.shortcuts', null, UI.shortcuts.nextSegment.keystrokes.standard, function(e) {
+            }).on('keydown.shortcuts', null, UI.shortcuts.paypal.events.nextSegment.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.nextSegment();
-            }).on('keydown.shortcuts', null, UI.shortcuts.previousSegment.keystrokes.standard, function(e) {
+            }).on('keydown.shortcuts', null, UI.shortcuts.paypal.events.previousSegment.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.prevSegment();
-            }).on('keydown.shortcuts', null, UI.shortcuts.firstSegment.keystrokes.standard, function(e) {
+            }).on('keydown.shortcuts', null, UI.shortcuts.paypal.events.firstSegment.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.firstSegment();
-            }).on('keydown.shortcuts', null, UI.shortcuts.lastSegment.keystrokes.standard, function(e) {
+            }).on('keydown.shortcuts', null, UI.shortcuts.paypal.events.lastSegment.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.lastSegment();
-            }).on('keydown.shortcuts', null, UI.shortcuts.nextSegmentPreview.keystrokes.standard, function(e) {
+            }).on('keydown.shortcuts', null, UI.shortcuts.paypal.events.nextSegmentPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.nextSegmentPreview();
-            }).on('keydown.shortcuts', null, UI.shortcuts.previousSegmentPreview.keystrokes.standard, function(e) {
+            }).on('keydown.shortcuts', null, UI.shortcuts.paypal.events.previousSegmentPreview.keystrokes.standard, function(e) {
                 e.preventDefault();
                 PreviewActions.previousSegmentPreview();
             }).on('keydown', function ( e ) {
@@ -105,71 +105,75 @@ let showdown = require( "showdown" );
          */
         setShortcuts: function() {
             originalSetShortcuts.apply(this);
-
-            UI.shortcuts.nextPreview = {
-                "label" : "Next Preview",
-                "equivalent": "",
-                "keystrokes" : {
-                    "standard": "alt+ctrl+right",
-                    "mac": "option+ctrl+right",
+            UI.shortcuts.paypal = {
+                label: "Preview",
+                events: {
+                    'nextPreview' : {
+                        "label": "Next Preview",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+right",
+                            "mac": "option+ctrl+right",
+                        }
+                    },
+                    'previousPreview' : {
+                        "label": "Previous Preview",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+left",
+                            "mac": "option+ctrl+left",
+                        }
+                    },
+                    'nextSegment' : {
+                        "label": "Next Preview Segment",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+down",
+                            "mac": "option+ctrl+down",
+                        }
+                    },
+                    'previousSegment' : {
+                        "label": "Previous Preview Segment",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+up",
+                            "mac": "option+ctrl+up",
+                        }
+                    },
+                    'lastSegment' : {
+                        "label": "Last Preview Segment",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+pagedown",
+                            "mac": "option+ctrl+fn+down",
+                        }
+                    },
+                    'firstSegment' : {
+                        "label": "First Preview Segment",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+pageup",
+                            "mac": "option+ctrl+fn+up",
+                        }
+                    },
+                    'nextSegmentPreview' : {
+                        "label": "Next Segment Preview",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+n",
+                            "mac": "option+ctrl+n",
+                        }
+                    },
+                    'previousSegmentPreview': {
+                        "label": "Previous Segment Preview",
+                        "equivalent": "",
+                        "keystrokes": {
+                            "standard": "alt+ctrl+p",
+                            "mac": "option+ctrl+p",
+                        }
+                    }
                 }
-            };
-            UI.shortcuts.previousPreview = {
-                "label" : "Previous Preview",
-                "equivalent": "",
-                "keystrokes" : {
-                    "standard": "alt+ctrl+left",
-                    "mac": "option+ctrl+left",
-                }
-            };
-            UI.shortcuts.nextSegment = {
-                "label" : "Next Preview Segment",
-                "equivalent": "",
-                "keystrokes" : {
-                    "standard": "alt+ctrl+down",
-                    "mac": "option+ctrl+down",
-                }
-            };
-            UI.shortcuts.previousSegment = {
-                "label": "Previous Preview Segment",
-                "equivalent": "",
-                "keystrokes": {
-                    "standard": "alt+ctrl+up",
-                    "mac": "option+ctrl+up",
-                }
-            };
-            UI.shortcuts.lastSegment = {
-                "label" : "Last Preview Segment",
-                "equivalent": "",
-                "keystrokes" : {
-                    "standard": "alt+ctrl+pagedown",
-                    "mac": "option+ctrl+fn+down",
-                }
-            };
-            UI.shortcuts.firstSegment = {
-                "label" : "First Preview Segment",
-                "equivalent": "",
-                "keystrokes" : {
-                    "standard": "alt+ctrl+pageup",
-                    "mac": "option+ctrl+fn+up",
-                }
-            };
-            UI.shortcuts.nextSegmentPreview = {
-                "label" : "Next Segment Preview",
-                "equivalent": "",
-                "keystrokes" : {
-                    "standard": "alt+ctrl+n",
-                    "mac": "option+ctrl+n",
-                }
-            };
-            UI.shortcuts.previousSegmentPreview = {
-                "label" : "Previous Segment Preview",
-                "equivalent": "",
-                "keystrokes" : {
-                    "standard": "alt+ctrl+p",
-                    "mac": "option+ctrl+p",
-                }
-            };
+            }
         },
         /**
          * Overwrite matecat function activateSegment

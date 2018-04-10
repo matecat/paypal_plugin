@@ -90,7 +90,7 @@ let Utils = require('./paypalUtils');
                 showInfo: false,
                 showFullScreenButton: true,
                 isMac: UI.isMac,
-                Shortcuts: UI.shortcuts,
+                Shortcuts: UI.shortcuts.paypal.events,
                 isLqa: config.isLQA
             }), mountPoint);
             this.getPreviewData().done(function (response) {
