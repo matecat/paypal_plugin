@@ -49,7 +49,7 @@ class Paypal extends BaseFeature {
 
     const PROJECT_TYPE_LR = 'LR';
 
-    protected $project_types = [ 'TR', 'LR', 'LQA' ];
+    protected static $project_types = [ 'TR', 'LR', 'LQA' ];
 
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
@@ -295,9 +295,16 @@ class Paypal extends BaseFeature {
      * @param $__postInput
      *
      * @return mixed
+     * @throws Exception
      */
     public function filterProjectMetadata( $metadata, $__postInput ) {
-        $metadata[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ];
+
+        if( !empty( $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ] ) ){
+            if( !in_array( $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ], self::$project_types ) ){
+                throw new Exception( "Project type '{$__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ]}'' is not allowed. Allowed types: [ 'TR', 'LR', 'LQA', NULL ]." );
+            }
+            $metadata[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ];
+        }
 
         return $metadata;
     }
