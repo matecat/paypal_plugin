@@ -526,7 +526,7 @@ class Paypal extends BaseFeature {
 
 
     /**
-     * Disable the TM ICES
+     * Set the TM ICES
      *
      * @param $tm_data
      * @param $queueElementParams
@@ -534,9 +534,22 @@ class Paypal extends BaseFeature {
      * @return mixed
      */
     public function checkIceLocked( $tm_data, $queueElementParams ) {
-        $tm_data[ 'status' ] = Constants_TranslationStatus::STATUS_NEW;
-        $tm_data[ 'locked' ] = false;
+        $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
+//        $tm_data[ 'locked' ] = true; //already locked
+        return $tm_data;
+    }
 
+    /**
+     * Lock 100% matches
+     *
+     * @param $tm_data
+     * @param $queueElementParams
+     *
+     * @return mixed
+     */
+    public function check100MatchLocked( $tm_data, $queueElementParams ){
+        $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
+        $tm_data[ 'locked' ] = true;
         return $tm_data;
     }
 
