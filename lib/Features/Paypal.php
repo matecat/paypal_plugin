@@ -343,7 +343,7 @@ class Paypal extends BaseFeature {
      *
      * @throws \Exception
      */
-    public function beginDoAction( viewController $controller, $params ) {
+    public function beginDoAction( viewController $controller, $params = [] ) {
 
         if ( method_exists( $controller, 'setLoginRequired' ) ) {
             /**
