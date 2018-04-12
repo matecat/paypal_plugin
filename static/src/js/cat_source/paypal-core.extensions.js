@@ -365,26 +365,18 @@ let showdown = require( "showdown" );
                     return item.type === "x-note";
                 });
                 let userMailHtml = <li className="graydesc">
-                                        Source:
-                                        <span className="bold">
-                                        {match.cb}
-                                    </span>
+                                        Source: <span className="bold"> {match.cb}</span>
                                     </li>;
                 let projectTypeHtml, noteHtml = "";
                 if (!_.isUndefined(userEmail)) {
                     userMailHtml = <li className="graydesc">
                                         Source:
-                                        <span className="bold">
-                                                {userEmail.value}
-                                            </span>
+                                        <span className="bold"> {userEmail.value}</span>
                                     </li>
                 }
                 if (!_.isUndefined(projectType)) {
                     projectTypeHtml = <li className="graydesc">
-                                            Project Type:
-                                            <span className="bold">
-                                                {projectType.value}
-                                            </span>
+                                            Project Type: <span className="bold"> {projectType.value}</span>
                                         </li>;
                 }
                 if (!_.isUndefined(note) && note.value) {
