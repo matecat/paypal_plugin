@@ -21,6 +21,7 @@ use Exception;
 use Features;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
+use Features\Paypal\Model\Analysis\CustomPayableRates;
 use Features\Paypal\Utils\CDataHandler;
 use Features\Paypal\Utils\Routes;
 use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
@@ -527,6 +528,20 @@ class Paypal extends BaseFeature {
             $translations_segments_dao->setTranslatedByChunk( $chunk );
         }
 
+    }
+
+    /**
+     *
+     * Payable Rates customization hook
+     * 
+     * @param $payableRates
+     * @param $SourceLang
+     * @param $TargetLang
+     *
+     * @return array
+     */
+    public function filterPayableRates( $payableRates, $SourceLang, $TargetLang ){
+        return CustomPayableRates::getPayableRates( $SourceLang, $TargetLang );
     }
 
 
