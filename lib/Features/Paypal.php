@@ -260,6 +260,11 @@ class Paypal extends BaseFeature {
         return $filter_args;
     }
 
+    public function filterCreateProjectInputFilters( $filter_args ){
+        unset( $filter_args[ 'tag_projection' ] );
+        return $filter_args;
+    }
+
     public function addNewProjectStructureAttributes( $projectStructure, $post_input ) {
         $projectStructure[ 'instructions' ] = $post_input[ 'instructions' ];
 
