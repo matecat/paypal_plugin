@@ -267,8 +267,11 @@ let showdown = require( "showdown" );
 
                 return config.job_completion_current_phase == 'lqa' &&
                     stats.APPROVED > 0 ;
-            }
-            else {
+            } else if (config.isReview) {
+                return config.job_completion_current_phase == 'revise' &&
+                    stats.DRAFT <= 0 && stats.TRANSLATED <=0 &&
+                    ( stats.APPROVED + stats.REJECTED ) > 0 ;
+            }  else {
                 return originalisMarkedAsCompleteClickable.apply(this, [stats])
             }
         },
