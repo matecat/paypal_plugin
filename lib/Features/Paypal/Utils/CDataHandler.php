@@ -71,7 +71,7 @@ class CDataHandler {
 
         $jMetaDao = new MetadataDao();
         foreach( $projectStructure[ 'array_jobs' ][ 'job_list' ] as $position => $id_job){
-            $jMetaDao->set( $id_job, $projectStructure[ 'array_jobs' ][ 'job_pass' ][ $position ], self::PREVIEWS_LOOKUP, json_encode( $projectStructure[ 'json_previews' ] ) );
+            $jMetaDao->set( $id_job, $projectStructure[ 'array_jobs' ][ 'job_pass' ][ $position ], self::PREVIEWS_LOOKUP, json_encode( @$projectStructure[ 'json_previews' ] ) );
         }
 
     }

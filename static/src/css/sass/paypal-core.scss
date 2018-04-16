@@ -116,6 +116,9 @@ section .footer {
         cursor: pointer;
         .icon-info {
             font-size: 13px;
+            color: rgb(167, 167, 167);
+            position: relative;
+            top: 2px;
         }
     }
 }

@@ -21,6 +21,7 @@ use Exception;
 use Features;
 use Features\Paypal\Controller\API\Validators\TranslatorsWhitelistAccessValidator;
 use Features\Paypal\Controller\PreviewController;
+use Features\Paypal\Model\Analysis\CustomPayableRates;
 use Features\Paypal\Utils\CDataHandler;
 use Features\Paypal\Utils\Routes;
 use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
@@ -49,7 +50,7 @@ class Paypal extends BaseFeature {
 
     const PROJECT_TYPE_LR = 'LR';
 
-    protected $project_types = [ 'TR', 'LR', 'LQA' ];
+    protected static $project_types = [ 'TR', 'LR', 'LQA' ];
 
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
@@ -260,6 +261,11 @@ class Paypal extends BaseFeature {
         return $filter_args;
     }
 
+    public function filterCreateProjectInputFilters( $filter_args ){
+        unset( $filter_args[ 'tag_projection' ] );
+        return $filter_args;
+    }
+
     public function addNewProjectStructureAttributes( $projectStructure, $post_input ) {
         $projectStructure[ 'instructions' ] = $post_input[ 'instructions' ];
 
@@ -295,9 +301,16 @@ class Paypal extends BaseFeature {
      * @param $__postInput
      *
      * @return mixed
+     * @throws Exception
      */
     public function filterProjectMetadata( $metadata, $__postInput ) {
-        $metadata[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ];
+
+        if( !empty( $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ] ) ){
+            if( !in_array( $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ], self::$project_types ) ){
+                throw new Exception( "Project type '{$__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ]}'' is not allowed. Allowed types: [ 'TR', 'LR', 'LQA', NULL ]." );
+            }
+            $metadata[ Paypal::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Paypal::PROJECT_TYPE_METADATA_KEY ];
+        }
 
         return $metadata;
     }
@@ -517,9 +530,23 @@ class Paypal extends BaseFeature {
 
     }
 
+    /**
+     *
+     * Payable Rates customization hook
+     * 
+     * @param $payableRates
+     * @param $SourceLang
+     * @param $TargetLang
+     *
+     * @return array
+     */
+    public function filterPayableRates( $payableRates, $SourceLang, $TargetLang ){
+        return CustomPayableRates::getPayableRates( $SourceLang, $TargetLang );
+    }
+
 
     /**
-     * Disable the TM ICES
+     * Set the TM ICES
      *
      * @param $tm_data
      * @param $queueElementParams
@@ -527,9 +554,22 @@ class Paypal extends BaseFeature {
      * @return mixed
      */
     public function checkIceLocked( $tm_data, $queueElementParams ) {
-        $tm_data[ 'status' ] = Constants_TranslationStatus::STATUS_NEW;
-        $tm_data[ 'locked' ] = false;
+        $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
+//        $tm_data[ 'locked' ] = true; //already locked
+        return $tm_data;
+    }
 
+    /**
+     * Lock 100% matches
+     *
+     * @param $tm_data
+     * @param $queueElementParams
+     *
+     * @return mixed
+     */
+    public function check100MatchLocked( $tm_data, $queueElementParams ){
+        $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
+        $tm_data[ 'locked' ] = true;
         return $tm_data;
     }
 

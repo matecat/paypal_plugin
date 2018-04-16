@@ -22,6 +22,9 @@ class CatDecorator extends AbstractDecorator {
         $this->template->allow_link_to_analysis = false;
         $this->template->lxq_enabled            = 0;
 
+        //do not show Tag Projection
+        $this->template->show_tag_projection = false;
+
         $this->stats = $this->controller->getJobStats();
 
         $dao                 = new \Chunks_ChunkCompletionEventDao();

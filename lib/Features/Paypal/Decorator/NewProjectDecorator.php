@@ -18,7 +18,8 @@ class NewProjectDecorator extends \AbstractDecorator {
     protected $template;
 
     public function decorate() {
-        $this->template->tag_projection_enabled = false;
+        //do not show Tag Projection
+        $this->template->show_tag_projection = false;
     }
 
 }
