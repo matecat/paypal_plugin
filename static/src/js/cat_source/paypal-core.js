@@ -29,7 +29,7 @@ let Utils = require('./paypalUtils');
         selectSegment: function (sid) {
             var el = $("section:not(.opened) #segment-" + sid + "-target").find(".editarea, .targetarea");
             if (el.length > 0 ) {
-                UI.editAreaClick(el[0]);
+                SegmentActions.openSegment(sid);
             }
         },
         /**
