@@ -20,6 +20,7 @@ let showdown = require( "showdown" );
     var original_deleteSegmentIssues = UI.deleteSegmentIssues;
     var originalGotoNextSegment = UI.gotoNextSegment;
     var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
+    var originalsetProgress = UI.setProgress;
     $.extend(UI, {
 
         /**
@@ -350,6 +351,16 @@ let showdown = require( "showdown" );
                 originalGotoNextSegment.apply(this);
             }
             return false;
+        },
+
+        setProgress: function ( stats ) {
+            originalsetProgress.apply(this, [ stats ]);
+            if (config.isReview) {
+                let total = stats.TOTAL;
+                let approved = stats.APPROVED;
+                let todo = Math.round( stats.TOTAL - stats.APPROVED);
+                $('#stat-todo strong').html(todo);
+            }
         }
 
     });
