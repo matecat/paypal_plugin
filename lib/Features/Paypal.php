@@ -546,7 +546,7 @@ class Paypal extends BaseFeature {
 
 
     /**
-     * Set the TM ICES
+     * Set the TM ICES in TManalysis
      *
      * @param $tm_data
      * @param $queueElementParams
@@ -560,7 +560,7 @@ class Paypal extends BaseFeature {
     }
 
     /**
-     * Lock 100% matches
+     * Lock 100% matches in TManalysis
      *
      * @param $tm_data
      * @param $queueElementParams
@@ -569,7 +569,6 @@ class Paypal extends BaseFeature {
      */
     public function check100MatchLocked( $tm_data, $queueElementParams ){
         $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
-        $tm_data[ 'locked' ] = true;
         return $tm_data;
     }
 
@@ -586,6 +585,19 @@ class Paypal extends BaseFeature {
         }
 
         return $match;
+    }
+
+    /**
+     *
+     * Add additional parameters to the getMoreSegments query
+     *
+     * @param $options
+     *
+     * @return mixed
+     */
+    public function filter_get_segments_optional_fields( $options ){
+        $options[ 'optional_fields' ][] = "IF( suggestion_match = 100, 1, 0 ) AS ice_locked"; // ALL 100% matches are locked for PayPal
+        return $options;
     }
 
     /**
