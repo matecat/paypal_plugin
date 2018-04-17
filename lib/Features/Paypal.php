@@ -569,7 +569,6 @@ class Paypal extends BaseFeature {
      */
     public function check100MatchLocked( $tm_data, $queueElementParams ){
         $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
-        $tm_data[ 'locked' ] = true;
         return $tm_data;
     }
 
@@ -597,7 +596,7 @@ class Paypal extends BaseFeature {
      * @return mixed
      */
     public function filter_get_segments_optional_fields( $options ){
-        $options[ 'optional_fields' ][] = "IF( st.locked AND suggestion_match = 100, 1, 0 ) AS ice_locked";
+        $options[ 'optional_fields' ][] = "IF( suggestion_match = 100, 1, 0 ) AS ice_locked"; // ALL 100% matches are locked for PayPal
         return $options;
     }
 
