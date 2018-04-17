@@ -361,6 +361,16 @@ let showdown = require( "showdown" );
                 let todo = Math.round( stats.TOTAL - stats.APPROVED);
                 $('#stat-todo strong').html(todo);
             }
+        },
+
+        showFixWarningsModal: function (  ) {
+            APP.confirm({
+                name: 'markJobAsComplete', // <-- this is the name of the function that gets invoked?
+                okTxt: 'Fix errors',
+                callback: 'goToFirstError',
+                msg: 'Unresolved tag issues may prevent downloading your translation. <br>Please fix the issues. <a style="color: #4183C4; font-weight: 700; text-decoration:' +
+                ' underline;" href="https://www.matecat.com/support/advanced-features/understanding-fixing-tag-errors-tag-issues-matecat/" target="_blank">How to fix tags in MateCat </a> '
+            });
         }
 
     });
