@@ -596,7 +596,7 @@ class Paypal extends BaseFeature {
      * @return mixed
      */
     public function filter_get_segments_optional_fields( $options ){
-        $options[ 'optional_fields' ][] = "IF( suggestion_match = 100, 1, 0 ) AS ice_locked"; // ALL 100% matches are locked for PayPal
+        $options[ 'optional_fields' ][] = "IF( (  st.locked AND match_type = 'ICE' ) OR suggestion_match = 100, 1, 0 ) AS ice_locked"; // ALL 100% matches are locked for PayPal
         return $options;
     }
 
@@ -620,7 +620,6 @@ class Paypal extends BaseFeature {
         if ( $iceLockArray[ 'approved' ] ) {
             $iceLockArray[ 'locked' ] = 1;
             $iceLockArray[ 'status' ] = Constants_TranslationStatus::STATUS_APPROVED;
-            $iceLockArray[ 'suggestion_match' ] = 100;
         }
 
         return $iceLockArray;
