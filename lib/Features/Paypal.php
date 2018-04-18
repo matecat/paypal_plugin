@@ -620,6 +620,7 @@ class Paypal extends BaseFeature {
         if ( $iceLockArray[ 'approved' ] ) {
             $iceLockArray[ 'locked' ] = 1;
             $iceLockArray[ 'status' ] = Constants_TranslationStatus::STATUS_APPROVED;
+            $iceLockArray[ 'suggestion_match' ] = 100;
         }
 
         return $iceLockArray;
