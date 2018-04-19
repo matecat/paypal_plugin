@@ -88,13 +88,16 @@ body.cattool {
     z-index: 1;
     position: relative;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     .preview-image-container {
-        position: relative;
         margin: 0 auto;
         width: 100%;
         overflow-y: auto;
-        height: 96%;
-        padding-bottom: 100px;
+        height: 100%;
+        flex: 1;
+        padding-bottom: 20px;
 
     }
     .preview-drag-area {
