@@ -80,7 +80,7 @@
             let project_status = this.props.project.get('project_status');
             if ( !project_type &&  project_status) {
                 let translateJobStatus = project_status.get('translate').find(function ( item ) {
-                    return parseInt(item.get('id')) === parseInt(chunkJob.get('id'));
+                    return parseInt(item.get('id')) === parseInt(chunkJob.id) && item.get('password') === chunkJob.password;
                 });
                 if ( translateJobStatus && translateJobStatus.get('completed') ) {
                     return <div className="open-revise ui green button open"
