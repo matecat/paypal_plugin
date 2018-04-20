@@ -5,6 +5,16 @@ body.cattool {
     padding: unset;
 }
 
+.translate-page {
+    #setStatus-filter {
+        display: none;
+    }
+    section .segment-add-inBulk,
+    section.editor .txt.segment-add-inBulk {
+        display: none !important;
+    }
+}
+
 .main-container {
     width: 100%;
     height: 95%;

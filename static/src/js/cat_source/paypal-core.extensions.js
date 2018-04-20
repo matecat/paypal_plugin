@@ -32,6 +32,12 @@ let showdown = require( "showdown" );
             this.checkInstructions();
             var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
             Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
+
+            if (config.isReview) {
+                $('body').assClass('revise-page');
+            } else {
+                $('body').addClass('translate-page');
+            }
         },
         /**
          * Overwrite the matecat fn to add events and listeners
