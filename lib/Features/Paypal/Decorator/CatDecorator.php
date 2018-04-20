@@ -6,6 +6,7 @@ namespace Features\Paypal\Decorator;
 use AbstractDecorator;
 use catController;
 use Chunks_ChunkCompletionEventDao;
+use Constants_TranslationStatus;
 use Features\Paypal\Utils\Routes;
 
 class CatDecorator extends AbstractDecorator {
@@ -48,6 +49,7 @@ class CatDecorator extends AbstractDecorator {
             $this->template->footer_show_translate_link = false;
         }
 
+        $this->template->searchable_statuses = $this->searchableStatuses();
 
     }
 
@@ -90,4 +92,20 @@ class CatDecorator extends AbstractDecorator {
 
         return $completable ;
     }
+
+    /**
+     * @return array
+     */
+    private function searchableStatuses() {
+        $statuses = array_merge(
+                Constants_TranslationStatus::$INITIAL_STATUSES,
+                Constants_TranslationStatus::$TRANSLATION_STATUSES,
+                array(Constants_TranslationStatus::STATUS_APPROVED)
+        );
+
+        return array_map( function ( $item ) {
+            return (object)array( 'value' => $item, 'label' => $item );
+        }, $statuses );
+    }
+
 }
