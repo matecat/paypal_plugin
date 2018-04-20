@@ -234,8 +234,26 @@ class Paypal extends BaseFeature {
         return false;
     }
 
-    public function skipTagLessFeature( $boolean ) {
-        return true;
+    /**
+     * Decide whether remove initial tags or not
+     *
+     * @param $boolean
+     * @param $segment
+     *
+     * @return bool
+     */
+    public function skipTagLessFeature( $boolean, $segment ) {
+        /**
+         * Ugly tag recognition, it's the easy way to decide whether a tag is a normal tag or a paypal xml <ph> tag
+         *
+         * Filters do not use <ph> tags, so it comes directly from a not converted xliff.
+         * In the PayPal feature ALL the Xliff are NOT converted
+         *
+         */
+        if( preg_match('|^<ph [^>]+>|', $segment ) ){
+            return true;
+        }
+        return false;
     }
 
     public function filter_manage_single_project( $project ) {
