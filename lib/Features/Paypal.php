@@ -562,6 +562,71 @@ class Paypal extends BaseFeature {
         return CustomPayableRates::getPayableRates( $SourceLang, $TargetLang );
     }
 
+    public function modifyMatches( $matches ){
+
+        $remove = false;
+
+        /**
+         * Force to perform re-ordering and match rewrite
+         */
+        if( count( $matches ) == 1 ){
+            $remove = true;
+            $matches[ 1 ] = $matches[ 0 ];
+        }
+
+        /**
+         * Force the MT value as 75 and reorder the matches
+         */
+        usort ( $matches , function( &$matchA, &$matchB ){
+
+            if ( stripos( $matchA[ 'created_by' ], "MT" ) !== false ){
+                $matchA[ 'match' ] = "75%";
+            }
+
+            if ( stripos( $matchB[ 'created_by' ], "MT" ) !== false ){
+                $matchB[ 'match' ] = "75%";
+            }
+
+            if( intval( $matchA[ 'match' ] ) == intval( $matchB[ 'match' ] ) ){
+                return 0;
+            }
+
+            return ( intval( $matchA[ 'match' ] ) < intval( $matchB[ 'match' ] ) ) ? 1 : -1;
+
+        } );
+
+        if( $remove ){
+            array_pop( $matches );
+        }
+
+        return $matches;
+
+    }
+
+    /**
+     * Customize Band value for the match retrieved during the TM Analysis
+     *
+     * @param $tm_match_type
+     *
+     * @return string
+     */
+    public function customizeTMMatches( $tm_match_type ){
+
+        /**
+         * If the first match is a match 50/74 ( the MT was not found for any reason ) force MT discount
+         */
+        if ( stripos( $tm_match_type, "MT" ) === false ) {
+
+            $ind = intval( $tm_match_type );
+            if ( $ind < 75 ) {
+                $tm_match_type = "MT";
+            }
+
+        }
+
+        return $tm_match_type;
+
+    }
 
     /**
      * Set the TM ICES in TManalysis
