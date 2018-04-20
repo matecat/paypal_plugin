@@ -34,7 +34,7 @@ let showdown = require( "showdown" );
             Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
 
             if (config.isReview) {
-                $('body').assClass('revise-page');
+                $('body').addClass('revise-page');
             } else {
                 $('body').addClass('translate-page');
             }
