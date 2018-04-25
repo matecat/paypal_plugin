@@ -1,6 +1,7 @@
 <?php
 namespace pingidentity\opentoken;
 
+use Features\Paypal;
 use pingidentity\opentoken\helpers\token;
 use pingidentity\opentoken\helpers\multistringarray;
 use pingidentity\opentoken\helpers\keyvalueserializer;
@@ -312,8 +313,8 @@ class Agent {
      */
     function loadConfiguration() {
         // open the config file and read its contents
-        // $config_data = file_get_contents(\pingidentity\opentoken\helpers\config:: AGENT_CONFIG_FILE);
-        $config_data = file_get_contents( \pingidentity\opentoken\helpers\config:: AGENT_CONFIG_FILE);
+        $config_file_path = PayPal::getSamlAgentConfigFilePath() ;
+        $config_data = file_get_contents( $config_file_path );
         $config = $this->flattenMultiStringArray(KeyValueSerializer::deserialize($config_data));
 
         // set the various instance variables

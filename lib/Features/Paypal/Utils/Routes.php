@@ -10,6 +10,8 @@
 namespace Features\Paypal\Utils;
 
 
+use Features\Paypal;
+
 class Routes {
 
     public static function staticBuild( $file, $options = [] ) {
@@ -37,9 +39,20 @@ class Routes {
 
     }
 
-    public static function githubOauth() {
+    public static function samlConsumer() {
         $host = \Routes::pluginsBase( [] );
-        return "$host/paypal/oauth/github/response" ;
+        return "$host/paypal/saml/login" ;
     }
+
+    public static function samlLoginURL( $params = [] ) {
+        $config = PayPal::getConfig();
+
+        $params['PartnerIdpId'] = $config['PartnerIdpId'];
+        $params['TargetResource'] = self::samlConsumer() ;
+
+        return "https://ssoqa.paypalcorp.com/sp/startSSO.ping?" . http_build_query( $params ) ;
+    }
+
+
 
 }

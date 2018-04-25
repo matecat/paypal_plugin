@@ -27,6 +27,7 @@ use Features\Paypal\Utils\Routes;
 use Features\Paypal\View\API\JSON\ProjectUrlsDecorator;
 use Klein\Klein;
 use LQA\ChunkReviewDao;
+use Monolog\Logger;
 use Projects_MetadataDao;
 use Projects_ProjectStruct;
 use Users_UserStruct;
@@ -51,6 +52,11 @@ class Paypal extends BaseFeature {
     const PROJECT_TYPE_LR = 'LR';
 
     protected static $project_types = [ 'TR', 'LR', 'LQA' ];
+
+    /**
+     * @var Logger
+     */
+    protected static $logger ;
 
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
@@ -96,6 +102,8 @@ class Paypal extends BaseFeature {
         route( '/lqa/[:id_job]/[:password]', 'GET', 'Features\Paypal\Controller\LqaController', 'show' );
 
         route( '/oauth/github/response', 'GET', 'Features\Paypal\Controller\OAuth\GithubOAuthController', 'response' );
+
+        route( '/saml/login', [ 'GET', 'POST' ] , 'Features\PayPal\Controller\SAML\PayPalController', 'response' );
     }
 
     public static function previewRoute( $request, $response, $service, $app ) {
@@ -792,16 +800,24 @@ class Paypal extends BaseFeature {
             }
 
             $template->append( 'config_js', [
-                    'paypal' => [
-                            'github_auth_url' => 'https://github.com/login/oauth/authorize?' . http_build_query( [
-                                            'client_id'    => $config[ 'GITHUB_OAUTH_CLIENT_ID' ],
-                                            'scope'        => 'user:email',
-                                            'state'        => $state,
-                                            'redirect_uri' => Routes::githubOauth()
-                                    ] )
-                    ]
+                    'auth_allow_google' => false,
+                    'auth_allow_email' => false,
+                    'other_service_auth_url' => Routes::samlLoginURL( ),
+                    'other_service_button_label' => 'Sign in with PayPal'
             ] );
         }
+    }
+
+    public static function getSamlAgentConfigFilePath() {
+        return realpath( self::getPluginBasePath() . '/../config/saml-agent-config.txt' ) ;
+    }
+
+    public static function staticLogger() {
+        if ( is_null( self::$logger ) ) {
+            $feature = new BasicFeatureStruct(['feature_code' => self::FEATURE_CODE ]);
+            self::$logger = ( new Dqf($feature) )->getLogger();
+        }
+        return self::$logger ;
     }
 
 }
