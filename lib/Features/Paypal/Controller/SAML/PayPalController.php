@@ -11,12 +11,12 @@ namespace Features\Paypal\Controller\SAML ;
 use BaseKleinViewController;
 use Features\Paypal;
 
-use pingidentity\opentoken\Agent ;
+use pingidentity\opentoken\agent ;
 
 class PayPalController extends BaseKleinViewController {
 
     public function response() {
-        $agent = new Agent();
+        $agent = new agent();
         $opentoken_values = $agent->readTokenFromHTTPRequest();
         $opentoken_valuesMultiStringArray = $agent->readTokenFromHTTPRequestToMultiStringArray();
 
