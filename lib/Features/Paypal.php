@@ -103,7 +103,7 @@ class Paypal extends BaseFeature {
 
         route( '/oauth/github/response', 'GET', 'Features\Paypal\Controller\OAuth\GithubOAuthController', 'response' );
 
-        route( '/saml/login', [ 'GET', 'POST' ] , 'Features\PayPal\Controller\SAML\PayPalController', 'response' );
+        route( '/saml/login', [ 'GET', 'POST' ] , 'Features\Paypal\Controller\SAML\PayPalController', 'response' );
     }
 
     public static function previewRoute( $request, $response, $service, $app ) {
@@ -791,7 +791,6 @@ class Paypal extends BaseFeature {
      */
     public function appendDecorators( $controller, $template ) {
         if ( method_exists( $template, 'append' ) ) {
-            $config = Paypal::getConfig();
 
             if ( !isset( $_SESSION[ 'paypal_github_oauth_state' ] ) ) {
                 $state = $_SESSION[ 'paypal_github_oauth_state' ] = CatUtils::generate_password( 12 );
