@@ -28,9 +28,9 @@ class PayPalController extends BaseKleinViewController {
                 ['response' => $opentoken_valuesMultiStringArray ]
         ) ;
 
-
-        PayPal::staticLogger()->info( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
-        PayPal::staticLogger()->info( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
+        PayPal::staticLogger()->debug( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
+        PayPal::staticLogger()->debug( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
+        Paypal::staticLogger()->debug( 'lastError',   ['error'  => $agent->lastError ] );
 
         // TODO:
         $this->response->body('keep going');
