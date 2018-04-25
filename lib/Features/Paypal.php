@@ -800,8 +800,8 @@ class Paypal extends BaseFeature {
             }
 
             $template->append( 'config_js', [
-                    'auth_allow_google' => false,
-                    'auth_allow_email' => false,
+                    'auth_disable_google' => true,
+                    'auth_disable_email' => false,
                     'other_service_auth_url' => Routes::samlLoginURL( ),
                     'other_service_button_label' => 'Sign in with PayPal'
             ] );
