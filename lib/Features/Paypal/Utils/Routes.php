@@ -53,6 +53,9 @@ class Routes {
         return "https://ssoqa.paypalcorp.com/sp/startSSO.ping?" . http_build_query( $params ) ;
     }
 
-
+    public static function githubOauth() {
+        $host = \Routes::pluginsBase( [] );
+        return "$host/paypal/oauth/github/response" ;
+    }
 
 }
