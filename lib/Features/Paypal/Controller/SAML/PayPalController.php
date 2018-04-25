@@ -28,6 +28,10 @@ class PayPalController extends BaseKleinViewController {
                 ['response' => $opentoken_valuesMultiStringArray ]
         ) ;
 
+
+        PayPal::staticLogger()->info( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
+        PayPal::staticLogger()->info( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
+
         // TODO:
         $this->response->body('keep going');
         $this->response->body('https://ssoqa.paypalcorp.com/sp/startSSO.ping?PartnerIdpId=PPSSOALL06_OUD&TargetResource=http://dev.matecat.com/plugins/paypal/saml/login');
