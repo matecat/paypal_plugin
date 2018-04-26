@@ -394,13 +394,14 @@ let showdown = require( "showdown" );
                 let note = tmProperties.find(function ( item ) {
                     return item.type === "x-note";
                 });
-                let userMailHtml = <li className="graydesc">
+                let tmSourceHtml = <li className="graydesc">
                                         Source: <span className="bold"> {match.cb}</span>
                                     </li>;
+                let userMailHtml = "";
                 let projectTypeHtml, noteHtml = "";
                 if (!_.isUndefined(userEmail)) {
                     userMailHtml = <li className="graydesc">
-                                        Source:
+                                        UserId:
                                         <span className="bold"> {userEmail.value}</span>
                                     </li>
                 }
@@ -429,6 +430,7 @@ let showdown = require( "showdown" );
                         <li>
                             {match.suggestion_info}
                         </li>
+                        {tmSourceHtml}
                         {userMailHtml}
                         {projectTypeHtml}
                         {noteHtml}
