@@ -814,7 +814,7 @@ class Paypal extends BaseFeature {
     public static function staticLogger() {
         if ( is_null( self::$logger ) ) {
             $feature = new BasicFeatureStruct(['feature_code' => self::FEATURE_CODE ]);
-            self::$logger = ( new Dqf($feature) )->getLogger();
+            self::$logger = ( new Paypal($feature) )->getLogger();
         }
         return self::$logger ;
     }
