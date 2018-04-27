@@ -11,6 +11,7 @@ namespace Features\Paypal\Controller\SAML ;
 use BaseKleinViewController;
 use Features\Paypal;
 use Features\Paypal\Utils\Routes;
+use OAuthSignInModel;
 use OneLogin_Saml2_Auth;
 
 
@@ -48,8 +49,28 @@ class PayPalController extends BaseKleinViewController {
         $logger->debug( 'getNameIdFormat', $auth->getNameIdFormat() ) ;
         $logger->debug( 'getSessionIndex', $auth->getSessionIndex() ) ;
 
-        // TODO: process authentication here
+        // At some point when the attributes are validated we will have
+        // First name
+        // Last name
+        // email
+        // so we can process the sign in
+        $firstName = 'John';
+        $lastName = 'Doe' ;
+        $email = 'johndoe@example.org' ;
 
+        $signIn = new OAuthSignInModel( $firstName, $lastName, $email );
+        $signIn->signIn() ;
+
+        $body = <<<EOF
+<html>
+<body>
+<script>window.close();</script>
+</body>
+</html>
+EOF;
+        $this->response->body( $body ) ;
+
+        // TODO: process authentication here
         // TODO: this is supposedly heppning in a modal window so we should close the modal window on successful login
 
         // if (isset($_POST['RelayState']) && OneLogin_Saml2_Utils::getSelfURL() != $_POST['RelayState']) {
