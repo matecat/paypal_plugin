@@ -13,6 +13,7 @@ use Features\Paypal;
 
 use Features\Paypal\Utils\Routes;
 use OneLogin_Saml2_Auth;
+use OneLogin_Saml2_Utils;
 use pingidentity\opentoken\agent ;
 
 
@@ -22,25 +23,37 @@ class PayPalController extends BaseKleinViewController {
      * This is for opentoken
      */
     public function login() {
-        $agent = new agent();
-        $opentoken_values = $agent->readTokenFromHTTPRequest();
-        $opentoken_valuesMultiStringArray = $agent->readTokenFromHTTPRequestToMultiStringArray();
+        $logger = PayPal::staticLogger() ;
 
-        PayPal::staticLogger()->info( 'readTokenFromHTTPRequest',
-                ['response' => $opentoken_values ]
-        ) ;
+        $logger->debug( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
+        $logger->debug( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
 
-        PayPal::staticLogger()->info( 'readTokenFromHTTPRequestToMultiStringArray',
-                ['response' => $opentoken_valuesMultiStringArray ]
-        ) ;
+        $auth = new OneLogin_Saml2_Auth( $this->getSamlSettings() ); // Constructor of the SP, loads settings.php
+        $auth->processResponse();
 
-        PayPal::staticLogger()->debug( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
-        PayPal::staticLogger()->debug( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
-        Paypal::staticLogger()->debug( 'lastError',   ['error'  => $agent->lastError ] );
+        $errors = $auth->getErrors();
 
-        // TODO:
-        $this->response->body('keep going');
-        $this->response->body('https://ssoqa.paypalcorp.com/sp/startSSO.ping?PartnerIdpId=PPSSOALL06_OUD&TargetResource=http://dev.matecat.com/plugins/paypal/saml/login');
+        if (!empty($errors)) {
+            echo '<p>',implode(', ', $errors),'</p>';
+        }
+
+        if (!$auth->isAuthenticated()) {
+            echo "<p>Not authenticated</p>";
+            exit();
+        }
+
+        $logger->debug( 'getAttributes', $auth->getAttributes() ) ;
+        $logger->debug( 'getNameId', $auth->getNameId() ) ;
+        $logger->debug( 'getNameIdFormat', $auth->getNameIdFormat() ) ;
+        $logger->debug( 'getSessionIndex', $auth->getSessionIndex() ) ;
+
+        // TODO: process authentication here
+
+        // TODO: this is supposedly heppning in a modal window so we should close the modal window on successful login
+
+        // if (isset($_POST['RelayState']) && OneLogin_Saml2_Utils::getSelfURL() != $_POST['RelayState']) {
+        //     $auth->redirectTo($_POST['RelayState']);
+        // }
     }
 
     public function forward() {
