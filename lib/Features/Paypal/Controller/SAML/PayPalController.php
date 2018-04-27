@@ -101,13 +101,13 @@ EOF;
                         'privateKey' => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/privkey.pem' ) ),
                 ),
                 'idp' => array (
-                        'entityId' => 'PayPal',
+                        'entityId' => 'https://ssoqa.paypalcorp.com',
                         'singleSignOnService' => array (
-                                'url' => Routes::samlLoginURL(),
+                                'url' => 'https://ssoqa.paypalcorp.com/idp/SSO.saml2',
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                         ),
                         'singleLogoutService' => array (
-                                'url' => Routes::samlLoginURL(),
+                                'url' => 'https://ssoqa.paypalcorp.com/idp/SSO.saml2',
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                         ),
                         'x509cert' => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/idp.pem' ) )

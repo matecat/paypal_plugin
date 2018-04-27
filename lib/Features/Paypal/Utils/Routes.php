@@ -54,15 +54,6 @@ class Routes {
         return "$host/paypal/saml/logout" ;
     }
 
-    public static function samlLoginURL( $params = [] ) {
-        $config = PayPal::getConfig();
-
-        $params['PartnerIdpId'] = $config['PartnerIdpId'];
-        $params['TargetResource'] = self::samlConsumer() ;
-
-        return "https://ssoqa.paypalcorp.com/sp/startSSO.ping?" . http_build_query( $params ) ;
-    }
-
     public static function githubOauth() {
         $host = \Routes::pluginsBase( [] );
         return "$host/paypal/oauth/github/response" ;
