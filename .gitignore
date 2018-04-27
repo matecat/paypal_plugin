@@ -18,3 +18,8 @@ package-lock.json
 
 vendor
 composer.phar
+
+config/*.ini
+config/*.txt
+config/*.pem
+config.ini
