@@ -22,7 +22,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
             '100%'        => 10,
             '100%_PUBLIC' => 10,
             'REPETITIONS' => 25,
-            'INTERNAL'    => 60,
+            'INTERNAL'    => 75,
             'MT'          => 24.9  //we assume an average between all MT percentages as default
     ];
 
@@ -39,7 +39,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 30
                     ],
                     "fr-FR" => [
@@ -52,7 +52,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 23.5
                     ],
                     "fr-CA" => [
@@ -65,7 +65,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 30
                     ],
                     "pt-PT" => [
@@ -79,7 +79,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
 
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 35
                     ],
                     "pt-BR" => [
@@ -93,7 +93,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
 
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 35
                     ],
                     "es-ES" => [
@@ -106,7 +106,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 26
                     ],
                     "es-MX" => [
@@ -119,7 +119,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 22
                     ],
                     "nl-NL" => [
@@ -132,7 +132,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 30
                     ],
                     "pl-PL" => [
@@ -145,7 +145,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 11
                     ],
                     "he-IL" => [
@@ -158,7 +158,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 25
                     ],
                     "id-ID" => [
@@ -171,7 +171,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 23
                     ],
                     "ja-JP" => [
@@ -184,7 +184,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 18
                     ],
                     "ko-KR" => [
@@ -197,7 +197,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 6
                     ],
                     "nb-NO" => [
@@ -210,7 +210,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 41.94
                     ],
                     "zh-CN" => [
@@ -223,7 +223,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 18.75
                     ],
                     "zh-HK" => [
@@ -236,7 +236,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 10
                     ],
                     "zh-TW" => [
@@ -249,7 +249,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 7
                     ],
                     "ar-SA" => [
@@ -262,7 +262,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 23
                     ],
                     "da-DK" => [
@@ -275,7 +275,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 38.71
                     ],
                     "de-DE" => [
@@ -288,7 +288,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 10
                     ],
                     "de-AT" => [
@@ -301,7 +301,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 10
                     ],
                     "ru-RU" => [
@@ -314,7 +314,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 16.67
                     ],
                     "sv-SE" => [
@@ -327,7 +327,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 35.71
                     ],
                     "th-TH" => [
@@ -340,7 +340,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 24
                     ],
                     "tr-TR" => [
@@ -353,7 +353,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 15
                     ]
             ],
@@ -368,7 +368,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 25
                     ]
             ],
@@ -383,7 +383,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 26
                     ]
             ],
@@ -398,7 +398,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 17
                     ]
             ],
@@ -413,7 +413,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 39
                     ]
             ],
@@ -428,7 +428,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 38
                     ]
             ],
@@ -443,7 +443,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 30
                     ]
             ],
@@ -458,7 +458,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 43
                     ]
             ],
@@ -473,7 +473,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 32
                     ]
             ],
@@ -488,7 +488,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 40
                     ]
             ],
@@ -503,7 +503,7 @@ class CustomPayableRates extends \Analysis_PayableRates {
                             '100%'        => 10,
                             '100%_PUBLIC' => 10,
                             'REPETITIONS' => 25,
-                            'INTERNAL'    => 60,
+                            'INTERNAL'    => 75,
                             'MT'          => 6
                     ]
             ]
