@@ -157,6 +157,8 @@ class Paypal extends BaseFeature {
             $userInfo                            = array_pop( $userInfoList );
             $contributionStruct->props[ 'user' ] = $userInfo->email;
 
+            $contributionStruct->props[ 'revision' ] = $contributionStruct->fromRevision;
+
         } catch ( Exception $e ) {
 
         }
