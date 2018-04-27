@@ -394,6 +394,12 @@ let showdown = require( "showdown" );
                 let note = tmProperties.find(function ( item ) {
                     return item.type === "x-note";
                 });
+                let sourceHtml = <li className="graydesc">
+                    Source:
+                    <span className="bold">
+                                        {match.cb}
+                                    </span>
+                </li>;
                 let userMailHtml = <li className="graydesc">
                                         User ID: <span className="bold"> Anonymous </span>
                                     </li>;
@@ -429,6 +435,7 @@ let showdown = require( "showdown" );
                         <li>
                             {match.suggestion_info}
                         </li>
+                        {sourceHtml}
                         {userMailHtml}
                         {projectTypeHtml}
                         {noteHtml}
