@@ -10,11 +10,8 @@ namespace Features\Paypal\Controller\SAML ;
 
 use BaseKleinViewController;
 use Features\Paypal;
-
 use Features\Paypal\Utils\Routes;
 use OneLogin_Saml2_Auth;
-use OneLogin_Saml2_Utils;
-use pingidentity\opentoken\agent ;
 
 
 class PayPalController extends BaseKleinViewController {
@@ -28,20 +25,24 @@ class PayPalController extends BaseKleinViewController {
         $logger->debug( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
         $logger->debug( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
 
-        $auth = new OneLogin_Saml2_Auth( $this->getSamlSettings() ); // Constructor of the SP, loads settings.php
+        $auth = new \OneLogin_Saml2_Auth( $this->getSamlSettings() ); // Constructor of the SP, loads settings.php
         $auth->processResponse();
 
         $errors = $auth->getErrors();
+
+        $logger->debug('errors', $auth->getErrors() );
 
         if (!empty($errors)) {
             echo '<p>',implode(', ', $errors),'</p>';
         }
 
         if (!$auth->isAuthenticated()) {
+            $logger->debug('Not authenticated') ;
             echo "<p>Not authenticated</p>";
             exit();
         }
 
+        $logger->debug( 'uniqueID is:', ['uniqueID' => \Log::$uniqID ] );
         $logger->debug( 'getAttributes', $auth->getAttributes() ) ;
         $logger->debug( 'getNameId', $auth->getNameId() ) ;
         $logger->debug( 'getNameIdFormat', $auth->getNameIdFormat() ) ;
@@ -88,6 +89,7 @@ class PayPalController extends BaseKleinViewController {
                                 'url' => Routes::samlLoginURL(),
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                         ),
+                        'x509cert' => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/idp.pem' ) )
                 ),
         );
 
