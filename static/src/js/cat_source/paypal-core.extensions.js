@@ -395,12 +395,12 @@ let showdown = require( "showdown" );
                     return item.type === "x-note";
                 });
                 let userMailHtml = <li className="graydesc">
-                                        Source: <span className="bold"> Anonymous </span>
+                                        User ID: <span className="bold"> Anonymous </span>
                                     </li>;
                 let projectTypeHtml, noteHtml = "";
                 if (!_.isUndefined(userEmail)) {
                     userMailHtml = <li className="graydesc">
-                                        Source:
+                                        User ID:
                                         <span className="bold"> {userEmail.value}</span>
                                     </li>
                 }
