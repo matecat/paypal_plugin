@@ -374,7 +374,7 @@ let showdown = require( "showdown" );
                 name: 'markJobAsComplete', // <-- this is the name of the function that gets invoked?
                 okTxt: 'Fix errors',
                 callback: 'goToFirstError',
-                msg: 'Unresolved tag issues may prevent downloading your translation. <br>Please fix the issues. <a style="color: #4183C4; font-weight: 700; text-decoration:' +
+                msg: 'Unresolved issues may prevent downloading your translation. <br>Please fix the issues. <a style="color: #4183C4; font-weight: 700; text-decoration:' +
                 ' underline;" href="https://www.matecat.com/support/advanced-features/understanding-fixing-tag-errors-tag-issues-matecat/" target="_blank">How to fix tags in MateCat </a> '
             });
         }
@@ -395,7 +395,7 @@ let showdown = require( "showdown" );
                     return item.type === "x-note";
                 });
                 let userMailHtml = <li className="graydesc">
-                                        Source: <span className="bold"> {match.cb}</span>
+                                        Source: <span className="bold"> Anonymous </span>
                                     </li>;
                 let projectTypeHtml, noteHtml = "";
                 if (!_.isUndefined(userEmail)) {
