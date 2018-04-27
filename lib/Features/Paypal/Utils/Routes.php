@@ -44,6 +44,16 @@ class Routes {
         return "$host/paypal/saml/login" ;
     }
 
+    public static function samlOwnLoginURL() {
+        $host = \Routes::pluginsBase( [] );
+        return "$host/paypal/saml/forward" ;
+    }
+
+    public static function samlOwnLoguotURL() {
+        $host = \Routes::pluginsBase( [] );
+        return "$host/paypal/saml/logout" ;
+    }
+
     public static function samlLoginURL( $params = [] ) {
         $config = PayPal::getConfig();
 

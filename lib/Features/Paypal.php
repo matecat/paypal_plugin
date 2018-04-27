@@ -103,7 +103,9 @@ class Paypal extends BaseFeature {
 
         route( '/oauth/github/response', 'GET', 'Features\Paypal\Controller\OAuth\GithubOAuthController', 'response' );
 
-        route( '/saml/login', [ 'GET', 'POST' ] , 'Features\Paypal\Controller\SAML\PayPalController', 'response' );
+        route( '/saml/login', [ 'GET', 'POST' ] , 'Features\Paypal\Controller\SAML\PayPalController', 'login' );
+        route( '/saml/logout', [ 'GET', 'POST' ] , 'Features\Paypal\Controller\SAML\PayPalController', 'logout' );
+        route( '/saml/forward', [ 'GET', 'POST' ] , 'Features\Paypal\Controller\SAML\PayPalController', 'forward' );
     }
 
     public static function previewRoute( $request, $response, $service, $app ) {
@@ -801,7 +803,7 @@ class Paypal extends BaseFeature {
             $template->append( 'config_js', [
                     'auth_disable_google' => true,
                     'auth_disable_email' => false,
-                    'other_service_auth_url' => Routes::samlLoginURL( ),
+                    'other_service_auth_url' => Routes::samlOwnLoginURL(),
                     'other_service_button_label' => 'Sign in with PayPal'
             ] );
         }
