@@ -23,31 +23,31 @@ class PayPalController extends BaseKleinViewController {
     public function login() {
         $logger = PayPal::staticLogger() ;
 
-        $logger->debug( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
-        $logger->debug( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
+        $logger->info( 'POST params', ['params' => $this->request->paramsPost() ] ) ;
+        $logger->info( 'GET params',  ['params' => $this->request->paramsGet()  ] ) ;
 
         $auth = new \OneLogin_Saml2_Auth( $this->getSamlSettings() ); // Constructor of the SP, loads settings.php
         $auth->processResponse();
 
         $errors = $auth->getErrors();
 
-        $logger->debug('errors', $auth->getErrors() );
+        $logger->info('errors', $auth->getErrors() );
 
         if (!empty($errors)) {
             echo '<p>',implode(', ', $errors),'</p>';
         }
 
         if (!$auth->isAuthenticated()) {
-            $logger->debug('Not authenticated') ;
+            $logger->info('Not authenticated') ;
             echo "<p>Not authenticated</p>";
             exit();
         }
 
-        $logger->debug( 'uniqueID is:', ['uniqueID' => \Log::$uniqID ] );
-        $logger->debug( 'getAttributes', $auth->getAttributes() ) ;
-        $logger->debug( 'getNameId', $auth->getNameId() ) ;
-        $logger->debug( 'getNameIdFormat', $auth->getNameIdFormat() ) ;
-        $logger->debug( 'getSessionIndex', $auth->getSessionIndex() ) ;
+        $logger->info( 'uniqueID is:', ['uniqueID' => \Log::$uniqID ] );
+        $logger->info( 'getAttributes', $auth->getAttributes() ) ;
+        $logger->info( 'getNameId', $auth->getNameId() ) ;
+        $logger->info( 'getNameIdFormat', $auth->getNameIdFormat() ) ;
+        $logger->info( 'getSessionIndex', $auth->getSessionIndex() ) ;
 
         // At some point when the attributes are validated we will have
         // First name
@@ -85,7 +85,10 @@ EOF;
 
     protected function getSamlSettings() {
         $settings = array (
-                'strict' => false,
+                'strict' => true,
+                'security' => [
+                        'authnRequestsSigned' => true
+                ],
                 'sp' => array (
                         'entityId' => 'MateCat',
                         'assertionConsumerService' => array (
@@ -96,7 +99,7 @@ EOF;
                                 'url' => Routes::samlOwnLoginURL(),
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                         ),
-                        'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+                        'NameIDFormat' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
                         'x509cert'   => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/cert.pem' ) ),
                         'privateKey' => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/privkey.pem' ) ),
                 ),
