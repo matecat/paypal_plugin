@@ -674,9 +674,19 @@ class Paypal extends BaseFeature {
      *
      * @return mixed
      */
-    public function iceMatchRewriteForContribution( $match ) {
+    public function matchRewriteForContribution( $match ) {
         if ( $match[ 'match' ] == '101%' ) {
             $match[ 'match' ] = '100%';
+        }
+
+        if( isset( $match[ 'tm_properties' ] ) && !empty( $match[ 'tm_properties' ] ) ){
+
+            foreach( $match[ 'tm_properties' ] as &$value ){
+                if( stripos( $value[ 'type' ],  'x-SID' ) !== false ){
+                    $value[ 'type' ] = 'x-SID';
+                }
+            }
+
         }
 
         return $match;
