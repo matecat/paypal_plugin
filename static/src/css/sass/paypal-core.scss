@@ -6,12 +6,18 @@ body.cattool {
 }
 
 .translate-page {
-    #setStatus-filter {
+//    To Hide bulk in translate page
+//    #setStatus-filter {
+//        display: none;
+//    }
+//    section .segment-add-inBulk,
+//    section.editor .txt.segment-add-inBulk {
+//        display: none !important;
+//    }
+
+//    To Hide Quality Report button in TR
+    li#quality-report-button {
         display: none;
-    }
-    section .segment-add-inBulk,
-    section.editor .txt.segment-add-inBulk {
-        display: none !important;
     }
 }
 
