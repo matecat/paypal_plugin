@@ -394,6 +394,12 @@ let showdown = require( "showdown" );
                 let note = tmProperties.find(function ( item ) {
                     return item.type === "x-note";
                 });
+                let matchOrigin = tmProperties.find(function ( item ) {
+                    return item.type === "x-revision";
+                });
+                let sid = tmProperties.find(function ( item ) {
+                    return item.type === "x-SID";
+                });
                 let sourceHtml = <li className="graydesc">
                     Source:
                     <span className="bold">
@@ -403,7 +409,7 @@ let showdown = require( "showdown" );
                 let userMailHtml = <li className="graydesc">
                                         User ID: <span className="bold"> Anonymous </span>
                                     </li>;
-                let projectTypeHtml, noteHtml = "";
+                let projectTypeHtml, noteHtml, matchOriginHtml = "";
                 if (!_.isUndefined(userEmail)) {
                     userMailHtml = <li className="graydesc">
                                         User ID:
@@ -414,6 +420,22 @@ let showdown = require( "showdown" );
                     projectTypeHtml = <li className="graydesc">
                                             Project Type: <span className="bold"> {projectType.value}</span>
                                         </li>;
+                }
+                if (!_.isUndefined(matchOrigin)) {
+                    let value = matchOrigin.value === false ? 'Translate' : 'Revise';
+                    matchOriginHtml = <li className="graydesc">
+                                            Match Origin: <span className="bold"> {value}</span>
+                                        </li>;
+                }
+                if (!_.isUndefined(sid)) {
+                    let noteText = '<div class="tm-match-note-tooltip-content"><p><strong>SID</strong>: '+ sid.value +'</p></div>';
+                    noteHtml = <li className="graydesc note-tm-match">
+                                            <span className="bold tm-match-note-tooltip" data-html={noteText} data-variation="tiny"
+                                                  ref={(tooltip) => this.noteTooltip = tooltip}>
+                                                    Notes
+                                                <i className="icon-info icon"/>
+                                            </span>
+                    </li>;
                 }
                 if (!_.isUndefined(note) && note.value) {
                     let converter = new showdown.Converter();
@@ -438,6 +460,7 @@ let showdown = require( "showdown" );
                         {sourceHtml}
                         {userMailHtml}
                         {projectTypeHtml}
+                        {matchOriginHtml}
                         {noteHtml}
                     </ul>;
 

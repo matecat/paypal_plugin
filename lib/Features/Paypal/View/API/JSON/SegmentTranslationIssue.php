@@ -17,7 +17,7 @@ class SegmentTranslationIssue {
 
     }
 
-    public function renderItem( \DataAccess_AbstractDaoSilentStruct $record ) {
+    public function renderItem( \DataAccess_AbstractDaoObjectStruct $record ) {
 
         $issues_records = EntryDao::findAllBySegmentId( $record->id_segment );
         $issues         = [];
