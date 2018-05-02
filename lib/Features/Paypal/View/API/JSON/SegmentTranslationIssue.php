@@ -8,7 +8,6 @@
 
 namespace Features\Paypal\View\API\JSON;
 
-use LQA\EntryCommentDao;
 use LQA\EntryDao;
 
 class SegmentTranslationIssue {
