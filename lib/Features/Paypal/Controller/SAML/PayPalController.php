@@ -99,7 +99,7 @@ EOF;
                                 'url' => Routes::samlOwnLoginURL(),
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                         ),
-                        'NameIDFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic',
+                        'NameIDFormat' => \OneLogin_Saml2_Constants::NAMEID_TRANSIENT,
                         'x509cert'   => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/cert.pem' ) ),
                         'privateKey' => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/privkey.pem' ) ),
                 ),
