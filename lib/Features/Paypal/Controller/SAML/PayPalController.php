@@ -45,18 +45,17 @@ class PayPalController extends BaseKleinViewController {
 
         $logger->info( 'uniqueID is:', ['uniqueID' => \Log::$uniqID ] );
         $logger->info( 'getAttributes', $auth->getAttributes() ) ;
-        $logger->info( 'getNameId', $auth->getNameId() ) ;
-        $logger->info( 'getNameIdFormat', $auth->getNameIdFormat() ) ;
-        $logger->info( 'getSessionIndex', $auth->getSessionIndex() ) ;
+
+        $attributes = $auth->getAttributes() ;
 
         // At some point when the attributes are validated we will have
         // First name
         // Last name
         // email
         // so we can process the sign in
-        $firstName = 'John';
-        $lastName = 'Doe' ;
-        $email = 'johndoe@example.org' ;
+        $firstName = $attributes['FirstName']  ;
+        $lastName  = $attributes['LastName'] ;
+        $email     = $attributes['Email'] ;
 
         $signIn = new OAuthSignInModel( $firstName, $lastName, $email );
         $signIn->signIn() ;
