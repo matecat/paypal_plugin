@@ -19,7 +19,7 @@ class ProjectUrlsDecorator extends UrlDecorator {
 
         if ( !array_key_exists( $record['jpassword'], $this->chunks ) ) {
             $this->chunks[ $record['jpassword'] ] = 1 ;
-            $this->jobs[ $record['jid'] ][ 'chunks' ][] = array(
+            $this->jobs[ $record['jid'] ][ 'chunks' ][ $record['jpassword'] ] = array(
                     'password'      => $record['jpassword'],
                     'translate_url' => $this->translateUrl( $record ),
                     'revise_url'    => $this->reviseUrl( $record ),
