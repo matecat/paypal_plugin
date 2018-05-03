@@ -53,9 +53,9 @@ class PayPalController extends BaseKleinViewController {
         // Last name
         // email
         // so we can process the sign in
-        $firstName = $attributes['FirstName']  ;
-        $lastName  = $attributes['LastName'] ;
-        $email     = $attributes['Email'] ;
+        $firstName = $attributes['FirstName'][0]  ;
+        $lastName  = $attributes['LastName'][0] ;
+        $email     = $attributes['Email'][0] ;
 
         $signIn = new OAuthSignInModel( $firstName, $lastName, $email );
         $signIn->signIn() ;
