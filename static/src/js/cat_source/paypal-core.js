@@ -94,7 +94,7 @@ let Utils = require('./paypalUtils');
                 isLqa: config.isLQA
             }), mountPoint);
             this.getPreviewData().done(function (response) {
-                if (!_.isNull(response.data.previews)) {
+                if (!_.isNull(response.data.previews) && response.data.segments) {
                     self.segmentsPreviews = response.data;
                     self.previewsData = response.data;
                     PreviewActions.renderPreview(currentId, response.data);
