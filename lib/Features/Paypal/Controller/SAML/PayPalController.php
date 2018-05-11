@@ -83,6 +83,8 @@ EOF;
     }
 
     protected function getSamlSettings() {
+        $config = Paypal::getConfig() ;
+
         $settings = array (
                 'strict' => true,
                 'security' => [
@@ -103,13 +105,13 @@ EOF;
                         'privateKey' => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/privkey.pem' ) ),
                 ),
                 'idp' => array (
-                        'entityId' => 'https://ssoqa.paypalcorp.com',
+                        'entityId' => $config['IDP_ENTITY_ID'],
                         'singleSignOnService' => array (
-                                'url' => 'https://ssoqa.paypalcorp.com/idp/SSO.saml2',
+                                'url' => $config['IDP_SSO_URL'],
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                         ),
                         'singleLogoutService' => array (
-                                'url' => 'https://ssoqa.paypalcorp.com/idp/SSO.saml2',
+                                'url' => $config['IDP_SLO_URL'],
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                         ),
                         'x509cert' => file_get_contents( realpath( Paypal::getPluginBasePath() . '/../config/idp.pem' ) )
