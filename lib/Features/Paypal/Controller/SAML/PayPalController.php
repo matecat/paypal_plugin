@@ -91,7 +91,7 @@ EOF;
                         'authnRequestsSigned' => true
                 ],
                 'sp' => array (
-                        'entityId' => 'MateCat',
+                        'entityId' => $config['SP_ENTITY_ID'],
                         'assertionConsumerService' => array (
                                 'url' => Routes::samlConsumer(),
                                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
