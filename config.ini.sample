@@ -1,1 +1,4 @@
-PartnerIdpId=XXX
+SP_ENTITY_ID=Matecat
+IDP_ENTITY_ID=xxxx
+IDP_SSO_URL=xxxx
+IDP_SLO_URL=xxxx
