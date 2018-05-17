@@ -701,7 +701,8 @@ class Paypal extends BaseFeature {
      * @return mixed
      */
     public function filter_get_segments_optional_fields( $options ){
-        $options[ 'optional_fields' ][] = "IF( ( st.locked AND match_type = 'ICE' ) OR (suggestion_match = 100 AND match_type = 'TM'), 1, 0 ) AS ice_locked"; // ALL 100% matches are locked for PayPal
+        // ALL 100% matches are locked for PayPal
+        $options[ 'optional_fields' ][] = "IF( ( st.locked AND match_type = 'ICE' ) OR (suggestion_match = 100 AND suggestion_source = '".\Constants_Engines::TM."'), 1, 0 ) AS ice_locked";
         $options[ 'optional_fields' ][] = "st.translation"; // Return ALL translations in the UI, even if the statuses are NEW
         $options[ 'optional_fields' ][] = "IF( st.status = 'NEW', 'DRAFT', st.status ) as status"; // Show NEW statuses as DRAFT in the UI
         return $options;
@@ -712,12 +713,14 @@ class Paypal extends BaseFeature {
      *
      * <code>
      *  [
-     *      'approved'      => $translation_row [ 4 ],
-     *      'locked'        => 0,
-     *      'match_type'    => 'ICE',
-     *      'eq_word_count' => 0,
-     *      'status'        => $status
-     * ]
+     *      'approved'         => @$translation_row [ 4 ][ 'attr' ][ 'approved' ],
+     *      'locked'           => 0,
+     *      'match_type'       => 'ICE',
+     *      'eq_word_count'    => 0,
+     *      'status'           => $status,
+     *      'suggestion_match' => null,
+     *      'trans-unit'       => $translation_row[ 4 ],
+     *  ]
      * </code>
      *
      * @return array $iceLockArray
@@ -734,7 +737,7 @@ class Paypal extends BaseFeature {
     }
 
     /**
-     * Ebay customisation requires that identical source and target are considered identical
+     * Paypal customisation requires that identical source and target are considered identical
      *
      * @param $originalValue
      * @param $projectStructure
