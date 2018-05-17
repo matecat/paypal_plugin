@@ -800,6 +800,12 @@ class Paypal extends BaseFeature {
         }
     }
 
+    public function filterSegmentFilter( Features\SegmentFilter\Model\FilterDefinition $filterDefinition, \Chunks_ChunkStruct $chunk ) {
+        if ( $filterDefinition->sampleType() == 'unlocked' ) {
+            $filterDefinition->setCustomCondition("  st.suggestion_match != 100 ", [] );
+        }
+    }
+
     /**
      * @param $controller
      * @param $template
