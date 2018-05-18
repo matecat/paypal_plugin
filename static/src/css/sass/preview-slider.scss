@@ -4,7 +4,7 @@
     z-index: 0;
     width: 100%;
     background-color: #f2f4f7;
-    height: 211px;
+    height: 210px;
     margin: auto;
     display: inline-block;
     .slick-slider {
@@ -19,6 +19,7 @@
             background-size: 30px 30px;
             background-repeat: no-repeat;
             background-position: 50% 40%;
+            text-align: center;
             img {
                 max-width: 100%;
                 min-width: 100px;
@@ -36,8 +37,7 @@
             p {
                 color: #000;
                 line-height: 31px;
-
-
+                margin: 0px;
             }
         }
 
@@ -45,6 +45,7 @@
             height: 30px;
             width: 30px;
             line-height: 40px;
+            text-align: center;
         }
         .slide-current img{
             border: 1px solid #09beec;
@@ -62,9 +63,10 @@
         }
         i.icon.icon-checkmark4 {
             float: left;
-            margin-top: 6px;
             font-size: 20px;
             color: #cccccc;
+            margin: 0em 0.25rem 0em 0em;
+            margin-top: 6px;
         }
     }
 

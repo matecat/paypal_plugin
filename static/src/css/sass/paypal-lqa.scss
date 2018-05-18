@@ -19,3 +19,13 @@ body.lqa-page {
 body.cattool .editor .text:hover {
     background: white;
 }
+
+body.cattool.lqa-page {
+    .gutter-vertical {
+        position: relative;
+        top: -20px;
+    }
+    #plugin-mount-point {
+        margin-top: -20px;
+    }
+}

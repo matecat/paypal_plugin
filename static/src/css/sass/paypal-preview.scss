@@ -8,6 +8,7 @@ body {
     font-family: Calibri, Arial, Helvetica, sans-serif;
 }
 
+/*
 .preview-container {
     min-width: 780px;
     .preview-image-innercontainer {
@@ -15,10 +16,11 @@ body {
     }
 }
 .preview-container, .preview-core-container {
-    /*position: relative;
+    !*position: relative;
     height: 100%;
-    z-index: 2;*/
+    z-index: 2;*!
 }
+*/
 
 body.review-side-panel-opened {
     &.preview-container, .preview-core-container, .gutter.gutter-vertical {
