@@ -702,7 +702,7 @@ class Paypal extends BaseFeature {
      */
     public function filter_get_segments_optional_fields( $options ){
         // ALL 100% matches are locked for PayPal
-        $options[ 'optional_fields' ][] = "IF( ( st.locked AND match_type = 'ICE' ) OR (suggestion_match = 100 AND suggestion_source = '".\Constants_Engines::TM."'), 1, 0 ) AS ice_locked";
+        $options[ 'optional_fields' ][] = "IF( ( st.locked AND match_type = 'ICE' ) OR (st.suggestion_match = 100 AND st.suggestion_source = '".\Constants_Engines::TM."'), 1, 0 ) AS ice_locked";
         $options[ 'optional_fields' ][] = "st.translation"; // Return ALL translations in the UI, even if the statuses are NEW
         $options[ 'optional_fields' ][] = "IF( st.status = 'NEW', 'DRAFT', st.status ) as status"; // Show NEW statuses as DRAFT in the UI
         return $options;
@@ -802,7 +802,8 @@ class Paypal extends BaseFeature {
 
     public function filterSegmentFilter( Features\SegmentFilter\Model\FilterDefinition $filterDefinition, \Chunks_ChunkStruct $chunk ) {
         if ( $filterDefinition->sampleType() == 'unlocked' ) {
-            $filterDefinition->setCustomCondition("  st.suggestion_match != 100 ", [] );
+            $filterDefinition->setCustomCondition(" (st.suggestion_match != 100 OR st.suggestion_source != '".\Constants_Engines::TM."') OR (st.suggestion_match IS NULL OR st.suggestion_source IS NULL) ",
+                    [] );
         }
     }
 
