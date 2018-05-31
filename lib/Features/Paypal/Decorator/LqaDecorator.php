@@ -375,7 +375,8 @@ class LqaDecorator extends AbstractDecorator {
         $jobQA = new Revise_JobQA(
                 $this->chunk->id,
                 $this->chunk->password,
-                $this->getWStruct( $data )->getTotal()
+                $this->getWStruct( $data )->getTotal(),
+                new \Constants_Revise()
         );
 
         $jobQA->retrieveJobErrorTotals();
