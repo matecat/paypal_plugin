@@ -41,8 +41,9 @@ let Utils = require('./paypalUtils');
                     this.spliInstance.destroy();
                     delete(this.spliInstance);
                 }
-                var outerHeight = $( 'section.opened' ).outerHeight() + 100;
-                var h = Math.floor( (outerHeight / $( '.main-container' ).height()) * 100 );
+                $('#outer').css('display', '');
+                var outerHeight = $( 'section.opened' ).outerHeight() + 50;
+                var h = Math.floor( (outerHeight / $( '.main-container' ).height()) * 100 ) ;
                 var h2 = 100 - h;
                 this.spliInstance = Split( ['#outer',
                     '#plugin-mount-point'], {
