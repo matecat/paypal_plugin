@@ -63,7 +63,7 @@ let Utils = require('./paypalUtils');
                 delete(this.spliInstance);
             }
             $('#plugin-mount-point').css('height', '100%');
-            $('#outer').css('height', '0');
+            $('#outer').css('display', 'none');
             $('#outer').removeClass('show-segment');
             PreviewActions.closeSegmentContainer();
         },
@@ -102,7 +102,7 @@ let Utils = require('./paypalUtils');
                     SegmentActions.renderPreview(currentId, response.data);
                     if (config.isLQA) {
                         $('#plugin-mount-point').css('height', '100%');
-                        $('#outer').css('height', '0');
+                        $('#outer').css('display', 'none');
                     } else {
                         self.spliInstance = Split(['#outer', '#plugin-mount-point'], {
                             sizes: [100, 0],

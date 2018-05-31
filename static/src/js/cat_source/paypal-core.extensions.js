@@ -21,6 +21,7 @@ let showdown = require( "showdown" );
     var originalGotoNextSegment = UI.gotoNextSegment;
     var originalisMarkedAsCompleteClickable = UI.isMarkedAsCompleteClickable;
     var originalsetProgress = UI.setProgress;
+    var originalCheckCompletionOnReady = UI.checkCompletionOnReady;
     $.extend(UI, {
 
         /**
@@ -30,8 +31,12 @@ let showdown = require( "showdown" );
             originalStart.apply(this);
             this.checkReferenceFiles();
             this.checkInstructions();
-            var cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
-            Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
+            let cookieName = (config.isReview)? 'hideMatchesReview' : 'hideMatches';
+            if ( config.isLQA ) {
+                Cookies.set(cookieName + '-' + config.id_job, true, { expires: 30 });
+            } else {
+                Cookies.set(cookieName + '-' + config.id_job, false, { expires: 30 });
+            }
 
             if (config.isReview) {
                 $('body').addClass('revise-page');
@@ -48,7 +53,7 @@ let showdown = require( "showdown" );
             originalSetEvents.apply(this);
 
             // To make tab Footer messages opened by default
-            if (config.isReview) {
+            if (config.isReview && !config.isLQA) {
                 SegmentActions.registerTab('messages', true, true);
             } else {
                 SegmentActions.registerTab('messages', true, false);
@@ -377,6 +382,14 @@ let showdown = require( "showdown" );
                 msg: 'Unresolved issues may prevent completing your translation. <br>Please fix the issues. <a style="color: #4183C4; font-weight: 700; text-decoration:' +
                 ' underline;" href="https://www.matecat.com/support/advanced-features/understanding-fixing-tag-errors-tag-issues-matecat/" target="_blank">How to fix tags in MateCat </a> '
             });
+        },
+
+        checkCompletionOnReady: function (  ) {
+            if (config.isLQA ) {
+                return true;
+            } else {
+                originalCheckCompletionOnReady.apply(this);
+            }
         }
 
     });
