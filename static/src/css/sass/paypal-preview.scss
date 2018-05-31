@@ -191,6 +191,12 @@ body.review-side-panel-opened {
 
                     }
                 }
+                .label-preview {
+                    display: inline-block;
+                    color: #ababab;
+                    margin-right: 5px;
+                    margin-left: 15px;
+                }
             }
             &.actions-segment {
                 text-align: left;
