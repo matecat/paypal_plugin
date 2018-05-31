@@ -165,7 +165,12 @@ let PreviewActions = {
     },
     openSliderPreviews: function (  ) {
         AppDispatcher.dispatch({
-            actionType: Constants.OPEN_SLIDER
+            actionType: Constants.TOGGLE_SLIDER
+        });
+    },
+    closeSliderPreviews: function (  ) {
+        AppDispatcher.dispatch({
+            actionType: Constants.CLOSE_SLIDER
         });
     },
     addIssuesToSegment: function ( segmentId, versions ) {

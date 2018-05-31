@@ -104,12 +104,19 @@ class PreviewContainer extends React.Component {
         });
     }
 
+    closeSliderPreviews() {
+        this.setState({
+            showSlider: false
+        });
+    }
+
     componentDidMount() {
         Store.addListener(Constants.RENDER_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.UPDATE_VIEW, this.renderPreview.bind(this));
         Store.addListener(Constants.SELECT_SEGMENT, this.selectSegment.bind(this));
         Store.addListener(Constants.UPDATE_SEGMENTS_INFO, this.updateSegments.bind(this));
-        Store.addListener(Constants.OPEN_SLIDER, this.openSliderPreviews.bind(this));
+        Store.addListener(Constants.TOGGLE_SLIDER, this.openSliderPreviews.bind(this));
+        Store.addListener(Constants.CLOSE_SLIDER, this.closeSliderPreviews.bind(this));
         window.addEventListener("resize", this.updateDimensions.bind(this));
     }
 
@@ -118,8 +125,8 @@ class PreviewContainer extends React.Component {
         Store.removeListener(Constants.UPDATE_VIEW, this.renderPreview);
         Store.removeListener(Constants.SELECT_SEGMENT, this.selectSegment);
         Store.removeListener(Constants.UPDATE_SEGMENTS_INFO, this.updateSegments);
-        Store.removeListener(Constants.OPEN_SLIDER, this.openSliderPreviews);
-
+        Store.removeListener(Constants.TOGGLE_SLIDER, this.openSliderPreviews);
+        Store.removeListener(Constants.CLOSE_SLIDER, this.closeSliderPreviews);
         window.removeEventListener("resize", this.updateDimensions.bind(this));
     }
 
