@@ -16,6 +16,7 @@ class PreviewHighlighter extends React.Component {
             Actions.selectSegment(this.props.segmentInfo.get('segment'), this.props.currentPreview);
         }
         Actions.openSegment(this.props.currentId);
+        Actions.closeSliderPreviews();
     }
 
     getPreviewPoint() {
