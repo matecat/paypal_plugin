@@ -336,20 +336,16 @@ class PreviewActions extends React.Component {
 
                     <div className="preview-pp actions-image">
 
+                        <button className="info-icon-picture" onClick={this.openPreviewSlider.bind( this )}>
+                            <i className="icon icon-picture"/>
+                        </button>
+                        <div className="label-preview">Flow</div>
                         <button className="preview-button previous"
                                 title={this.props.shortcuts.previousPreview.label + " (" + this.props.shortcuts.previousPreview.keystrokes[keyShortcuts] + ")"}
                                 onClick={this.previousImage.bind( this )}>
                             <i className="icon icon-chevron-left"/>
                             <i className="icon icon-chevron-left"/>
                         </button>
-
-
-                        <button className="info-icon-picture" onClick={this.openPreviewSlider.bind( this )}>
-                            <i className="icon icon-picture"/>
-                        </button>
-
-
-
                         <button onClick={this.nextImage.bind( this )}
                                 title={this.props.shortcuts.nextPreview.label + " (" + this.props.shortcuts.nextPreview.keystrokes[keyShortcuts] + ")"}>
                             <i className="icon icon-chevron-right"/>
