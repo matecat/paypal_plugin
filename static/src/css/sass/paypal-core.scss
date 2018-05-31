@@ -46,8 +46,6 @@ body.lqa-page #outer article {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    min-height: 80px;
-
 }
 #plugin-mount-point {
     height: 0;
@@ -60,10 +58,7 @@ body.lqa-page #outer article {
     &.loading {
         bottom: 0 !important;
     }
-    /*article {
-        margin-left: 5% !important;
-        margin-top: 47px !important;
-    }*/
+
     .rejectedStatusMenu {
         display: none;
     }
