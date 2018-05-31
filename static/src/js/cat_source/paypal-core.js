@@ -42,7 +42,7 @@ let Utils = require('./paypalUtils');
                     delete(this.spliInstance);
                 }
                 $('#outer').css('display', '');
-                var outerHeight = $( 'section.opened' ).outerHeight() + 50;
+                var outerHeight = $( 'section.opened' ).outerHeight() + 80;
                 var h = Math.floor( (outerHeight / $( '.main-container' ).height()) * 100 ) ;
                 var h2 = 100 - h;
                 this.spliInstance = Split( ['#outer',
