@@ -22,6 +22,7 @@ class CatDecorator extends AbstractDecorator {
         $this->template->splitSegmentEnabled    = var_export( false, true );
         $this->template->allow_link_to_analysis = false;
         $this->template->lxq_enabled            = 0;
+        $this->template->review_type = 'extended-footer';
 
         //do not show Tag Projection
         $this->template->show_tag_projection = false;
