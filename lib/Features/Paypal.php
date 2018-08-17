@@ -124,14 +124,17 @@ class Paypal extends BaseFeature {
     /**
      * As Autoload Plugin PayPal set itself as project feature when an user is logged
      *
+     * Called in @see createProjectController::appendFeaturesToProject()
+     * Called in @see NewController::appendFeaturesToProject()
+     *
      * @param $projectFeatures
-     * @param $__postInput
+     * @param $controller \NewController|\createProjectController
      *
      * @return array
      */
-    public function filterCreateProjectFeatures( $projectFeatures, $__postInput, $userIsLogged ) {
+    public function filterCreateProjectFeatures( $projectFeatures, $controller ) {
 
-        if( $userIsLogged ){
+        if( $controller->userIsLogged() ){
             $projectFeatures[ self::FEATURE_CODE ] = new BasicFeatureStruct( [ 'feature_code' => self::FEATURE_CODE ] );
         }
 
@@ -452,6 +455,7 @@ class Paypal extends BaseFeature {
                 $editlog_model = new \EditLog_EditLogModel( $controller->id_job, $controller->password );
                 $filePath      = $editlog_model->genCSVTmpFile();
                 $zip->addFile( $filePath, "__meta/Edit-log-export-" . $controller->id_job . ".csv" );
+                $editlog_model->cleanDownloadResource();
 
                 /**
                  * appendSegmentsCommentsToDownload
@@ -466,6 +470,7 @@ class Paypal extends BaseFeature {
                 $formatter = new SegmentComment( $comments );
                 $filePath  = $formatter->genCSVTmpFile();
                 $zip->addFile( $filePath, "__meta/Segments-comments-export_" . $controller->id_job . ".csv" );
+                $formatter->cleanDownloadResource();
 
                 /**
                  * appendSegmentsIssuesCommentsToDownload
@@ -475,6 +480,7 @@ class Paypal extends BaseFeature {
                 $formatter = new SegmentTranslationIssue;
                 $filePath  = $formatter->genCSVTmpFile( $entries );
                 $zip->addFile( $filePath, "__meta/Segments-issues-export_" . $controller->id_job . ".csv" );
+                $formatter->cleanDownloadResource();
 
                 /**
                  * appendJobsInfoToDownload
@@ -502,7 +508,7 @@ class Paypal extends BaseFeature {
 
                 $filePath = $this->genCSVKeyValueFile( $csv_array );
                 $zip->addFile( $filePath, "__meta/Job-info-export_" . $controller->id_job . ".csv" );
-
+                unlink( $filePath );
 
                 $zip->close();
             }
