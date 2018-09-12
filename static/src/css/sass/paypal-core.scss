@@ -147,6 +147,9 @@ section .footer {
     .graysmall-message {
         bottom: 10px !important;
     }
+    .segment-notes-container {
+        max-width: 50% !important;
+    }
 }
 
 .tm-match-note-tooltip-content p{
